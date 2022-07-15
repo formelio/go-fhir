@@ -45,7 +45,7 @@ func generateFields(
 		}
 
 		// direct childs
-		name := Title(pathSplit[level])
+		name := FirstUpper(pathSplit[level])
 
 		// support contained resources later
 		if name == "Contained" {
@@ -135,7 +135,7 @@ func findTypeIdentifier(fieldType FieldType, element fhir.ElementDefinition, par
 	// For Referenced fields, we build the field Type identifier from the referenced path
 	case FieldTypeReferenced:
 		for _, pathPart := range strings.Split((*element.ContentReference)[1:], ".") {
-			typeIdentifier = typeIdentifier + Title(pathPart)
+			typeIdentifier = typeIdentifier + FirstUpper(pathPart)
 		}
 	// For code fields, check if value set is required, save it to context.RequiredValueSetBindings
 	// Set the typeIdentifier to either the name of the value set or string if it is not required
@@ -205,7 +205,7 @@ func generatePolymorphicType(
 			elementTypeCode = typeCodeToTypeIdentifier(elementTypeCode)
 		}
 
-		fieldName := typeIdentifier + Title(elementType.Code)
+		fieldName := typeIdentifier + FirstUpper(elementType.Code)
 		jsonFieldName := strings.ToLower(fieldName[:1]) + fieldName[1:]
 
 		addPolymorphicStatement(fields, fieldName, jsonFieldName, elementTypeCode, false, *element.Max == "*")
@@ -304,7 +304,7 @@ func typeCodeToTypeIdentifier(typeCode string) string {
 	case "http://hl7.org/fhirpath/System.String":
 		return "string"
 	default:
-		if typeCode != Title(typeCode) {
+		if typeCode != FirstUpper(typeCode) {
 			fmt.Println("Unknown type code:", typeCode)
 		}
 		return typeCode
