@@ -44,8 +44,6 @@ func generateElement(requiredTypes map[string]bool, definition fhir.StructureDef
 	}
 
 	fmt.Printf("Generate Go sources for Element: %s\n", definition.Name)
-	fmt.Println(definition.Kind.Code())
-
 	file := jen.NewFile("fhir")
 
 	// generate struct

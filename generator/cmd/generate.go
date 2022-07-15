@@ -59,7 +59,7 @@ func generateStruct(file *jen.File, definition fhir.StructureDefinition, element
 	var err error
 	file.Commentf("%s is documented here %s", definition.Name, definition.Url)
 	file.Type().Id(definition.Name).StructFunc(func(rootStruct *jen.Group) {
-		_, err = appendFields(requiredElements, file, rootStruct, definition.Name, elementDefinitions, 1, 1)
+		_, err = generateFields(requiredElements, file, rootStruct, definition.Name, elementDefinitions, 1, 1)
 	})
 	return err
 }
@@ -101,7 +101,7 @@ func generateMarshall(file *jen.File, resourceType string) {
 	}
 */
 func generateUnmarshall(file *jen.File, resourceType string) {
-	file.Commentf("Unmarshal%s unmarshals a %s.", resourceType, resourceType)
+	file.Commentf("Unmarshal%s unmarshalls a %s.", resourceType, resourceType)
 	file.Func().Id("Unmarshal"+resourceType).
 		Params(jen.Id("b").Op("[]").Byte()).
 		Params(jen.Id(resourceType), jen.Error()).
@@ -119,6 +119,23 @@ func generateUnmarshall(file *jen.File, resourceType string) {
 			jen.Return(jen.Id(FirstLower(resourceType)), jen.Nil()),
 		)
 
+}
+
+func generateJsonTags(statement *jen.Statement, jsonTag string, required bool) {
+	// If the field is not required, we add add `omitempty` to the field tags
+	if !required {
+		statement.Tag(map[string]string{"json": jsonTag + ",omitempty", "bson": jsonTag + ",omitempty"})
+	} else {
+		statement.Tag(map[string]string{"json": jsonTag, "bson": jsonTag})
+	}
+}
+
+func generateOperators(statement *jen.Statement, list, required bool) {
+	if list {
+		statement.Op("[]")
+	} else if !required {
+		statement.Op("*")
+	}
 }
 
 func init() {
