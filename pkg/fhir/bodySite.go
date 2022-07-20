@@ -4,20 +4,21 @@ import "encoding/json"
 
 // BodySite is documented here http://hl7.org/fhir/StructureDefinition/BodySite
 type BodySite struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Active            *bool             `bson:"active,omitempty" json:"active,omitempty"`
-	Code              *CodeableConcept  `bson:"code,omitempty" json:"code,omitempty"`
-	Qualifier         []CodeableConcept `bson:"qualifier,omitempty" json:"qualifier,omitempty"`
-	Description       *string           `bson:"description,omitempty" json:"description,omitempty"`
-	Image             []Attachment      `bson:"image,omitempty" json:"image,omitempty"`
-	Patient           Reference         `bson:"patient" json:"patient"`
+	Id                *string           `bson:"id" json:"id"`
+	Meta              *Meta             `bson:"meta" json:"meta"`
+	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
+	Language          *string           `bson:"language" json:"language"`
+	Text              *Narrative        `bson:"text" json:"text"`
+	Contained         []json.RawMessage `bson:"contained" json:"contained"`
+	Extension         []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
+	Active            *bool             `bson:"active" json:"active"`
+	Code              *CodeableConcept  `bson:"code" json:"code"`
+	Qualifier         []CodeableConcept `bson:"qualifier" json:"qualifier"`
+	Description       *string           `bson:"description" json:"description"`
+	Image             []Attachment      `bson:"image" json:"image"`
+	Patient           Reference         `bson:"patient,omitempty" json:"patient,omitempty"`
 }
 type OtherBodySite BodySite
 
@@ -32,7 +33,7 @@ func (r BodySite) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalBodySite unmarshals a BodySite.
+// UnmarshalBodySite unmarshalls a BodySite.
 func UnmarshalBodySite(b []byte) (BodySite, error) {
 	var bodySite BodySite
 	if err := json.Unmarshal(b, &bodySite); err != nil {

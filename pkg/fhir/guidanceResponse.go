@@ -4,23 +4,29 @@ import "encoding/json"
 
 // GuidanceResponse is documented here http://hl7.org/fhir/StructureDefinition/GuidanceResponse
 type GuidanceResponse struct {
-	Id                 *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta               *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules      *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language           *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text               *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	Extension          []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension  []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	RequestId          *string           `bson:"requestId,omitempty" json:"requestId,omitempty"`
-	Identifier         *Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Module             Reference         `bson:"module" json:"module"`
-	Status             string            `bson:"status" json:"status"`
-	OccurrenceDateTime *string           `bson:"occurrenceDateTime,omitempty" json:"occurrenceDateTime,omitempty"`
-	Performer          *Reference        `bson:"performer,omitempty" json:"performer,omitempty"`
-	Note               []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
-	EvaluationMessage  []Reference       `bson:"evaluationMessage,omitempty" json:"evaluationMessage,omitempty"`
-	OutputParameters   *Reference        `bson:"outputParameters,omitempty" json:"outputParameters,omitempty"`
-	DataRequirement    []DataRequirement `bson:"dataRequirement,omitempty" json:"dataRequirement,omitempty"`
+	Id                    *string                `bson:"id" json:"id"`
+	Meta                  *Meta                  `bson:"meta" json:"meta"`
+	ImplicitRules         *string                `bson:"implicitRules" json:"implicitRules"`
+	Language              *string                `bson:"language" json:"language"`
+	Text                  *Narrative             `bson:"text" json:"text"`
+	Contained             []json.RawMessage      `bson:"contained" json:"contained"`
+	Extension             []Extension            `bson:"extension" json:"extension"`
+	ModifierExtension     []Extension            `bson:"modifierExtension" json:"modifierExtension"`
+	RequestId             *string                `bson:"requestId" json:"requestId"`
+	Identifier            *Identifier            `bson:"identifier" json:"identifier"`
+	Module                Reference              `bson:"module,omitempty" json:"module,omitempty"`
+	Status                GuidanceResponseStatus `bson:"status,omitempty" json:"status,omitempty"`
+	Subject               *Reference             `bson:"subject" json:"subject"`
+	Context               *Reference             `bson:"context" json:"context"`
+	OccurrenceDateTime    *string                `bson:"occurrenceDateTime" json:"occurrenceDateTime"`
+	Performer             *Reference             `bson:"performer" json:"performer"`
+	ReasonCodeableConcept *CodeableConcept       `bson:"reasonCodeableConcept,omitempty" json:"reasonCodeableConcept,omitempty"`
+	ReasonReference       *Reference             `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
+	Note                  []Annotation           `bson:"note" json:"note"`
+	EvaluationMessage     []Reference            `bson:"evaluationMessage" json:"evaluationMessage"`
+	OutputParameters      *Reference             `bson:"outputParameters" json:"outputParameters"`
+	Result                *Reference             `bson:"result" json:"result"`
+	DataRequirement       []DataRequirement      `bson:"dataRequirement" json:"dataRequirement"`
 }
 type OtherGuidanceResponse GuidanceResponse
 
@@ -35,7 +41,7 @@ func (r GuidanceResponse) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalGuidanceResponse unmarshals a GuidanceResponse.
+// UnmarshalGuidanceResponse unmarshalls a GuidanceResponse.
 func UnmarshalGuidanceResponse(b []byte) (GuidanceResponse, error) {
 	var guidanceResponse GuidanceResponse
 	if err := json.Unmarshal(b, &guidanceResponse); err != nil {

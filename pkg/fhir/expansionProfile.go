@@ -4,84 +4,85 @@ import "encoding/json"
 
 // ExpansionProfile is documented here http://hl7.org/fhir/StructureDefinition/ExpansionProfile
 type ExpansionProfile struct {
-	Id                     *string                         `bson:"id,omitempty" json:"id,omitempty"`
-	Meta                   *Meta                           `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules          *string                         `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language               *string                         `bson:"language,omitempty" json:"language,omitempty"`
-	Text                   *Narrative                      `bson:"text,omitempty" json:"text,omitempty"`
-	Extension              []Extension                     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension      []Extension                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Url                    *string                         `bson:"url,omitempty" json:"url,omitempty"`
-	Identifier             *Identifier                     `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Version                *string                         `bson:"version,omitempty" json:"version,omitempty"`
-	Name                   *string                         `bson:"name,omitempty" json:"name,omitempty"`
-	Status                 string                          `bson:"status" json:"status"`
-	Experimental           *bool                           `bson:"experimental,omitempty" json:"experimental,omitempty"`
-	Date                   *string                         `bson:"date,omitempty" json:"date,omitempty"`
-	Publisher              *string                         `bson:"publisher,omitempty" json:"publisher,omitempty"`
-	Contact                []ContactDetail                 `bson:"contact,omitempty" json:"contact,omitempty"`
-	Description            *string                         `bson:"description,omitempty" json:"description,omitempty"`
-	UseContext             []UsageContext                  `bson:"useContext,omitempty" json:"useContext,omitempty"`
-	Jurisdiction           []CodeableConcept               `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
-	FixedVersion           []ExpansionProfileFixedVersion  `bson:"fixedVersion,omitempty" json:"fixedVersion,omitempty"`
-	ExcludedSystem         *ExpansionProfileExcludedSystem `bson:"excludedSystem,omitempty" json:"excludedSystem,omitempty"`
-	IncludeDesignations    *bool                           `bson:"includeDesignations,omitempty" json:"includeDesignations,omitempty"`
-	Designation            *ExpansionProfileDesignation    `bson:"designation,omitempty" json:"designation,omitempty"`
-	IncludeDefinition      *bool                           `bson:"includeDefinition,omitempty" json:"includeDefinition,omitempty"`
-	ActiveOnly             *bool                           `bson:"activeOnly,omitempty" json:"activeOnly,omitempty"`
-	ExcludeNested          *bool                           `bson:"excludeNested,omitempty" json:"excludeNested,omitempty"`
-	ExcludeNotForUI        *bool                           `bson:"excludeNotForUI,omitempty" json:"excludeNotForUI,omitempty"`
-	ExcludePostCoordinated *bool                           `bson:"excludePostCoordinated,omitempty" json:"excludePostCoordinated,omitempty"`
-	DisplayLanguage        *string                         `bson:"displayLanguage,omitempty" json:"displayLanguage,omitempty"`
-	LimitedExpansion       *bool                           `bson:"limitedExpansion,omitempty" json:"limitedExpansion,omitempty"`
+	Id                     *string                         `bson:"id" json:"id"`
+	Meta                   *Meta                           `bson:"meta" json:"meta"`
+	ImplicitRules          *string                         `bson:"implicitRules" json:"implicitRules"`
+	Language               *string                         `bson:"language" json:"language"`
+	Text                   *Narrative                      `bson:"text" json:"text"`
+	Contained              []json.RawMessage               `bson:"contained" json:"contained"`
+	Extension              []Extension                     `bson:"extension" json:"extension"`
+	ModifierExtension      []Extension                     `bson:"modifierExtension" json:"modifierExtension"`
+	Url                    *string                         `bson:"url" json:"url"`
+	Identifier             *Identifier                     `bson:"identifier" json:"identifier"`
+	Version                *string                         `bson:"version" json:"version"`
+	Name                   *string                         `bson:"name" json:"name"`
+	Status                 PublicationStatus               `bson:"status,omitempty" json:"status,omitempty"`
+	Experimental           *bool                           `bson:"experimental" json:"experimental"`
+	Date                   *string                         `bson:"date" json:"date"`
+	Publisher              *string                         `bson:"publisher" json:"publisher"`
+	Contact                []ContactDetail                 `bson:"contact" json:"contact"`
+	Description            *string                         `bson:"description" json:"description"`
+	UseContext             []UsageContext                  `bson:"useContext" json:"useContext"`
+	Jurisdiction           []CodeableConcept               `bson:"jurisdiction" json:"jurisdiction"`
+	FixedVersion           []ExpansionProfileFixedVersion  `bson:"fixedVersion" json:"fixedVersion"`
+	ExcludedSystem         *ExpansionProfileExcludedSystem `bson:"excludedSystem" json:"excludedSystem"`
+	IncludeDesignations    *bool                           `bson:"includeDesignations" json:"includeDesignations"`
+	Designation            *ExpansionProfileDesignation    `bson:"designation" json:"designation"`
+	IncludeDefinition      *bool                           `bson:"includeDefinition" json:"includeDefinition"`
+	ActiveOnly             *bool                           `bson:"activeOnly" json:"activeOnly"`
+	ExcludeNested          *bool                           `bson:"excludeNested" json:"excludeNested"`
+	ExcludeNotForUI        *bool                           `bson:"excludeNotForUI" json:"excludeNotForUI"`
+	ExcludePostCoordinated *bool                           `bson:"excludePostCoordinated" json:"excludePostCoordinated"`
+	DisplayLanguage        *string                         `bson:"displayLanguage" json:"displayLanguage"`
+	LimitedExpansion       *bool                           `bson:"limitedExpansion" json:"limitedExpansion"`
 }
 type ExpansionProfileFixedVersion struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	System            string      `bson:"system" json:"system"`
-	Version           string      `bson:"version" json:"version"`
-	Mode              string      `bson:"mode" json:"mode"`
+	Id                *string                     `bson:"id" json:"id"`
+	Extension         []Extension                 `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                 `bson:"modifierExtension" json:"modifierExtension"`
+	System            string                      `bson:"system,omitempty" json:"system,omitempty"`
+	Version           string                      `bson:"version,omitempty" json:"version,omitempty"`
+	Mode              SystemVersionProcessingMode `bson:"mode,omitempty" json:"mode,omitempty"`
 }
 type ExpansionProfileExcludedSystem struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	System            string      `bson:"system" json:"system"`
-	Version           *string     `bson:"version,omitempty" json:"version,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	System            string      `bson:"system,omitempty" json:"system,omitempty"`
+	Version           *string     `bson:"version" json:"version"`
 }
 type ExpansionProfileDesignation struct {
-	Id                *string                             `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                         `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Include           *ExpansionProfileDesignationInclude `bson:"include,omitempty" json:"include,omitempty"`
-	Exclude           *ExpansionProfileDesignationExclude `bson:"exclude,omitempty" json:"exclude,omitempty"`
+	Id                *string                             `bson:"id" json:"id"`
+	Extension         []Extension                         `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                         `bson:"modifierExtension" json:"modifierExtension"`
+	Include           *ExpansionProfileDesignationInclude `bson:"include" json:"include"`
+	Exclude           *ExpansionProfileDesignationExclude `bson:"exclude" json:"exclude"`
 }
 type ExpansionProfileDesignationInclude struct {
-	Id                *string                                         `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                                     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Designation       []ExpansionProfileDesignationIncludeDesignation `bson:"designation,omitempty" json:"designation,omitempty"`
+	Id                *string                                         `bson:"id" json:"id"`
+	Extension         []Extension                                     `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                                     `bson:"modifierExtension" json:"modifierExtension"`
+	Designation       []ExpansionProfileDesignationIncludeDesignation `bson:"designation" json:"designation"`
 }
 type ExpansionProfileDesignationIncludeDesignation struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Language          *string     `bson:"language,omitempty" json:"language,omitempty"`
-	Use               *Coding     `bson:"use,omitempty" json:"use,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Language          *string     `bson:"language" json:"language"`
+	Use               *Coding     `bson:"use" json:"use"`
 }
 type ExpansionProfileDesignationExclude struct {
-	Id                *string                                         `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                                     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Designation       []ExpansionProfileDesignationExcludeDesignation `bson:"designation,omitempty" json:"designation,omitempty"`
+	Id                *string                                         `bson:"id" json:"id"`
+	Extension         []Extension                                     `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                                     `bson:"modifierExtension" json:"modifierExtension"`
+	Designation       []ExpansionProfileDesignationExcludeDesignation `bson:"designation" json:"designation"`
 }
 type ExpansionProfileDesignationExcludeDesignation struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Language          *string     `bson:"language,omitempty" json:"language,omitempty"`
-	Use               *Coding     `bson:"use,omitempty" json:"use,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Language          *string     `bson:"language" json:"language"`
+	Use               *Coding     `bson:"use" json:"use"`
 }
 type OtherExpansionProfile ExpansionProfile
 
@@ -96,7 +97,7 @@ func (r ExpansionProfile) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalExpansionProfile unmarshals a ExpansionProfile.
+// UnmarshalExpansionProfile unmarshalls a ExpansionProfile.
 func UnmarshalExpansionProfile(b []byte) (ExpansionProfile, error) {
 	var expansionProfile ExpansionProfile
 	if err := json.Unmarshal(b, &expansionProfile); err != nil {

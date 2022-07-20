@@ -4,61 +4,75 @@ import "encoding/json"
 
 // RequestGroup is documented here http://hl7.org/fhir/StructureDefinition/RequestGroup
 type RequestGroup struct {
-	Id                *string              `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string              `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string              `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative           `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension          `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier         `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Definition        []Reference          `bson:"definition,omitempty" json:"definition,omitempty"`
-	BasedOn           []Reference          `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	Replaces          []Reference          `bson:"replaces,omitempty" json:"replaces,omitempty"`
-	GroupIdentifier   *Identifier          `bson:"groupIdentifier,omitempty" json:"groupIdentifier,omitempty"`
-	Status            string               `bson:"status" json:"status"`
-	Intent            string               `bson:"intent" json:"intent"`
-	Priority          *string              `bson:"priority,omitempty" json:"priority,omitempty"`
-	AuthoredOn        *string              `bson:"authoredOn,omitempty" json:"authoredOn,omitempty"`
-	Note              []Annotation         `bson:"note,omitempty" json:"note,omitempty"`
-	Action            []RequestGroupAction `bson:"action,omitempty" json:"action,omitempty"`
+	Id                    *string              `bson:"id" json:"id"`
+	Meta                  *Meta                `bson:"meta" json:"meta"`
+	ImplicitRules         *string              `bson:"implicitRules" json:"implicitRules"`
+	Language              *string              `bson:"language" json:"language"`
+	Text                  *Narrative           `bson:"text" json:"text"`
+	Contained             []json.RawMessage    `bson:"contained" json:"contained"`
+	Extension             []Extension          `bson:"extension" json:"extension"`
+	ModifierExtension     []Extension          `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier            []Identifier         `bson:"identifier" json:"identifier"`
+	Definition            []Reference          `bson:"definition" json:"definition"`
+	BasedOn               []Reference          `bson:"basedOn" json:"basedOn"`
+	Replaces              []Reference          `bson:"replaces" json:"replaces"`
+	GroupIdentifier       *Identifier          `bson:"groupIdentifier" json:"groupIdentifier"`
+	Status                RequestStatus        `bson:"status,omitempty" json:"status,omitempty"`
+	Intent                RequestIntent        `bson:"intent,omitempty" json:"intent,omitempty"`
+	Priority              *RequestPriority     `bson:"priority" json:"priority"`
+	Subject               *Reference           `bson:"subject" json:"subject"`
+	Context               *Reference           `bson:"context" json:"context"`
+	AuthoredOn            *string              `bson:"authoredOn" json:"authoredOn"`
+	Author                *Reference           `bson:"author" json:"author"`
+	ReasonCodeableConcept *CodeableConcept     `bson:"reasonCodeableConcept,omitempty" json:"reasonCodeableConcept,omitempty"`
+	ReasonReference       *Reference           `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
+	Note                  []Annotation         `bson:"note" json:"note"`
+	Action                []RequestGroupAction `bson:"action" json:"action"`
 }
 type RequestGroupAction struct {
-	Id                  *string                           `bson:"id,omitempty" json:"id,omitempty"`
-	Extension           []Extension                       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension                       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Label               *string                           `bson:"label,omitempty" json:"label,omitempty"`
-	Title               *string                           `bson:"title,omitempty" json:"title,omitempty"`
-	Description         *string                           `bson:"description,omitempty" json:"description,omitempty"`
-	TextEquivalent      *string                           `bson:"textEquivalent,omitempty" json:"textEquivalent,omitempty"`
-	Code                []CodeableConcept                 `bson:"code,omitempty" json:"code,omitempty"`
-	Documentation       []RelatedArtifact                 `bson:"documentation,omitempty" json:"documentation,omitempty"`
-	Condition           []RequestGroupActionCondition     `bson:"condition,omitempty" json:"condition,omitempty"`
-	RelatedAction       []RequestGroupActionRelatedAction `bson:"relatedAction,omitempty" json:"relatedAction,omitempty"`
-	Type                *Coding                           `bson:"type,omitempty" json:"type,omitempty"`
-	GroupingBehavior    *string                           `bson:"groupingBehavior,omitempty" json:"groupingBehavior,omitempty"`
-	SelectionBehavior   *string                           `bson:"selectionBehavior,omitempty" json:"selectionBehavior,omitempty"`
-	RequiredBehavior    *string                           `bson:"requiredBehavior,omitempty" json:"requiredBehavior,omitempty"`
-	PrecheckBehavior    *string                           `bson:"precheckBehavior,omitempty" json:"precheckBehavior,omitempty"`
-	CardinalityBehavior *string                           `bson:"cardinalityBehavior,omitempty" json:"cardinalityBehavior,omitempty"`
-	Resource            *Reference                        `bson:"resource,omitempty" json:"resource,omitempty"`
-	Action              []RequestGroupAction              `bson:"action,omitempty" json:"action,omitempty"`
+	Id                  *string                           `bson:"id" json:"id"`
+	Extension           []Extension                       `bson:"extension" json:"extension"`
+	ModifierExtension   []Extension                       `bson:"modifierExtension" json:"modifierExtension"`
+	Label               *string                           `bson:"label" json:"label"`
+	Title               *string                           `bson:"title" json:"title"`
+	Description         *string                           `bson:"description" json:"description"`
+	TextEquivalent      *string                           `bson:"textEquivalent" json:"textEquivalent"`
+	Code                []CodeableConcept                 `bson:"code" json:"code"`
+	Documentation       []RelatedArtifact                 `bson:"documentation" json:"documentation"`
+	Condition           []RequestGroupActionCondition     `bson:"condition" json:"condition"`
+	RelatedAction       []RequestGroupActionRelatedAction `bson:"relatedAction" json:"relatedAction"`
+	TimingDateTime      *string                           `bson:"timingDateTime,omitempty" json:"timingDateTime,omitempty"`
+	TimingPeriod        *Period                           `bson:"timingPeriod,omitempty" json:"timingPeriod,omitempty"`
+	TimingDuration      *Duration                         `bson:"timingDuration,omitempty" json:"timingDuration,omitempty"`
+	TimingRange         *Range                            `bson:"timingRange,omitempty" json:"timingRange,omitempty"`
+	TimingTiming        *Timing                           `bson:"timingTiming,omitempty" json:"timingTiming,omitempty"`
+	Participant         []Reference                       `bson:"participant" json:"participant"`
+	Type                *Coding                           `bson:"type" json:"type"`
+	GroupingBehavior    *ActionGroupingBehavior           `bson:"groupingBehavior" json:"groupingBehavior"`
+	SelectionBehavior   *ActionSelectionBehavior          `bson:"selectionBehavior" json:"selectionBehavior"`
+	RequiredBehavior    *ActionRequiredBehavior           `bson:"requiredBehavior" json:"requiredBehavior"`
+	PrecheckBehavior    *ActionPrecheckBehavior           `bson:"precheckBehavior" json:"precheckBehavior"`
+	CardinalityBehavior *ActionCardinalityBehavior        `bson:"cardinalityBehavior" json:"cardinalityBehavior"`
+	Resource            *Reference                        `bson:"resource" json:"resource"`
+	Action              []RequestGroupAction              `bson:"action" json:"action"`
 }
 type RequestGroupActionCondition struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Kind              string      `bson:"kind" json:"kind"`
-	Description       *string     `bson:"description,omitempty" json:"description,omitempty"`
-	Language          *string     `bson:"language,omitempty" json:"language,omitempty"`
-	Expression        *string     `bson:"expression,omitempty" json:"expression,omitempty"`
+	Id                *string             `bson:"id" json:"id"`
+	Extension         []Extension         `bson:"extension" json:"extension"`
+	ModifierExtension []Extension         `bson:"modifierExtension" json:"modifierExtension"`
+	Kind              ActionConditionKind `bson:"kind,omitempty" json:"kind,omitempty"`
+	Description       *string             `bson:"description" json:"description"`
+	Language          *string             `bson:"language" json:"language"`
+	Expression        *string             `bson:"expression" json:"expression"`
 }
 type RequestGroupActionRelatedAction struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	ActionId          string      `bson:"actionId" json:"actionId"`
-	Relationship      string      `bson:"relationship" json:"relationship"`
+	Id                *string                `bson:"id" json:"id"`
+	Extension         []Extension            `bson:"extension" json:"extension"`
+	ModifierExtension []Extension            `bson:"modifierExtension" json:"modifierExtension"`
+	ActionId          string                 `bson:"actionId,omitempty" json:"actionId,omitempty"`
+	Relationship      ActionRelationshipType `bson:"relationship,omitempty" json:"relationship,omitempty"`
+	OffsetDuration    *Duration              `bson:"offsetDuration,omitempty" json:"offsetDuration,omitempty"`
+	OffsetRange       *Range                 `bson:"offsetRange,omitempty" json:"offsetRange,omitempty"`
 }
 type OtherRequestGroup RequestGroup
 
@@ -73,7 +87,7 @@ func (r RequestGroup) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalRequestGroup unmarshals a RequestGroup.
+// UnmarshalRequestGroup unmarshalls a RequestGroup.
 func UnmarshalRequestGroup(b []byte) (RequestGroup, error) {
 	var requestGroup RequestGroup
 	if err := json.Unmarshal(b, &requestGroup); err != nil {

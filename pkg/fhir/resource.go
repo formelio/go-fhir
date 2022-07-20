@@ -4,10 +4,10 @@ import "encoding/json"
 
 // Resource is documented here http://hl7.org/fhir/StructureDefinition/Resource
 type Resource struct {
-	Id            *string `bson:"id,omitempty" json:"id,omitempty"`
-	Meta          *Meta   `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules *string `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language      *string `bson:"language,omitempty" json:"language,omitempty"`
+	Id            *string `bson:"id" json:"id"`
+	Meta          *Meta   `bson:"meta" json:"meta"`
+	ImplicitRules *string `bson:"implicitRules" json:"implicitRules"`
+	Language      *string `bson:"language" json:"language"`
 }
 type OtherResource Resource
 
@@ -22,7 +22,7 @@ func (r Resource) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalResource unmarshals a Resource.
+// UnmarshalResource unmarshalls a Resource.
 func UnmarshalResource(b []byte) (Resource, error) {
 	var resource Resource
 	if err := json.Unmarshal(b, &resource); err != nil {

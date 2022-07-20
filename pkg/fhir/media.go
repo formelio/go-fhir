@@ -4,27 +4,33 @@ import "encoding/json"
 
 // Media is documented here http://hl7.org/fhir/StructureDefinition/Media
 type Media struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	BasedOn           []Reference       `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	Type              string            `bson:"type" json:"type"`
-	Subtype           *CodeableConcept  `bson:"subtype,omitempty" json:"subtype,omitempty"`
-	View              *CodeableConcept  `bson:"view,omitempty" json:"view,omitempty"`
-	Operator          *Reference        `bson:"operator,omitempty" json:"operator,omitempty"`
-	ReasonCode        []CodeableConcept `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	BodySite          *CodeableConcept  `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
-	Height            *int              `bson:"height,omitempty" json:"height,omitempty"`
-	Width             *int              `bson:"width,omitempty" json:"width,omitempty"`
-	Frames            *int              `bson:"frames,omitempty" json:"frames,omitempty"`
-	Duration          *int              `bson:"duration,omitempty" json:"duration,omitempty"`
-	Content           Attachment        `bson:"content" json:"content"`
-	Note              []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
+	Id                 *string           `bson:"id" json:"id"`
+	Meta               *Meta             `bson:"meta" json:"meta"`
+	ImplicitRules      *string           `bson:"implicitRules" json:"implicitRules"`
+	Language           *string           `bson:"language" json:"language"`
+	Text               *Narrative        `bson:"text" json:"text"`
+	Contained          []json.RawMessage `bson:"contained" json:"contained"`
+	Extension          []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension  []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier         []Identifier      `bson:"identifier" json:"identifier"`
+	BasedOn            []Reference       `bson:"basedOn" json:"basedOn"`
+	Type               DigitalMediaType  `bson:"type,omitempty" json:"type,omitempty"`
+	Subtype            *CodeableConcept  `bson:"subtype" json:"subtype"`
+	View               *CodeableConcept  `bson:"view" json:"view"`
+	Subject            *Reference        `bson:"subject" json:"subject"`
+	Context            *Reference        `bson:"context" json:"context"`
+	OccurrenceDateTime *string           `bson:"occurrenceDateTime,omitempty" json:"occurrenceDateTime,omitempty"`
+	OccurrencePeriod   *Period           `bson:"occurrencePeriod,omitempty" json:"occurrencePeriod,omitempty"`
+	Operator           *Reference        `bson:"operator" json:"operator"`
+	ReasonCode         []CodeableConcept `bson:"reasonCode" json:"reasonCode"`
+	BodySite           *CodeableConcept  `bson:"bodySite" json:"bodySite"`
+	Device             *Reference        `bson:"device" json:"device"`
+	Height             *int              `bson:"height" json:"height"`
+	Width              *int              `bson:"width" json:"width"`
+	Frames             *int              `bson:"frames" json:"frames"`
+	Duration           *int              `bson:"duration" json:"duration"`
+	Content            Attachment        `bson:"content,omitempty" json:"content,omitempty"`
+	Note               []Annotation      `bson:"note" json:"note"`
 }
 type OtherMedia Media
 
@@ -39,7 +45,7 @@ func (r Media) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalMedia unmarshals a Media.
+// UnmarshalMedia unmarshalls a Media.
 func UnmarshalMedia(b []byte) (Media, error) {
 	var media Media
 	if err := json.Unmarshal(b, &media); err != nil {

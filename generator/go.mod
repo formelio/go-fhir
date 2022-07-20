@@ -1,7 +1,6 @@
-module github.com/ivido/go-fhir-library/generator
+module github.com/ivido/go-fhir-stu3/generator
 
 go 1.18
-
 
 require (
 	github.com/spf13/cobra v1.5.0

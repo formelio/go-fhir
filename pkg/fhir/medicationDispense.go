@@ -4,47 +4,56 @@ import "encoding/json"
 
 // MedicationDispense is documented here http://hl7.org/fhir/StructureDefinition/MedicationDispense
 type MedicationDispense struct {
-	Id                      *string                         `bson:"id,omitempty" json:"id,omitempty"`
-	Meta                    *Meta                           `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules           *string                         `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language                *string                         `bson:"language,omitempty" json:"language,omitempty"`
-	Text                    *Narrative                      `bson:"text,omitempty" json:"text,omitempty"`
-	Extension               []Extension                     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension       []Extension                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier              []Identifier                    `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	PartOf                  []Reference                     `bson:"partOf,omitempty" json:"partOf,omitempty"`
-	Status                  *string                         `bson:"status,omitempty" json:"status,omitempty"`
-	Category                *CodeableConcept                `bson:"category,omitempty" json:"category,omitempty"`
-	SupportingInformation   []Reference                     `bson:"supportingInformation,omitempty" json:"supportingInformation,omitempty"`
-	Performer               []MedicationDispensePerformer   `bson:"performer,omitempty" json:"performer,omitempty"`
-	AuthorizingPrescription []Reference                     `bson:"authorizingPrescription,omitempty" json:"authorizingPrescription,omitempty"`
-	Type                    *CodeableConcept                `bson:"type,omitempty" json:"type,omitempty"`
-	Quantity                *Quantity                       `bson:"quantity,omitempty" json:"quantity,omitempty"`
-	DaysSupply              *Quantity                       `bson:"daysSupply,omitempty" json:"daysSupply,omitempty"`
-	WhenPrepared            *string                         `bson:"whenPrepared,omitempty" json:"whenPrepared,omitempty"`
-	WhenHandedOver          *string                         `bson:"whenHandedOver,omitempty" json:"whenHandedOver,omitempty"`
-	Destination             *Reference                      `bson:"destination,omitempty" json:"destination,omitempty"`
-	Note                    []Annotation                    `bson:"note,omitempty" json:"note,omitempty"`
-	DosageInstruction       []Dosage                        `bson:"dosageInstruction,omitempty" json:"dosageInstruction,omitempty"`
-	Substitution            *MedicationDispenseSubstitution `bson:"substitution,omitempty" json:"substitution,omitempty"`
-	DetectedIssue           []Reference                     `bson:"detectedIssue,omitempty" json:"detectedIssue,omitempty"`
-	NotDone                 *bool                           `bson:"notDone,omitempty" json:"notDone,omitempty"`
-	EventHistory            []Reference                     `bson:"eventHistory,omitempty" json:"eventHistory,omitempty"`
+	Id                           *string                         `bson:"id" json:"id"`
+	Meta                         *Meta                           `bson:"meta" json:"meta"`
+	ImplicitRules                *string                         `bson:"implicitRules" json:"implicitRules"`
+	Language                     *string                         `bson:"language" json:"language"`
+	Text                         *Narrative                      `bson:"text" json:"text"`
+	Contained                    []json.RawMessage               `bson:"contained" json:"contained"`
+	Extension                    []Extension                     `bson:"extension" json:"extension"`
+	ModifierExtension            []Extension                     `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier                   []Identifier                    `bson:"identifier" json:"identifier"`
+	PartOf                       []Reference                     `bson:"partOf" json:"partOf"`
+	Status                       *MedicationDispenseStatus       `bson:"status" json:"status"`
+	Category                     *CodeableConcept                `bson:"category" json:"category"`
+	MedicationCodeableConcept    *CodeableConcept                `bson:"medicationCodeableConcept,omitempty" json:"medicationCodeableConcept,omitempty"`
+	MedicationReference          *Reference                      `bson:"medicationReference,omitempty" json:"medicationReference,omitempty"`
+	Subject                      *Reference                      `bson:"subject" json:"subject"`
+	Context                      *Reference                      `bson:"context" json:"context"`
+	SupportingInformation        []Reference                     `bson:"supportingInformation" json:"supportingInformation"`
+	Performer                    []MedicationDispensePerformer   `bson:"performer" json:"performer"`
+	AuthorizingPrescription      []Reference                     `bson:"authorizingPrescription" json:"authorizingPrescription"`
+	Type                         *CodeableConcept                `bson:"type" json:"type"`
+	Quantity                     *Quantity                       `bson:"quantity" json:"quantity"`
+	DaysSupply                   *Quantity                       `bson:"daysSupply" json:"daysSupply"`
+	WhenPrepared                 *string                         `bson:"whenPrepared" json:"whenPrepared"`
+	WhenHandedOver               *string                         `bson:"whenHandedOver" json:"whenHandedOver"`
+	Destination                  *Reference                      `bson:"destination" json:"destination"`
+	Receiver                     []Reference                     `bson:"receiver" json:"receiver"`
+	Note                         []Annotation                    `bson:"note" json:"note"`
+	DosageInstruction            []Dosage                        `bson:"dosageInstruction" json:"dosageInstruction"`
+	Substitution                 *MedicationDispenseSubstitution `bson:"substitution" json:"substitution"`
+	DetectedIssue                []Reference                     `bson:"detectedIssue" json:"detectedIssue"`
+	NotDone                      *bool                           `bson:"notDone" json:"notDone"`
+	NotDoneReasonCodeableConcept *CodeableConcept                `bson:"notDoneReasonCodeableConcept,omitempty" json:"notDoneReasonCodeableConcept,omitempty"`
+	NotDoneReasonReference       *Reference                      `bson:"notDoneReasonReference,omitempty" json:"notDoneReasonReference,omitempty"`
+	EventHistory                 []Reference                     `bson:"eventHistory" json:"eventHistory"`
 }
 type MedicationDispensePerformer struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	OnBehalfOf        *Reference  `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Actor             Reference   `bson:"actor,omitempty" json:"actor,omitempty"`
+	OnBehalfOf        *Reference  `bson:"onBehalfOf" json:"onBehalfOf"`
 }
 type MedicationDispenseSubstitution struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	WasSubstituted    bool              `bson:"wasSubstituted" json:"wasSubstituted"`
-	Type              *CodeableConcept  `bson:"type,omitempty" json:"type,omitempty"`
-	Reason            []CodeableConcept `bson:"reason,omitempty" json:"reason,omitempty"`
-	ResponsibleParty  []Reference       `bson:"responsibleParty,omitempty" json:"responsibleParty,omitempty"`
+	Id                *string           `bson:"id" json:"id"`
+	Extension         []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	WasSubstituted    bool              `bson:"wasSubstituted,omitempty" json:"wasSubstituted,omitempty"`
+	Type              *CodeableConcept  `bson:"type" json:"type"`
+	Reason            []CodeableConcept `bson:"reason" json:"reason"`
+	ResponsibleParty  []Reference       `bson:"responsibleParty" json:"responsibleParty"`
 }
 type OtherMedicationDispense MedicationDispense
 
@@ -59,7 +68,7 @@ func (r MedicationDispense) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalMedicationDispense unmarshals a MedicationDispense.
+// UnmarshalMedicationDispense unmarshalls a MedicationDispense.
 func UnmarshalMedicationDispense(b []byte) (MedicationDispense, error) {
 	var medicationDispense MedicationDispense
 	if err := json.Unmarshal(b, &medicationDispense); err != nil {

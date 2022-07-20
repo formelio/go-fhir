@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/ivido/go-fhir-library/generator/fhir"
+	"github.com/ivido/go-fhir-stu3/generator/fhir"
 )
 
 func generateResources() {
@@ -36,7 +36,7 @@ func generateResource(definition fhir.StructureDefinition) (*jen.File, error) {
 		return nil, fmt.Errorf("missing element definitions in structure definition `%s`", definition.Name)
 	}
 
-	fmt.Printf("Generate Go sources for R: %s\n", definition.Name)
+	fmt.Printf("Generate Go sources for Resource: %s\n", definition.Name)
 
 	var err error
 

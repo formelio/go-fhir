@@ -4,29 +4,31 @@ import "encoding/json"
 
 // Person is documented here http://hl7.org/fhir/StructureDefinition/Person
 type Person struct {
-	Id                   *string        `bson:"id,omitempty" json:"id,omitempty"`
-	Meta                 *Meta          `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules        *string        `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language             *string        `bson:"language,omitempty" json:"language,omitempty"`
-	Text                 *Narrative     `bson:"text,omitempty" json:"text,omitempty"`
-	Extension            []Extension    `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension    []Extension    `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier           []Identifier   `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Name                 []HumanName    `bson:"name,omitempty" json:"name,omitempty"`
-	Telecom              []ContactPoint `bson:"telecom,omitempty" json:"telecom,omitempty"`
-	Gender               *string        `bson:"gender,omitempty" json:"gender,omitempty"`
-	BirthDate            *string        `bson:"birthDate,omitempty" json:"birthDate,omitempty"`
-	Address              []Address      `bson:"address,omitempty" json:"address,omitempty"`
-	Photo                *Attachment    `bson:"photo,omitempty" json:"photo,omitempty"`
-	ManagingOrganization *Reference     `bson:"managingOrganization,omitempty" json:"managingOrganization,omitempty"`
-	Active               *bool          `bson:"active,omitempty" json:"active,omitempty"`
-	Link                 []PersonLink   `bson:"link,omitempty" json:"link,omitempty"`
+	Id                   *string               `bson:"id" json:"id"`
+	Meta                 *Meta                 `bson:"meta" json:"meta"`
+	ImplicitRules        *string               `bson:"implicitRules" json:"implicitRules"`
+	Language             *string               `bson:"language" json:"language"`
+	Text                 *Narrative            `bson:"text" json:"text"`
+	Contained            []json.RawMessage     `bson:"contained" json:"contained"`
+	Extension            []Extension           `bson:"extension" json:"extension"`
+	ModifierExtension    []Extension           `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier           []Identifier          `bson:"identifier" json:"identifier"`
+	Name                 []HumanName           `bson:"name" json:"name"`
+	Telecom              []ContactPoint        `bson:"telecom" json:"telecom"`
+	Gender               *AdministrativeGender `bson:"gender" json:"gender"`
+	BirthDate            *string               `bson:"birthDate" json:"birthDate"`
+	Address              []Address             `bson:"address" json:"address"`
+	Photo                *Attachment           `bson:"photo" json:"photo"`
+	ManagingOrganization *Reference            `bson:"managingOrganization" json:"managingOrganization"`
+	Active               *bool                 `bson:"active" json:"active"`
+	Link                 []PersonLink          `bson:"link" json:"link"`
 }
 type PersonLink struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Assurance         *string     `bson:"assurance,omitempty" json:"assurance,omitempty"`
+	Id                *string                 `bson:"id" json:"id"`
+	Extension         []Extension             `bson:"extension" json:"extension"`
+	ModifierExtension []Extension             `bson:"modifierExtension" json:"modifierExtension"`
+	Target            Reference               `bson:"target,omitempty" json:"target,omitempty"`
+	Assurance         *IdentityAssuranceLevel `bson:"assurance" json:"assurance"`
 }
 type OtherPerson Person
 
@@ -41,7 +43,7 @@ func (r Person) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalPerson unmarshals a Person.
+// UnmarshalPerson unmarshalls a Person.
 func UnmarshalPerson(b []byte) (Person, error) {
 	var person Person
 	if err := json.Unmarshal(b, &person); err != nil {

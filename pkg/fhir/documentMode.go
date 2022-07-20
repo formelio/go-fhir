@@ -1,0 +1,61 @@
+package fhir
+
+import (
+	"encoding/json"
+	"fmt"
+	"strings"
+)
+
+// DocumentMode is documented here http://hl7.org/fhir/ValueSet/document-mode
+type DocumentMode int
+
+const (
+	DocumentModeProducer DocumentMode = iota
+	DocumentModeConsumer
+)
+
+func (code DocumentMode) MarshalJSON() ([]byte, error) {
+	return json.Marshal(code.Code())
+}
+func (code *DocumentMode) UnmarshalJSON(json []byte) error {
+	s := strings.Trim(string(json), "\"")
+	switch s {
+	case "producer":
+		*code = DocumentModeProducer
+	case "consumer":
+		*code = DocumentModeConsumer
+	default:
+		return fmt.Errorf("unknown DocumentMode code `%s`", s)
+	}
+	return nil
+}
+func (code DocumentMode) String() string {
+	return code.Code()
+}
+func (code DocumentMode) Code() string {
+	switch code {
+	case DocumentModeProducer:
+		return "producer"
+	case DocumentModeConsumer:
+		return "consumer"
+	}
+	return "<unknown>"
+}
+func (code DocumentMode) Display() string {
+	switch code {
+	case DocumentModeProducer:
+		return "Producer"
+	case DocumentModeConsumer:
+		return "Consumer"
+	}
+	return "<unknown>"
+}
+func (code DocumentMode) Definition() string {
+	switch code {
+	case DocumentModeProducer:
+		return "The application produces documents of the specified type."
+	case DocumentModeConsumer:
+		return "The application consumes documents of the specified type."
+	}
+	return "<unknown>"
+}

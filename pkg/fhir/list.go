@@ -4,33 +4,36 @@ import "encoding/json"
 
 // List is documented here http://hl7.org/fhir/StructureDefinition/List
 type List struct {
-	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta            `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string          `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string          `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative       `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            string           `bson:"status" json:"status"`
-	Mode              string           `bson:"mode" json:"mode"`
-	Title             *string          `bson:"title,omitempty" json:"title,omitempty"`
-	Code              *CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
-	Encounter         *Reference       `bson:"encounter,omitempty" json:"encounter,omitempty"`
-	Date              *string          `bson:"date,omitempty" json:"date,omitempty"`
-	OrderedBy         *CodeableConcept `bson:"orderedBy,omitempty" json:"orderedBy,omitempty"`
-	Note              []Annotation     `bson:"note,omitempty" json:"note,omitempty"`
-	Entry             []ListEntry      `bson:"entry,omitempty" json:"entry,omitempty"`
-	EmptyReason       *CodeableConcept `bson:"emptyReason,omitempty" json:"emptyReason,omitempty"`
+	Id                *string           `bson:"id" json:"id"`
+	Meta              *Meta             `bson:"meta" json:"meta"`
+	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
+	Language          *string           `bson:"language" json:"language"`
+	Text              *Narrative        `bson:"text" json:"text"`
+	Contained         []json.RawMessage `bson:"contained" json:"contained"`
+	Extension         []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
+	Status            ListStatus        `bson:"status,omitempty" json:"status,omitempty"`
+	Mode              ListMode          `bson:"mode,omitempty" json:"mode,omitempty"`
+	Title             *string           `bson:"title" json:"title"`
+	Code              *CodeableConcept  `bson:"code" json:"code"`
+	Subject           *Reference        `bson:"subject" json:"subject"`
+	Encounter         *Reference        `bson:"encounter" json:"encounter"`
+	Date              *string           `bson:"date" json:"date"`
+	Source            *Reference        `bson:"source" json:"source"`
+	OrderedBy         *CodeableConcept  `bson:"orderedBy" json:"orderedBy"`
+	Note              []Annotation      `bson:"note" json:"note"`
+	Entry             []ListEntry       `bson:"entry" json:"entry"`
+	EmptyReason       *CodeableConcept  `bson:"emptyReason" json:"emptyReason"`
 }
 type ListEntry struct {
-	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Flag              *CodeableConcept `bson:"flag,omitempty" json:"flag,omitempty"`
-	Deleted           *bool            `bson:"deleted,omitempty" json:"deleted,omitempty"`
-	Date              *string          `bson:"date,omitempty" json:"date,omitempty"`
-	Item              Reference        `bson:"item" json:"item"`
+	Id                *string          `bson:"id" json:"id"`
+	Extension         []Extension      `bson:"extension" json:"extension"`
+	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Flag              *CodeableConcept `bson:"flag" json:"flag"`
+	Deleted           *bool            `bson:"deleted" json:"deleted"`
+	Date              *string          `bson:"date" json:"date"`
+	Item              Reference        `bson:"item,omitempty" json:"item,omitempty"`
 }
 type OtherList List
 
@@ -45,7 +48,7 @@ func (r List) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalList unmarshals a List.
+// UnmarshalList unmarshalls a List.
 func UnmarshalList(b []byte) (List, error) {
 	var list List
 	if err := json.Unmarshal(b, &list); err != nil {

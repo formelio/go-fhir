@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/ivido/go-fhir-library/generator/fhir"
+	"github.com/ivido/go-fhir-stu3/generator/fhir"
 )
 
 func generateValueSets() {
@@ -256,4 +256,3 @@ func definitions(valueSetName string, concepts []fhir.CodeSystemConcept) func(gr
 		}
 	}
 }
-

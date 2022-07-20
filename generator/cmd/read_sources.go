@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ivido/go-fhir-library/generator/fhir"
+	"github.com/ivido/go-fhir-stu3/generator/fhir"
 )
 
 func readSourcesToContext(dir string) {
@@ -43,11 +43,11 @@ func processResource(resource Resource, resourceBytes []byte) error {
 			return err
 		}
 		for _, entry := range bundle.Entry {
-			entryResource, err := UnmarshalResource(entry.Resource)
+			entryResource, err := UnmarshalResource(*entry.Resource)
 			if err != nil {
 				return err
 			}
-			processResource(entryResource, entry.Resource)
+			processResource(entryResource, *entry.Resource)
 		}
 	case "StructureDefinition":
 		if resource.Name != nil && *resource.Name != "Element" && *resource.Name != "BackboneElement" {

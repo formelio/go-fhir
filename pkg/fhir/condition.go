@@ -4,37 +4,53 @@ import "encoding/json"
 
 // Condition is documented here http://hl7.org/fhir/StructureDefinition/Condition
 type Condition struct {
-	Id                 *string             `bson:"id,omitempty" json:"id,omitempty"`
-	Meta               *Meta               `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules      *string             `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language           *string             `bson:"language,omitempty" json:"language,omitempty"`
-	Text               *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
-	Extension          []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension  []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier         []Identifier        `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	ClinicalStatus     *string             `bson:"clinicalStatus,omitempty" json:"clinicalStatus,omitempty"`
-	VerificationStatus *string             `bson:"verificationStatus,omitempty" json:"verificationStatus,omitempty"`
-	Category           []CodeableConcept   `bson:"category,omitempty" json:"category,omitempty"`
-	Severity           *CodeableConcept    `bson:"severity,omitempty" json:"severity,omitempty"`
-	Code               *CodeableConcept    `bson:"code,omitempty" json:"code,omitempty"`
-	BodySite           []CodeableConcept   `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
-	AssertedDate       *string             `bson:"assertedDate,omitempty" json:"assertedDate,omitempty"`
-	Stage              *ConditionStage     `bson:"stage,omitempty" json:"stage,omitempty"`
-	Evidence           []ConditionEvidence `bson:"evidence,omitempty" json:"evidence,omitempty"`
-	Note               []Annotation        `bson:"note,omitempty" json:"note,omitempty"`
+	Id                 *string                      `bson:"id" json:"id"`
+	Meta               *Meta                        `bson:"meta" json:"meta"`
+	ImplicitRules      *string                      `bson:"implicitRules" json:"implicitRules"`
+	Language           *string                      `bson:"language" json:"language"`
+	Text               *Narrative                   `bson:"text" json:"text"`
+	Contained          []json.RawMessage            `bson:"contained" json:"contained"`
+	Extension          []Extension                  `bson:"extension" json:"extension"`
+	ModifierExtension  []Extension                  `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier         []Identifier                 `bson:"identifier" json:"identifier"`
+	ClinicalStatus     *string                      `bson:"clinicalStatus" json:"clinicalStatus"`
+	VerificationStatus *ConditionVerificationStatus `bson:"verificationStatus" json:"verificationStatus"`
+	Category           []CodeableConcept            `bson:"category" json:"category"`
+	Severity           *CodeableConcept             `bson:"severity" json:"severity"`
+	Code               *CodeableConcept             `bson:"code" json:"code"`
+	BodySite           []CodeableConcept            `bson:"bodySite" json:"bodySite"`
+	Subject            Reference                    `bson:"subject,omitempty" json:"subject,omitempty"`
+	Context            *Reference                   `bson:"context" json:"context"`
+	OnsetDateTime      *string                      `bson:"onsetDateTime,omitempty" json:"onsetDateTime,omitempty"`
+	OnsetAge           *Age                         `bson:"onsetAge,omitempty" json:"onsetAge,omitempty"`
+	OnsetPeriod        *Period                      `bson:"onsetPeriod,omitempty" json:"onsetPeriod,omitempty"`
+	OnsetRange         *Range                       `bson:"onsetRange,omitempty" json:"onsetRange,omitempty"`
+	OnsetString        *string                      `bson:"onsetString,omitempty" json:"onsetString,omitempty"`
+	AbatementDateTime  *string                      `bson:"abatementDateTime,omitempty" json:"abatementDateTime,omitempty"`
+	AbatementAge       *Age                         `bson:"abatementAge,omitempty" json:"abatementAge,omitempty"`
+	AbatementBoolean   *bool                        `bson:"abatementBoolean,omitempty" json:"abatementBoolean,omitempty"`
+	AbatementPeriod    *Period                      `bson:"abatementPeriod,omitempty" json:"abatementPeriod,omitempty"`
+	AbatementRange     *Range                       `bson:"abatementRange,omitempty" json:"abatementRange,omitempty"`
+	AbatementString    *string                      `bson:"abatementString,omitempty" json:"abatementString,omitempty"`
+	AssertedDate       *string                      `bson:"assertedDate" json:"assertedDate"`
+	Asserter           *Reference                   `bson:"asserter" json:"asserter"`
+	Stage              *ConditionStage              `bson:"stage" json:"stage"`
+	Evidence           []ConditionEvidence          `bson:"evidence" json:"evidence"`
+	Note               []Annotation                 `bson:"note" json:"note"`
 }
 type ConditionStage struct {
-	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Summary           *CodeableConcept `bson:"summary,omitempty" json:"summary,omitempty"`
+	Id                *string          `bson:"id" json:"id"`
+	Extension         []Extension      `bson:"extension" json:"extension"`
+	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Summary           *CodeableConcept `bson:"summary" json:"summary"`
+	Assessment        []Reference      `bson:"assessment" json:"assessment"`
 }
 type ConditionEvidence struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Code              []CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
-	Detail            []Reference       `bson:"detail,omitempty" json:"detail,omitempty"`
+	Id                *string           `bson:"id" json:"id"`
+	Extension         []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Code              []CodeableConcept `bson:"code" json:"code"`
+	Detail            []Reference       `bson:"detail" json:"detail"`
 }
 type OtherCondition Condition
 
@@ -49,7 +65,7 @@ func (r Condition) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalCondition unmarshals a Condition.
+// UnmarshalCondition unmarshalls a Condition.
 func UnmarshalCondition(b []byte) (Condition, error) {
 	var condition Condition
 	if err := json.Unmarshal(b, &condition); err != nil {

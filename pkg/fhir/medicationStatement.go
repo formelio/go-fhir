@@ -4,23 +4,34 @@ import "encoding/json"
 
 // MedicationStatement is documented here http://hl7.org/fhir/StructureDefinition/MedicationStatement
 type MedicationStatement struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            string            `bson:"status" json:"status"`
-	Category          *CodeableConcept  `bson:"category,omitempty" json:"category,omitempty"`
-	DateAsserted      *string           `bson:"dateAsserted,omitempty" json:"dateAsserted,omitempty"`
-	DerivedFrom       []Reference       `bson:"derivedFrom,omitempty" json:"derivedFrom,omitempty"`
-	Taken             string            `bson:"taken" json:"taken"`
-	ReasonNotTaken    []CodeableConcept `bson:"reasonNotTaken,omitempty" json:"reasonNotTaken,omitempty"`
-	ReasonCode        []CodeableConcept `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	Note              []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
-	Dosage            []Dosage          `bson:"dosage,omitempty" json:"dosage,omitempty"`
+	Id                        *string                   `bson:"id" json:"id"`
+	Meta                      *Meta                     `bson:"meta" json:"meta"`
+	ImplicitRules             *string                   `bson:"implicitRules" json:"implicitRules"`
+	Language                  *string                   `bson:"language" json:"language"`
+	Text                      *Narrative                `bson:"text" json:"text"`
+	Contained                 []json.RawMessage         `bson:"contained" json:"contained"`
+	Extension                 []Extension               `bson:"extension" json:"extension"`
+	ModifierExtension         []Extension               `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier                []Identifier              `bson:"identifier" json:"identifier"`
+	BasedOn                   []Reference               `bson:"basedOn" json:"basedOn"`
+	PartOf                    []Reference               `bson:"partOf" json:"partOf"`
+	Context                   *Reference                `bson:"context" json:"context"`
+	Status                    MedicationStatementStatus `bson:"status,omitempty" json:"status,omitempty"`
+	Category                  *CodeableConcept          `bson:"category" json:"category"`
+	MedicationCodeableConcept *CodeableConcept          `bson:"medicationCodeableConcept,omitempty" json:"medicationCodeableConcept,omitempty"`
+	MedicationReference       *Reference                `bson:"medicationReference,omitempty" json:"medicationReference,omitempty"`
+	EffectiveDateTime         *string                   `bson:"effectiveDateTime,omitempty" json:"effectiveDateTime,omitempty"`
+	EffectivePeriod           *Period                   `bson:"effectivePeriod,omitempty" json:"effectivePeriod,omitempty"`
+	DateAsserted              *string                   `bson:"dateAsserted" json:"dateAsserted"`
+	InformationSource         *Reference                `bson:"informationSource" json:"informationSource"`
+	Subject                   Reference                 `bson:"subject,omitempty" json:"subject,omitempty"`
+	DerivedFrom               []Reference               `bson:"derivedFrom" json:"derivedFrom"`
+	Taken                     MedicationStatementTaken  `bson:"taken,omitempty" json:"taken,omitempty"`
+	ReasonNotTaken            []CodeableConcept         `bson:"reasonNotTaken" json:"reasonNotTaken"`
+	ReasonCode                []CodeableConcept         `bson:"reasonCode" json:"reasonCode"`
+	ReasonReference           []Reference               `bson:"reasonReference" json:"reasonReference"`
+	Note                      []Annotation              `bson:"note" json:"note"`
+	Dosage                    []Dosage                  `bson:"dosage" json:"dosage"`
 }
 type OtherMedicationStatement MedicationStatement
 
@@ -35,7 +46,7 @@ func (r MedicationStatement) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalMedicationStatement unmarshals a MedicationStatement.
+// UnmarshalMedicationStatement unmarshalls a MedicationStatement.
 func UnmarshalMedicationStatement(b []byte) (MedicationStatement, error) {
 	var medicationStatement MedicationStatement
 	if err := json.Unmarshal(b, &medicationStatement); err != nil {

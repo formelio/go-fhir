@@ -4,37 +4,43 @@ import "encoding/json"
 
 // Group is documented here http://hl7.org/fhir/StructureDefinition/Group
 type Group struct {
-	Id                *string               `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string               `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Active            *bool                 `bson:"active,omitempty" json:"active,omitempty"`
-	Type              string                `bson:"type" json:"type"`
-	Actual            bool                  `bson:"actual" json:"actual"`
-	Code              *CodeableConcept      `bson:"code,omitempty" json:"code,omitempty"`
-	Name              *string               `bson:"name,omitempty" json:"name,omitempty"`
-	Quantity          *int                  `bson:"quantity,omitempty" json:"quantity,omitempty"`
-	Characteristic    []GroupCharacteristic `bson:"characteristic,omitempty" json:"characteristic,omitempty"`
-	Member            []GroupMember         `bson:"member,omitempty" json:"member,omitempty"`
+	Id                *string               `bson:"id" json:"id"`
+	Meta              *Meta                 `bson:"meta" json:"meta"`
+	ImplicitRules     *string               `bson:"implicitRules" json:"implicitRules"`
+	Language          *string               `bson:"language" json:"language"`
+	Text              *Narrative            `bson:"text" json:"text"`
+	Contained         []json.RawMessage     `bson:"contained" json:"contained"`
+	Extension         []Extension           `bson:"extension" json:"extension"`
+	ModifierExtension []Extension           `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        []Identifier          `bson:"identifier" json:"identifier"`
+	Active            *bool                 `bson:"active" json:"active"`
+	Type              GroupType             `bson:"type,omitempty" json:"type,omitempty"`
+	Actual            bool                  `bson:"actual,omitempty" json:"actual,omitempty"`
+	Code              *CodeableConcept      `bson:"code" json:"code"`
+	Name              *string               `bson:"name" json:"name"`
+	Quantity          *int                  `bson:"quantity" json:"quantity"`
+	Characteristic    []GroupCharacteristic `bson:"characteristic" json:"characteristic"`
+	Member            []GroupMember         `bson:"member" json:"member"`
 }
 type GroupCharacteristic struct {
-	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Code              CodeableConcept `bson:"code" json:"code"`
-	Exclude           bool            `bson:"exclude" json:"exclude"`
-	Period            *Period         `bson:"period,omitempty" json:"period,omitempty"`
+	Id                   *string          `bson:"id" json:"id"`
+	Extension            []Extension      `bson:"extension" json:"extension"`
+	ModifierExtension    []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Code                 CodeableConcept  `bson:"code,omitempty" json:"code,omitempty"`
+	ValueCodeableConcept *CodeableConcept `bson:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty"`
+	ValueBoolean         *bool            `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
+	ValueQuantity        *Quantity        `bson:"valueQuantity,omitempty" json:"valueQuantity,omitempty"`
+	ValueRange           *Range           `bson:"valueRange,omitempty" json:"valueRange,omitempty"`
+	Exclude              bool             `bson:"exclude,omitempty" json:"exclude,omitempty"`
+	Period               *Period          `bson:"period" json:"period"`
 }
 type GroupMember struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Period            *Period     `bson:"period,omitempty" json:"period,omitempty"`
-	Inactive          *bool       `bson:"inactive,omitempty" json:"inactive,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Entity            Reference   `bson:"entity,omitempty" json:"entity,omitempty"`
+	Period            *Period     `bson:"period" json:"period"`
+	Inactive          *bool       `bson:"inactive" json:"inactive"`
 }
 type OtherGroup Group
 
@@ -49,7 +55,7 @@ func (r Group) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalGroup unmarshals a Group.
+// UnmarshalGroup unmarshalls a Group.
 func UnmarshalGroup(b []byte) (Group, error) {
 	var group Group
 	if err := json.Unmarshal(b, &group); err != nil {

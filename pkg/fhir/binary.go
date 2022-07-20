@@ -4,13 +4,13 @@ import "encoding/json"
 
 // Binary is documented here http://hl7.org/fhir/StructureDefinition/Binary
 type Binary struct {
-	Id              *string    `bson:"id,omitempty" json:"id,omitempty"`
-	Meta            *Meta      `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules   *string    `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language        *string    `bson:"language,omitempty" json:"language,omitempty"`
-	ContentType     string     `bson:"contentType" json:"contentType"`
-	SecurityContext *Reference `bson:"securityContext,omitempty" json:"securityContext,omitempty"`
-	Content         string     `bson:"content" json:"content"`
+	Id              *string    `bson:"id" json:"id"`
+	Meta            *Meta      `bson:"meta" json:"meta"`
+	ImplicitRules   *string    `bson:"implicitRules" json:"implicitRules"`
+	Language        *string    `bson:"language" json:"language"`
+	ContentType     string     `bson:"contentType,omitempty" json:"contentType,omitempty"`
+	SecurityContext *Reference `bson:"securityContext" json:"securityContext"`
+	Content         string     `bson:"content,omitempty" json:"content,omitempty"`
 }
 type OtherBinary Binary
 
@@ -25,7 +25,7 @@ func (r Binary) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalBinary unmarshals a Binary.
+// UnmarshalBinary unmarshalls a Binary.
 func UnmarshalBinary(b []byte) (Binary, error) {
 	var binary Binary
 	if err := json.Unmarshal(b, &binary); err != nil {

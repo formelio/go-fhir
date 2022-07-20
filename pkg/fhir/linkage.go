@@ -4,22 +4,24 @@ import "encoding/json"
 
 // Linkage is documented here http://hl7.org/fhir/StructureDefinition/Linkage
 type Linkage struct {
-	Id                *string       `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta         `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string       `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string       `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative    `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension   `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension   `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Active            *bool         `bson:"active,omitempty" json:"active,omitempty"`
-	Item              []LinkageItem `bson:"item" json:"item"`
+	Id                *string           `bson:"id" json:"id"`
+	Meta              *Meta             `bson:"meta" json:"meta"`
+	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
+	Language          *string           `bson:"language" json:"language"`
+	Text              *Narrative        `bson:"text" json:"text"`
+	Contained         []json.RawMessage `bson:"contained" json:"contained"`
+	Extension         []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Active            *bool             `bson:"active" json:"active"`
+	Author            *Reference        `bson:"author" json:"author"`
+	Item              []LinkageItem     `bson:"item,omitempty" json:"item,omitempty"`
 }
 type LinkageItem struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              string      `bson:"type" json:"type"`
-	Resource          Reference   `bson:"resource" json:"resource"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Type              LinkageType `bson:"type,omitempty" json:"type,omitempty"`
+	Resource          Reference   `bson:"resource,omitempty" json:"resource,omitempty"`
 }
 type OtherLinkage Linkage
 
@@ -34,7 +36,7 @@ func (r Linkage) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalLinkage unmarshals a Linkage.
+// UnmarshalLinkage unmarshalls a Linkage.
 func UnmarshalLinkage(b []byte) (Linkage, error) {
 	var linkage Linkage
 	if err := json.Unmarshal(b, &linkage); err != nil {

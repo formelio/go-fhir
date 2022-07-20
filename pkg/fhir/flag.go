@@ -4,19 +4,22 @@ import "encoding/json"
 
 // Flag is documented here http://hl7.org/fhir/StructureDefinition/Flag
 type Flag struct {
-	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta            `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string          `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string          `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative       `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            string           `bson:"status" json:"status"`
-	Category          *CodeableConcept `bson:"category,omitempty" json:"category,omitempty"`
-	Code              CodeableConcept  `bson:"code" json:"code"`
-	Period            *Period          `bson:"period,omitempty" json:"period,omitempty"`
-	Encounter         *Reference       `bson:"encounter,omitempty" json:"encounter,omitempty"`
+	Id                *string           `bson:"id" json:"id"`
+	Meta              *Meta             `bson:"meta" json:"meta"`
+	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
+	Language          *string           `bson:"language" json:"language"`
+	Text              *Narrative        `bson:"text" json:"text"`
+	Contained         []json.RawMessage `bson:"contained" json:"contained"`
+	Extension         []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
+	Status            FlagStatus        `bson:"status,omitempty" json:"status,omitempty"`
+	Category          *CodeableConcept  `bson:"category" json:"category"`
+	Code              CodeableConcept   `bson:"code,omitempty" json:"code,omitempty"`
+	Subject           Reference         `bson:"subject,omitempty" json:"subject,omitempty"`
+	Period            *Period           `bson:"period" json:"period"`
+	Encounter         *Reference        `bson:"encounter" json:"encounter"`
+	Author            *Reference        `bson:"author" json:"author"`
 }
 type OtherFlag Flag
 
@@ -31,7 +34,7 @@ func (r Flag) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalFlag unmarshals a Flag.
+// UnmarshalFlag unmarshalls a Flag.
 func UnmarshalFlag(b []byte) (Flag, error) {
 	var flag Flag
 	if err := json.Unmarshal(b, &flag); err != nil {

@@ -4,36 +4,37 @@ import "encoding/json"
 
 // CompartmentDefinition is documented here http://hl7.org/fhir/StructureDefinition/CompartmentDefinition
 type CompartmentDefinition struct {
-	Id                *string                         `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                           `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                         `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                         `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                      `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension                     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Url               string                          `bson:"url" json:"url"`
-	Name              string                          `bson:"name" json:"name"`
-	Title             *string                         `bson:"title,omitempty" json:"title,omitempty"`
-	Status            string                          `bson:"status" json:"status"`
-	Experimental      *bool                           `bson:"experimental,omitempty" json:"experimental,omitempty"`
-	Date              *string                         `bson:"date,omitempty" json:"date,omitempty"`
-	Publisher         *string                         `bson:"publisher,omitempty" json:"publisher,omitempty"`
-	Contact           []ContactDetail                 `bson:"contact,omitempty" json:"contact,omitempty"`
-	Description       *string                         `bson:"description,omitempty" json:"description,omitempty"`
-	Purpose           *string                         `bson:"purpose,omitempty" json:"purpose,omitempty"`
-	UseContext        []UsageContext                  `bson:"useContext,omitempty" json:"useContext,omitempty"`
-	Jurisdiction      []CodeableConcept               `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
-	Code              string                          `bson:"code" json:"code"`
-	Search            bool                            `bson:"search" json:"search"`
-	Resource          []CompartmentDefinitionResource `bson:"resource,omitempty" json:"resource,omitempty"`
+	Id                *string                         `bson:"id" json:"id"`
+	Meta              *Meta                           `bson:"meta" json:"meta"`
+	ImplicitRules     *string                         `bson:"implicitRules" json:"implicitRules"`
+	Language          *string                         `bson:"language" json:"language"`
+	Text              *Narrative                      `bson:"text" json:"text"`
+	Contained         []json.RawMessage               `bson:"contained" json:"contained"`
+	Extension         []Extension                     `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                     `bson:"modifierExtension" json:"modifierExtension"`
+	Url               string                          `bson:"url,omitempty" json:"url,omitempty"`
+	Name              string                          `bson:"name,omitempty" json:"name,omitempty"`
+	Title             *string                         `bson:"title" json:"title"`
+	Status            PublicationStatus               `bson:"status,omitempty" json:"status,omitempty"`
+	Experimental      *bool                           `bson:"experimental" json:"experimental"`
+	Date              *string                         `bson:"date" json:"date"`
+	Publisher         *string                         `bson:"publisher" json:"publisher"`
+	Contact           []ContactDetail                 `bson:"contact" json:"contact"`
+	Description       *string                         `bson:"description" json:"description"`
+	Purpose           *string                         `bson:"purpose" json:"purpose"`
+	UseContext        []UsageContext                  `bson:"useContext" json:"useContext"`
+	Jurisdiction      []CodeableConcept               `bson:"jurisdiction" json:"jurisdiction"`
+	Code              CompartmentType                 `bson:"code,omitempty" json:"code,omitempty"`
+	Search            bool                            `bson:"search,omitempty" json:"search,omitempty"`
+	Resource          []CompartmentDefinitionResource `bson:"resource" json:"resource"`
 }
 type CompartmentDefinitionResource struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Code              string      `bson:"code" json:"code"`
-	Param             []string    `bson:"param,omitempty" json:"param,omitempty"`
-	Documentation     *string     `bson:"documentation,omitempty" json:"documentation,omitempty"`
+	Id                *string      `bson:"id" json:"id"`
+	Extension         []Extension  `bson:"extension" json:"extension"`
+	ModifierExtension []Extension  `bson:"modifierExtension" json:"modifierExtension"`
+	Code              ResourceType `bson:"code,omitempty" json:"code,omitempty"`
+	Param             []string     `bson:"param" json:"param"`
+	Documentation     *string      `bson:"documentation" json:"documentation"`
 }
 type OtherCompartmentDefinition CompartmentDefinition
 
@@ -48,7 +49,7 @@ func (r CompartmentDefinition) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalCompartmentDefinition unmarshals a CompartmentDefinition.
+// UnmarshalCompartmentDefinition unmarshalls a CompartmentDefinition.
 func UnmarshalCompartmentDefinition(b []byte) (CompartmentDefinition, error) {
 	var compartmentDefinition CompartmentDefinition
 	if err := json.Unmarshal(b, &compartmentDefinition); err != nil {

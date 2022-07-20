@@ -4,77 +4,84 @@ import "encoding/json"
 
 // Consent is documented here http://hl7.org/fhir/StructureDefinition/Consent
 type Consent struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        *Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            string            `bson:"status" json:"status"`
-	Category          []CodeableConcept `bson:"category,omitempty" json:"category,omitempty"`
-	Patient           Reference         `bson:"patient" json:"patient"`
-	Period            *Period           `bson:"period,omitempty" json:"period,omitempty"`
-	DateTime          *string           `bson:"dateTime,omitempty" json:"dateTime,omitempty"`
-	Actor             []ConsentActor    `bson:"actor,omitempty" json:"actor,omitempty"`
-	Action            []CodeableConcept `bson:"action,omitempty" json:"action,omitempty"`
-	Organization      []Reference       `bson:"organization,omitempty" json:"organization,omitempty"`
-	Policy            []ConsentPolicy   `bson:"policy,omitempty" json:"policy,omitempty"`
-	PolicyRule        *string           `bson:"policyRule,omitempty" json:"policyRule,omitempty"`
-	SecurityLabel     []Coding          `bson:"securityLabel,omitempty" json:"securityLabel,omitempty"`
-	Purpose           []Coding          `bson:"purpose,omitempty" json:"purpose,omitempty"`
-	DataPeriod        *Period           `bson:"dataPeriod,omitempty" json:"dataPeriod,omitempty"`
-	Data              []ConsentData     `bson:"data,omitempty" json:"data,omitempty"`
-	Except            []ConsentExcept   `bson:"except,omitempty" json:"except,omitempty"`
+	Id                *string           `bson:"id" json:"id"`
+	Meta              *Meta             `bson:"meta" json:"meta"`
+	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
+	Language          *string           `bson:"language" json:"language"`
+	Text              *Narrative        `bson:"text" json:"text"`
+	Contained         []json.RawMessage `bson:"contained" json:"contained"`
+	Extension         []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        *Identifier       `bson:"identifier" json:"identifier"`
+	Status            ConsentState      `bson:"status,omitempty" json:"status,omitempty"`
+	Category          []CodeableConcept `bson:"category" json:"category"`
+	Patient           Reference         `bson:"patient,omitempty" json:"patient,omitempty"`
+	Period            *Period           `bson:"period" json:"period"`
+	DateTime          *string           `bson:"dateTime" json:"dateTime"`
+	ConsentingParty   []Reference       `bson:"consentingParty" json:"consentingParty"`
+	Actor             []ConsentActor    `bson:"actor" json:"actor"`
+	Action            []CodeableConcept `bson:"action" json:"action"`
+	Organization      []Reference       `bson:"organization" json:"organization"`
+	SourceAttachment  *Attachment       `bson:"sourceAttachment,omitempty" json:"sourceAttachment,omitempty"`
+	SourceIdentifier  *Identifier       `bson:"sourceIdentifier,omitempty" json:"sourceIdentifier,omitempty"`
+	SourceReference   *Reference        `bson:"sourceReference,omitempty" json:"sourceReference,omitempty"`
+	Policy            []ConsentPolicy   `bson:"policy" json:"policy"`
+	PolicyRule        *string           `bson:"policyRule" json:"policyRule"`
+	SecurityLabel     []Coding          `bson:"securityLabel" json:"securityLabel"`
+	Purpose           []Coding          `bson:"purpose" json:"purpose"`
+	DataPeriod        *Period           `bson:"dataPeriod" json:"dataPeriod"`
+	Data              []ConsentData     `bson:"data" json:"data"`
+	Except            []ConsentExcept   `bson:"except" json:"except"`
 }
 type ConsentActor struct {
-	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Role              CodeableConcept `bson:"role" json:"role"`
+	Id                *string         `bson:"id" json:"id"`
+	Extension         []Extension     `bson:"extension" json:"extension"`
+	ModifierExtension []Extension     `bson:"modifierExtension" json:"modifierExtension"`
+	Role              CodeableConcept `bson:"role,omitempty" json:"role,omitempty"`
+	Reference         Reference       `bson:"reference,omitempty" json:"reference,omitempty"`
 }
 type ConsentPolicy struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Authority         *string     `bson:"authority,omitempty" json:"authority,omitempty"`
-	Uri               *string     `bson:"uri,omitempty" json:"uri,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Authority         *string     `bson:"authority" json:"authority"`
+	Uri               *string     `bson:"uri" json:"uri"`
 }
 type ConsentData struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Meaning           string      `bson:"meaning" json:"meaning"`
-	Reference         Reference   `bson:"reference" json:"reference"`
+	Id                *string            `bson:"id" json:"id"`
+	Extension         []Extension        `bson:"extension" json:"extension"`
+	ModifierExtension []Extension        `bson:"modifierExtension" json:"modifierExtension"`
+	Meaning           ConsentDataMeaning `bson:"meaning,omitempty" json:"meaning,omitempty"`
+	Reference         Reference          `bson:"reference,omitempty" json:"reference,omitempty"`
 }
 type ConsentExcept struct {
-	Id                *string              `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension          `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              string               `bson:"type" json:"type"`
-	Period            *Period              `bson:"period,omitempty" json:"period,omitempty"`
-	Actor             []ConsentExceptActor `bson:"actor,omitempty" json:"actor,omitempty"`
-	Action            []CodeableConcept    `bson:"action,omitempty" json:"action,omitempty"`
-	SecurityLabel     []Coding             `bson:"securityLabel,omitempty" json:"securityLabel,omitempty"`
-	Purpose           []Coding             `bson:"purpose,omitempty" json:"purpose,omitempty"`
-	Class             []Coding             `bson:"class,omitempty" json:"class,omitempty"`
-	Code              []Coding             `bson:"code,omitempty" json:"code,omitempty"`
-	DataPeriod        *Period              `bson:"dataPeriod,omitempty" json:"dataPeriod,omitempty"`
-	Data              []ConsentExceptData  `bson:"data,omitempty" json:"data,omitempty"`
+	Id                *string              `bson:"id" json:"id"`
+	Extension         []Extension          `bson:"extension" json:"extension"`
+	ModifierExtension []Extension          `bson:"modifierExtension" json:"modifierExtension"`
+	Type              ConsentExceptType    `bson:"type,omitempty" json:"type,omitempty"`
+	Period            *Period              `bson:"period" json:"period"`
+	Actor             []ConsentExceptActor `bson:"actor" json:"actor"`
+	Action            []CodeableConcept    `bson:"action" json:"action"`
+	SecurityLabel     []Coding             `bson:"securityLabel" json:"securityLabel"`
+	Purpose           []Coding             `bson:"purpose" json:"purpose"`
+	Class             []Coding             `bson:"class" json:"class"`
+	Code              []Coding             `bson:"code" json:"code"`
+	DataPeriod        *Period              `bson:"dataPeriod" json:"dataPeriod"`
+	Data              []ConsentExceptData  `bson:"data" json:"data"`
 }
 type ConsentExceptActor struct {
-	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Role              CodeableConcept `bson:"role" json:"role"`
+	Id                *string         `bson:"id" json:"id"`
+	Extension         []Extension     `bson:"extension" json:"extension"`
+	ModifierExtension []Extension     `bson:"modifierExtension" json:"modifierExtension"`
+	Role              CodeableConcept `bson:"role,omitempty" json:"role,omitempty"`
+	Reference         Reference       `bson:"reference,omitempty" json:"reference,omitempty"`
 }
 type ConsentExceptData struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Meaning           string      `bson:"meaning" json:"meaning"`
-	Reference         Reference   `bson:"reference" json:"reference"`
+	Id                *string            `bson:"id" json:"id"`
+	Extension         []Extension        `bson:"extension" json:"extension"`
+	ModifierExtension []Extension        `bson:"modifierExtension" json:"modifierExtension"`
+	Meaning           ConsentDataMeaning `bson:"meaning,omitempty" json:"meaning,omitempty"`
+	Reference         Reference          `bson:"reference,omitempty" json:"reference,omitempty"`
 }
 type OtherConsent Consent
 
@@ -89,7 +96,7 @@ func (r Consent) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalConsent unmarshals a Consent.
+// UnmarshalConsent unmarshalls a Consent.
 func UnmarshalConsent(b []byte) (Consent, error) {
 	var consent Consent
 	if err := json.Unmarshal(b, &consent); err != nil {

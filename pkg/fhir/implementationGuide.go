@@ -4,75 +4,78 @@ import "encoding/json"
 
 // ImplementationGuide is documented here http://hl7.org/fhir/StructureDefinition/ImplementationGuide
 type ImplementationGuide struct {
-	Id                *string                         `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                           `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                         `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                         `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                      `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension                     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Url               string                          `bson:"url" json:"url"`
-	Version           *string                         `bson:"version,omitempty" json:"version,omitempty"`
-	Name              string                          `bson:"name" json:"name"`
-	Status            string                          `bson:"status" json:"status"`
-	Experimental      *bool                           `bson:"experimental,omitempty" json:"experimental,omitempty"`
-	Date              *string                         `bson:"date,omitempty" json:"date,omitempty"`
-	Publisher         *string                         `bson:"publisher,omitempty" json:"publisher,omitempty"`
-	Contact           []ContactDetail                 `bson:"contact,omitempty" json:"contact,omitempty"`
-	Description       *string                         `bson:"description,omitempty" json:"description,omitempty"`
-	UseContext        []UsageContext                  `bson:"useContext,omitempty" json:"useContext,omitempty"`
-	Jurisdiction      []CodeableConcept               `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
-	Copyright         *string                         `bson:"copyright,omitempty" json:"copyright,omitempty"`
-	FhirVersion       *string                         `bson:"fhirVersion,omitempty" json:"fhirVersion,omitempty"`
-	Dependency        []ImplementationGuideDependency `bson:"dependency,omitempty" json:"dependency,omitempty"`
-	Package           []ImplementationGuidePackage    `bson:"package,omitempty" json:"package,omitempty"`
-	Global            []ImplementationGuideGlobal     `bson:"global,omitempty" json:"global,omitempty"`
-	Binary            []string                        `bson:"binary,omitempty" json:"binary,omitempty"`
-	Page              *ImplementationGuidePage        `bson:"page,omitempty" json:"page,omitempty"`
+	Id                *string                         `bson:"id" json:"id"`
+	Meta              *Meta                           `bson:"meta" json:"meta"`
+	ImplicitRules     *string                         `bson:"implicitRules" json:"implicitRules"`
+	Language          *string                         `bson:"language" json:"language"`
+	Text              *Narrative                      `bson:"text" json:"text"`
+	Contained         []json.RawMessage               `bson:"contained" json:"contained"`
+	Extension         []Extension                     `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                     `bson:"modifierExtension" json:"modifierExtension"`
+	Url               string                          `bson:"url,omitempty" json:"url,omitempty"`
+	Version           *string                         `bson:"version" json:"version"`
+	Name              string                          `bson:"name,omitempty" json:"name,omitempty"`
+	Status            PublicationStatus               `bson:"status,omitempty" json:"status,omitempty"`
+	Experimental      *bool                           `bson:"experimental" json:"experimental"`
+	Date              *string                         `bson:"date" json:"date"`
+	Publisher         *string                         `bson:"publisher" json:"publisher"`
+	Contact           []ContactDetail                 `bson:"contact" json:"contact"`
+	Description       *string                         `bson:"description" json:"description"`
+	UseContext        []UsageContext                  `bson:"useContext" json:"useContext"`
+	Jurisdiction      []CodeableConcept               `bson:"jurisdiction" json:"jurisdiction"`
+	Copyright         *string                         `bson:"copyright" json:"copyright"`
+	FhirVersion       *string                         `bson:"fhirVersion" json:"fhirVersion"`
+	Dependency        []ImplementationGuideDependency `bson:"dependency" json:"dependency"`
+	Package           []ImplementationGuidePackage    `bson:"package" json:"package"`
+	Global            []ImplementationGuideGlobal     `bson:"global" json:"global"`
+	Binary            []string                        `bson:"binary" json:"binary"`
+	Page              *ImplementationGuidePage        `bson:"page" json:"page"`
 }
 type ImplementationGuideDependency struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              string      `bson:"type" json:"type"`
-	Uri               string      `bson:"uri" json:"uri"`
+	Id                *string             `bson:"id" json:"id"`
+	Extension         []Extension         `bson:"extension" json:"extension"`
+	ModifierExtension []Extension         `bson:"modifierExtension" json:"modifierExtension"`
+	Type              GuideDependencyType `bson:"type,omitempty" json:"type,omitempty"`
+	Uri               string              `bson:"uri,omitempty" json:"uri,omitempty"`
 }
 type ImplementationGuidePackage struct {
-	Id                *string                              `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                          `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Name              string                               `bson:"name" json:"name"`
-	Description       *string                              `bson:"description,omitempty" json:"description,omitempty"`
-	Resource          []ImplementationGuidePackageResource `bson:"resource" json:"resource"`
+	Id                *string                              `bson:"id" json:"id"`
+	Extension         []Extension                          `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                          `bson:"modifierExtension" json:"modifierExtension"`
+	Name              string                               `bson:"name,omitempty" json:"name,omitempty"`
+	Description       *string                              `bson:"description" json:"description"`
+	Resource          []ImplementationGuidePackageResource `bson:"resource,omitempty" json:"resource,omitempty"`
 }
 type ImplementationGuidePackageResource struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Example           bool        `bson:"example" json:"example"`
-	Name              *string     `bson:"name,omitempty" json:"name,omitempty"`
-	Description       *string     `bson:"description,omitempty" json:"description,omitempty"`
-	Acronym           *string     `bson:"acronym,omitempty" json:"acronym,omitempty"`
-	ExampleFor        *Reference  `bson:"exampleFor,omitempty" json:"exampleFor,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Example           bool        `bson:"example,omitempty" json:"example,omitempty"`
+	Name              *string     `bson:"name" json:"name"`
+	Description       *string     `bson:"description" json:"description"`
+	Acronym           *string     `bson:"acronym" json:"acronym"`
+	SourceUri         *string     `bson:"sourceUri,omitempty" json:"sourceUri,omitempty"`
+	SourceReference   *Reference  `bson:"sourceReference,omitempty" json:"sourceReference,omitempty"`
+	ExampleFor        *Reference  `bson:"exampleFor" json:"exampleFor"`
 }
 type ImplementationGuideGlobal struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              string      `bson:"type" json:"type"`
-	Profile           Reference   `bson:"profile" json:"profile"`
+	Id                *string      `bson:"id" json:"id"`
+	Extension         []Extension  `bson:"extension" json:"extension"`
+	ModifierExtension []Extension  `bson:"modifierExtension" json:"modifierExtension"`
+	Type              ResourceType `bson:"type,omitempty" json:"type,omitempty"`
+	Profile           Reference    `bson:"profile,omitempty" json:"profile,omitempty"`
 }
 type ImplementationGuidePage struct {
-	Id                *string                   `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Source            string                    `bson:"source" json:"source"`
-	Title             string                    `bson:"title" json:"title"`
-	Kind              string                    `bson:"kind" json:"kind"`
-	Type              []string                  `bson:"type,omitempty" json:"type,omitempty"`
-	Package           []string                  `bson:"package,omitempty" json:"package,omitempty"`
-	Format            *string                   `bson:"format,omitempty" json:"format,omitempty"`
-	Page              []ImplementationGuidePage `bson:"page,omitempty" json:"page,omitempty"`
+	Id                *string                   `bson:"id" json:"id"`
+	Extension         []Extension               `bson:"extension" json:"extension"`
+	ModifierExtension []Extension               `bson:"modifierExtension" json:"modifierExtension"`
+	Source            string                    `bson:"source,omitempty" json:"source,omitempty"`
+	Title             string                    `bson:"title,omitempty" json:"title,omitempty"`
+	Kind              GuidePageKind             `bson:"kind,omitempty" json:"kind,omitempty"`
+	Type              []ResourceType            `bson:"type" json:"type"`
+	Package           []string                  `bson:"package" json:"package"`
+	Format            *string                   `bson:"format" json:"format"`
+	Page              []ImplementationGuidePage `bson:"page" json:"page"`
 }
 type OtherImplementationGuide ImplementationGuide
 
@@ -87,7 +90,7 @@ func (r ImplementationGuide) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalImplementationGuide unmarshals a ImplementationGuide.
+// UnmarshalImplementationGuide unmarshalls a ImplementationGuide.
 func UnmarshalImplementationGuide(b []byte) (ImplementationGuide, error) {
 	var implementationGuide ImplementationGuide
 	if err := json.Unmarshal(b, &implementationGuide); err != nil {

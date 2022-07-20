@@ -4,34 +4,45 @@ import "encoding/json"
 
 // DeviceRequest is documented here http://hl7.org/fhir/StructureDefinition/DeviceRequest
 type DeviceRequest struct {
-	Id                *string                 `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                   `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                 `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                 `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative              `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier            `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	BasedOn           []Reference             `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	PriorRequest      []Reference             `bson:"priorRequest,omitempty" json:"priorRequest,omitempty"`
-	GroupIdentifier   *Identifier             `bson:"groupIdentifier,omitempty" json:"groupIdentifier,omitempty"`
-	Status            *string                 `bson:"status,omitempty" json:"status,omitempty"`
-	Intent            CodeableConcept         `bson:"intent" json:"intent"`
-	Priority          *string                 `bson:"priority,omitempty" json:"priority,omitempty"`
-	AuthoredOn        *string                 `bson:"authoredOn,omitempty" json:"authoredOn,omitempty"`
-	Requester         *DeviceRequestRequester `bson:"requester,omitempty" json:"requester,omitempty"`
-	PerformerType     *CodeableConcept        `bson:"performerType,omitempty" json:"performerType,omitempty"`
-	ReasonCode        []CodeableConcept       `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	ReasonReference   []Reference             `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	SupportingInfo    []Reference             `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
-	Note              []Annotation            `bson:"note,omitempty" json:"note,omitempty"`
-	RelevantHistory   []Reference             `bson:"relevantHistory,omitempty" json:"relevantHistory,omitempty"`
+	Id                  *string                 `bson:"id" json:"id"`
+	Meta                *Meta                   `bson:"meta" json:"meta"`
+	ImplicitRules       *string                 `bson:"implicitRules" json:"implicitRules"`
+	Language            *string                 `bson:"language" json:"language"`
+	Text                *Narrative              `bson:"text" json:"text"`
+	Contained           []json.RawMessage       `bson:"contained" json:"contained"`
+	Extension           []Extension             `bson:"extension" json:"extension"`
+	ModifierExtension   []Extension             `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier          []Identifier            `bson:"identifier" json:"identifier"`
+	Definition          []Reference             `bson:"definition" json:"definition"`
+	BasedOn             []Reference             `bson:"basedOn" json:"basedOn"`
+	PriorRequest        []Reference             `bson:"priorRequest" json:"priorRequest"`
+	GroupIdentifier     *Identifier             `bson:"groupIdentifier" json:"groupIdentifier"`
+	Status              *RequestStatus          `bson:"status" json:"status"`
+	Intent              CodeableConcept         `bson:"intent,omitempty" json:"intent,omitempty"`
+	Priority            *RequestPriority        `bson:"priority" json:"priority"`
+	CodeReference       *Reference              `bson:"codeReference,omitempty" json:"codeReference,omitempty"`
+	CodeCodeableConcept *CodeableConcept        `bson:"codeCodeableConcept,omitempty" json:"codeCodeableConcept,omitempty"`
+	Subject             Reference               `bson:"subject,omitempty" json:"subject,omitempty"`
+	Context             *Reference              `bson:"context" json:"context"`
+	OccurrenceDateTime  *string                 `bson:"occurrenceDateTime,omitempty" json:"occurrenceDateTime,omitempty"`
+	OccurrencePeriod    *Period                 `bson:"occurrencePeriod,omitempty" json:"occurrencePeriod,omitempty"`
+	OccurrenceTiming    *Timing                 `bson:"occurrenceTiming,omitempty" json:"occurrenceTiming,omitempty"`
+	AuthoredOn          *string                 `bson:"authoredOn" json:"authoredOn"`
+	Requester           *DeviceRequestRequester `bson:"requester" json:"requester"`
+	PerformerType       *CodeableConcept        `bson:"performerType" json:"performerType"`
+	Performer           *Reference              `bson:"performer" json:"performer"`
+	ReasonCode          []CodeableConcept       `bson:"reasonCode" json:"reasonCode"`
+	ReasonReference     []Reference             `bson:"reasonReference" json:"reasonReference"`
+	SupportingInfo      []Reference             `bson:"supportingInfo" json:"supportingInfo"`
+	Note                []Annotation            `bson:"note" json:"note"`
+	RelevantHistory     []Reference             `bson:"relevantHistory" json:"relevantHistory"`
 }
 type DeviceRequestRequester struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	OnBehalfOf        *Reference  `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
+	OnBehalfOf        *Reference  `bson:"onBehalfOf" json:"onBehalfOf"`
 }
 type OtherDeviceRequest DeviceRequest
 
@@ -46,7 +57,7 @@ func (r DeviceRequest) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalDeviceRequest unmarshals a DeviceRequest.
+// UnmarshalDeviceRequest unmarshalls a DeviceRequest.
 func UnmarshalDeviceRequest(b []byte) (DeviceRequest, error) {
 	var deviceRequest DeviceRequest
 	if err := json.Unmarshal(b, &deviceRequest); err != nil {

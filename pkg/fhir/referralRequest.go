@@ -4,35 +4,45 @@ import "encoding/json"
 
 // ReferralRequest is documented here http://hl7.org/fhir/StructureDefinition/ReferralRequest
 type ReferralRequest struct {
-	Id                *string                   `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                     `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                   `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                   `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Replaces          []Reference               `bson:"replaces,omitempty" json:"replaces,omitempty"`
-	GroupIdentifier   *Identifier               `bson:"groupIdentifier,omitempty" json:"groupIdentifier,omitempty"`
-	Status            string                    `bson:"status" json:"status"`
-	Intent            string                    `bson:"intent" json:"intent"`
-	Type              *CodeableConcept          `bson:"type,omitempty" json:"type,omitempty"`
-	Priority          *string                   `bson:"priority,omitempty" json:"priority,omitempty"`
-	ServiceRequested  []CodeableConcept         `bson:"serviceRequested,omitempty" json:"serviceRequested,omitempty"`
-	AuthoredOn        *string                   `bson:"authoredOn,omitempty" json:"authoredOn,omitempty"`
-	Requester         *ReferralRequestRequester `bson:"requester,omitempty" json:"requester,omitempty"`
-	Specialty         *CodeableConcept          `bson:"specialty,omitempty" json:"specialty,omitempty"`
-	ReasonCode        []CodeableConcept         `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	Description       *string                   `bson:"description,omitempty" json:"description,omitempty"`
-	SupportingInfo    []Reference               `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
-	Note              []Annotation              `bson:"note,omitempty" json:"note,omitempty"`
-	RelevantHistory   []Reference               `bson:"relevantHistory,omitempty" json:"relevantHistory,omitempty"`
+	Id                 *string                   `bson:"id" json:"id"`
+	Meta               *Meta                     `bson:"meta" json:"meta"`
+	ImplicitRules      *string                   `bson:"implicitRules" json:"implicitRules"`
+	Language           *string                   `bson:"language" json:"language"`
+	Text               *Narrative                `bson:"text" json:"text"`
+	Contained          []json.RawMessage         `bson:"contained" json:"contained"`
+	Extension          []Extension               `bson:"extension" json:"extension"`
+	ModifierExtension  []Extension               `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier         []Identifier              `bson:"identifier" json:"identifier"`
+	Definition         []Reference               `bson:"definition" json:"definition"`
+	BasedOn            []Reference               `bson:"basedOn" json:"basedOn"`
+	Replaces           []Reference               `bson:"replaces" json:"replaces"`
+	GroupIdentifier    *Identifier               `bson:"groupIdentifier" json:"groupIdentifier"`
+	Status             RequestStatus             `bson:"status,omitempty" json:"status,omitempty"`
+	Intent             RequestIntent             `bson:"intent,omitempty" json:"intent,omitempty"`
+	Type               *CodeableConcept          `bson:"type" json:"type"`
+	Priority           *RequestPriority          `bson:"priority" json:"priority"`
+	ServiceRequested   []CodeableConcept         `bson:"serviceRequested" json:"serviceRequested"`
+	Subject            Reference                 `bson:"subject,omitempty" json:"subject,omitempty"`
+	Context            *Reference                `bson:"context" json:"context"`
+	OccurrenceDateTime *string                   `bson:"occurrenceDateTime,omitempty" json:"occurrenceDateTime,omitempty"`
+	OccurrencePeriod   *Period                   `bson:"occurrencePeriod,omitempty" json:"occurrencePeriod,omitempty"`
+	AuthoredOn         *string                   `bson:"authoredOn" json:"authoredOn"`
+	Requester          *ReferralRequestRequester `bson:"requester" json:"requester"`
+	Specialty          *CodeableConcept          `bson:"specialty" json:"specialty"`
+	Recipient          []Reference               `bson:"recipient" json:"recipient"`
+	ReasonCode         []CodeableConcept         `bson:"reasonCode" json:"reasonCode"`
+	ReasonReference    []Reference               `bson:"reasonReference" json:"reasonReference"`
+	Description        *string                   `bson:"description" json:"description"`
+	SupportingInfo     []Reference               `bson:"supportingInfo" json:"supportingInfo"`
+	Note               []Annotation              `bson:"note" json:"note"`
+	RelevantHistory    []Reference               `bson:"relevantHistory" json:"relevantHistory"`
 }
 type ReferralRequestRequester struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	OnBehalfOf        *Reference  `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
+	OnBehalfOf        *Reference  `bson:"onBehalfOf" json:"onBehalfOf"`
 }
 type OtherReferralRequest ReferralRequest
 
@@ -47,7 +57,7 @@ func (r ReferralRequest) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalReferralRequest unmarshals a ReferralRequest.
+// UnmarshalReferralRequest unmarshalls a ReferralRequest.
 func UnmarshalReferralRequest(b []byte) (ReferralRequest, error) {
 	var referralRequest ReferralRequest
 	if err := json.Unmarshal(b, &referralRequest); err != nil {

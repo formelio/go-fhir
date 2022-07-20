@@ -4,31 +4,32 @@ import "encoding/json"
 
 // DeviceMetric is documented here http://hl7.org/fhir/StructureDefinition/DeviceMetric
 type DeviceMetric struct {
-	Id                *string                   `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                     `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                   `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                   `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        Identifier                `bson:"identifier" json:"identifier"`
-	Type              CodeableConcept           `bson:"type" json:"type"`
-	Unit              *CodeableConcept          `bson:"unit,omitempty" json:"unit,omitempty"`
-	Source            *Reference                `bson:"source,omitempty" json:"source,omitempty"`
-	Parent            *Reference                `bson:"parent,omitempty" json:"parent,omitempty"`
-	OperationalStatus *string                   `bson:"operationalStatus,omitempty" json:"operationalStatus,omitempty"`
-	Color             *string                   `bson:"color,omitempty" json:"color,omitempty"`
-	Category          string                    `bson:"category" json:"category"`
-	MeasurementPeriod *Timing                   `bson:"measurementPeriod,omitempty" json:"measurementPeriod,omitempty"`
-	Calibration       []DeviceMetricCalibration `bson:"calibration,omitempty" json:"calibration,omitempty"`
+	Id                *string                        `bson:"id" json:"id"`
+	Meta              *Meta                          `bson:"meta" json:"meta"`
+	ImplicitRules     *string                        `bson:"implicitRules" json:"implicitRules"`
+	Language          *string                        `bson:"language" json:"language"`
+	Text              *Narrative                     `bson:"text" json:"text"`
+	Contained         []json.RawMessage              `bson:"contained" json:"contained"`
+	Extension         []Extension                    `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                    `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        Identifier                     `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Type              CodeableConcept                `bson:"type,omitempty" json:"type,omitempty"`
+	Unit              *CodeableConcept               `bson:"unit" json:"unit"`
+	Source            *Reference                     `bson:"source" json:"source"`
+	Parent            *Reference                     `bson:"parent" json:"parent"`
+	OperationalStatus *DeviceMetricOperationalStatus `bson:"operationalStatus" json:"operationalStatus"`
+	Color             *DeviceMetricColor             `bson:"color" json:"color"`
+	Category          DeviceMetricCategory           `bson:"category,omitempty" json:"category,omitempty"`
+	MeasurementPeriod *Timing                        `bson:"measurementPeriod" json:"measurementPeriod"`
+	Calibration       []DeviceMetricCalibration      `bson:"calibration" json:"calibration"`
 }
 type DeviceMetricCalibration struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              *string     `bson:"type,omitempty" json:"type,omitempty"`
-	State             *string     `bson:"state,omitempty" json:"state,omitempty"`
-	Time              *string     `bson:"time,omitempty" json:"time,omitempty"`
+	Id                *string                       `bson:"id" json:"id"`
+	Extension         []Extension                   `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                   `bson:"modifierExtension" json:"modifierExtension"`
+	Type              *DeviceMetricCalibrationType  `bson:"type" json:"type"`
+	State             *DeviceMetricCalibrationState `bson:"state" json:"state"`
+	Time              *string                       `bson:"time" json:"time"`
 }
 type OtherDeviceMetric DeviceMetric
 
@@ -43,7 +44,7 @@ func (r DeviceMetric) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalDeviceMetric unmarshals a DeviceMetric.
+// UnmarshalDeviceMetric unmarshalls a DeviceMetric.
 func UnmarshalDeviceMetric(b []byte) (DeviceMetric, error) {
 	var deviceMetric DeviceMetric
 	if err := json.Unmarshal(b, &deviceMetric); err != nil {

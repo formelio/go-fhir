@@ -4,34 +4,37 @@ import "encoding/json"
 
 // Substance is documented here http://hl7.org/fhir/StructureDefinition/Substance
 type Substance struct {
-	Id                *string               `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string               `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            *string               `bson:"status,omitempty" json:"status,omitempty"`
-	Category          []CodeableConcept     `bson:"category,omitempty" json:"category,omitempty"`
-	Code              CodeableConcept       `bson:"code" json:"code"`
-	Description       *string               `bson:"description,omitempty" json:"description,omitempty"`
-	Instance          []SubstanceInstance   `bson:"instance,omitempty" json:"instance,omitempty"`
-	Ingredient        []SubstanceIngredient `bson:"ingredient,omitempty" json:"ingredient,omitempty"`
+	Id                *string               `bson:"id" json:"id"`
+	Meta              *Meta                 `bson:"meta" json:"meta"`
+	ImplicitRules     *string               `bson:"implicitRules" json:"implicitRules"`
+	Language          *string               `bson:"language" json:"language"`
+	Text              *Narrative            `bson:"text" json:"text"`
+	Contained         []json.RawMessage     `bson:"contained" json:"contained"`
+	Extension         []Extension           `bson:"extension" json:"extension"`
+	ModifierExtension []Extension           `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        []Identifier          `bson:"identifier" json:"identifier"`
+	Status            *FHIRSubstanceStatus  `bson:"status" json:"status"`
+	Category          []CodeableConcept     `bson:"category" json:"category"`
+	Code              CodeableConcept       `bson:"code,omitempty" json:"code,omitempty"`
+	Description       *string               `bson:"description" json:"description"`
+	Instance          []SubstanceInstance   `bson:"instance" json:"instance"`
+	Ingredient        []SubstanceIngredient `bson:"ingredient" json:"ingredient"`
 }
 type SubstanceInstance struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        *Identifier `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Expiry            *string     `bson:"expiry,omitempty" json:"expiry,omitempty"`
-	Quantity          *Quantity   `bson:"quantity,omitempty" json:"quantity,omitempty"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        *Identifier `bson:"identifier" json:"identifier"`
+	Expiry            *string     `bson:"expiry" json:"expiry"`
+	Quantity          *Quantity   `bson:"quantity" json:"quantity"`
 }
 type SubstanceIngredient struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Quantity          *Ratio      `bson:"quantity,omitempty" json:"quantity,omitempty"`
+	Id                       *string          `bson:"id" json:"id"`
+	Extension                []Extension      `bson:"extension" json:"extension"`
+	ModifierExtension        []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Quantity                 *Ratio           `bson:"quantity" json:"quantity"`
+	SubstanceCodeableConcept *CodeableConcept `bson:"substanceCodeableConcept,omitempty" json:"substanceCodeableConcept,omitempty"`
+	SubstanceReference       *Reference       `bson:"substanceReference,omitempty" json:"substanceReference,omitempty"`
 }
 type OtherSubstance Substance
 
@@ -46,7 +49,7 @@ func (r Substance) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalSubstance unmarshals a Substance.
+// UnmarshalSubstance unmarshalls a Substance.
 func UnmarshalSubstance(b []byte) (Substance, error) {
 	var substance Substance
 	if err := json.Unmarshal(b, &substance); err != nil {

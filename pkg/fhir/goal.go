@@ -4,30 +4,41 @@ import "encoding/json"
 
 // Goal is documented here http://hl7.org/fhir/StructureDefinition/Goal
 type Goal struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            string            `bson:"status" json:"status"`
-	Category          []CodeableConcept `bson:"category,omitempty" json:"category,omitempty"`
-	Priority          *CodeableConcept  `bson:"priority,omitempty" json:"priority,omitempty"`
-	Description       CodeableConcept   `bson:"description" json:"description"`
-	Target            *GoalTarget       `bson:"target,omitempty" json:"target,omitempty"`
-	StatusDate        *string           `bson:"statusDate,omitempty" json:"statusDate,omitempty"`
-	StatusReason      *string           `bson:"statusReason,omitempty" json:"statusReason,omitempty"`
-	Note              []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
-	OutcomeCode       []CodeableConcept `bson:"outcomeCode,omitempty" json:"outcomeCode,omitempty"`
-	OutcomeReference  []Reference       `bson:"outcomeReference,omitempty" json:"outcomeReference,omitempty"`
+	Id                   *string           `bson:"id" json:"id"`
+	Meta                 *Meta             `bson:"meta" json:"meta"`
+	ImplicitRules        *string           `bson:"implicitRules" json:"implicitRules"`
+	Language             *string           `bson:"language" json:"language"`
+	Text                 *Narrative        `bson:"text" json:"text"`
+	Contained            []json.RawMessage `bson:"contained" json:"contained"`
+	Extension            []Extension       `bson:"extension" json:"extension"`
+	ModifierExtension    []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier           []Identifier      `bson:"identifier" json:"identifier"`
+	Status               GoalStatus        `bson:"status,omitempty" json:"status,omitempty"`
+	Category             []CodeableConcept `bson:"category" json:"category"`
+	Priority             *CodeableConcept  `bson:"priority" json:"priority"`
+	Description          CodeableConcept   `bson:"description,omitempty" json:"description,omitempty"`
+	Subject              *Reference        `bson:"subject" json:"subject"`
+	StartDate            *string           `bson:"startDate,omitempty" json:"startDate,omitempty"`
+	StartCodeableConcept *CodeableConcept  `bson:"startCodeableConcept,omitempty" json:"startCodeableConcept,omitempty"`
+	Target               *GoalTarget       `bson:"target" json:"target"`
+	StatusDate           *string           `bson:"statusDate" json:"statusDate"`
+	StatusReason         *string           `bson:"statusReason" json:"statusReason"`
+	ExpressedBy          *Reference        `bson:"expressedBy" json:"expressedBy"`
+	Addresses            []Reference       `bson:"addresses" json:"addresses"`
+	Note                 []Annotation      `bson:"note" json:"note"`
+	OutcomeCode          []CodeableConcept `bson:"outcomeCode" json:"outcomeCode"`
+	OutcomeReference     []Reference       `bson:"outcomeReference" json:"outcomeReference"`
 }
 type GoalTarget struct {
-	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Measure           *CodeableConcept `bson:"measure,omitempty" json:"measure,omitempty"`
+	Id                    *string          `bson:"id" json:"id"`
+	Extension             []Extension      `bson:"extension" json:"extension"`
+	ModifierExtension     []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Measure               *CodeableConcept `bson:"measure" json:"measure"`
+	DetailQuantity        *Quantity        `bson:"detailQuantity,omitempty" json:"detailQuantity,omitempty"`
+	DetailRange           *Range           `bson:"detailRange,omitempty" json:"detailRange,omitempty"`
+	DetailCodeableConcept *CodeableConcept `bson:"detailCodeableConcept,omitempty" json:"detailCodeableConcept,omitempty"`
+	DueDate               *string          `bson:"dueDate,omitempty" json:"dueDate,omitempty"`
+	DueDuration           *Duration        `bson:"dueDuration,omitempty" json:"dueDuration,omitempty"`
 }
 type OtherGoal Goal
 
@@ -42,7 +53,7 @@ func (r Goal) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalGoal unmarshals a Goal.
+// UnmarshalGoal unmarshalls a Goal.
 func UnmarshalGoal(b []byte) (Goal, error) {
 	var goal Goal
 	if err := json.Unmarshal(b, &goal); err != nil {

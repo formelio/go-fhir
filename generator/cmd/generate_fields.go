@@ -7,7 +7,7 @@ import (
 	"unicode"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/ivido/go-fhir-library/generator/fhir"
+	"github.com/ivido/go-fhir-stu3/generator/fhir"
 )
 
 type FieldType int
@@ -78,7 +78,6 @@ func generateFields(
 					return 0, err
 				}
 			}
-
 			// For other tpes of fields we set the field type to the type identifier found
 			statement.Id(typeIdentifier)
 		}
@@ -116,7 +115,6 @@ func findFieldType(element fhir.ElementDefinition) FieldType {
 		elementTypeCode := element.Type[0].Code
 		for _, elementType := range element.Type {
 			if elementType.Code != elementTypeCode {
-				fmt.Println("Multiple types for " + element.Path)
 				return FieldTypePolymorphic
 			}
 		}
@@ -217,7 +215,11 @@ func requiredValueSetBinding(elementDefinition fhir.ElementDefinition) *string {
 	if elementDefinition.Binding != nil {
 		binding := *elementDefinition.Binding
 		if binding.Strength == fhir.BindingStrengthRequired {
-			return binding.ValueSet
+			if binding.ValueSetUri != nil {
+				return binding.ValueSetUri
+			} else if binding.ValueSetReference != nil {
+				return binding.ValueSetReference.Reference
+			}
 		}
 	}
 	return nil

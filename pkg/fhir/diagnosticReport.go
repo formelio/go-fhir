@@ -4,38 +4,46 @@ import "encoding/json"
 
 // DiagnosticReport is documented here http://hl7.org/fhir/StructureDefinition/DiagnosticReport
 type DiagnosticReport struct {
-	Id                *string                     `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                       `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                     `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                     `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                  `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier                `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            string                      `bson:"status" json:"status"`
-	Category          *CodeableConcept            `bson:"category,omitempty" json:"category,omitempty"`
-	Code              CodeableConcept             `bson:"code" json:"code"`
-	Issued            *string                     `bson:"issued,omitempty" json:"issued,omitempty"`
-	Performer         []DiagnosticReportPerformer `bson:"performer,omitempty" json:"performer,omitempty"`
-	Specimen          []Reference                 `bson:"specimen,omitempty" json:"specimen,omitempty"`
-	Result            []Reference                 `bson:"result,omitempty" json:"result,omitempty"`
-	Image             []DiagnosticReportImage     `bson:"image,omitempty" json:"image,omitempty"`
-	Conclusion        *string                     `bson:"conclusion,omitempty" json:"conclusion,omitempty"`
-	CodedDiagnosis    []CodeableConcept           `bson:"codedDiagnosis,omitempty" json:"codedDiagnosis,omitempty"`
-	PresentedForm     []Attachment                `bson:"presentedForm,omitempty" json:"presentedForm,omitempty"`
+	Id                *string                     `bson:"id" json:"id"`
+	Meta              *Meta                       `bson:"meta" json:"meta"`
+	ImplicitRules     *string                     `bson:"implicitRules" json:"implicitRules"`
+	Language          *string                     `bson:"language" json:"language"`
+	Text              *Narrative                  `bson:"text" json:"text"`
+	Contained         []json.RawMessage           `bson:"contained" json:"contained"`
+	Extension         []Extension                 `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                 `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        []Identifier                `bson:"identifier" json:"identifier"`
+	BasedOn           []Reference                 `bson:"basedOn" json:"basedOn"`
+	Status            DiagnosticReportStatus      `bson:"status,omitempty" json:"status,omitempty"`
+	Category          *CodeableConcept            `bson:"category" json:"category"`
+	Code              CodeableConcept             `bson:"code,omitempty" json:"code,omitempty"`
+	Subject           *Reference                  `bson:"subject" json:"subject"`
+	Context           *Reference                  `bson:"context" json:"context"`
+	EffectiveDateTime *string                     `bson:"effectiveDateTime,omitempty" json:"effectiveDateTime,omitempty"`
+	EffectivePeriod   *Period                     `bson:"effectivePeriod,omitempty" json:"effectivePeriod,omitempty"`
+	Issued            *string                     `bson:"issued" json:"issued"`
+	Performer         []DiagnosticReportPerformer `bson:"performer" json:"performer"`
+	Specimen          []Reference                 `bson:"specimen" json:"specimen"`
+	Result            []Reference                 `bson:"result" json:"result"`
+	ImagingStudy      []Reference                 `bson:"imagingStudy" json:"imagingStudy"`
+	Image             []DiagnosticReportImage     `bson:"image" json:"image"`
+	Conclusion        *string                     `bson:"conclusion" json:"conclusion"`
+	CodedDiagnosis    []CodeableConcept           `bson:"codedDiagnosis" json:"codedDiagnosis"`
+	PresentedForm     []Attachment                `bson:"presentedForm" json:"presentedForm"`
 }
 type DiagnosticReportPerformer struct {
-	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Role              *CodeableConcept `bson:"role,omitempty" json:"role,omitempty"`
+	Id                *string          `bson:"id" json:"id"`
+	Extension         []Extension      `bson:"extension" json:"extension"`
+	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Role              *CodeableConcept `bson:"role" json:"role"`
+	Actor             Reference        `bson:"actor,omitempty" json:"actor,omitempty"`
 }
 type DiagnosticReportImage struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Comment           *string     `bson:"comment,omitempty" json:"comment,omitempty"`
-	Link              Reference   `bson:"link" json:"link"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Comment           *string     `bson:"comment" json:"comment"`
+	Link              Reference   `bson:"link,omitempty" json:"link,omitempty"`
 }
 type OtherDiagnosticReport DiagnosticReport
 
@@ -50,7 +58,7 @@ func (r DiagnosticReport) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalDiagnosticReport unmarshals a DiagnosticReport.
+// UnmarshalDiagnosticReport unmarshalls a DiagnosticReport.
 func UnmarshalDiagnosticReport(b []byte) (DiagnosticReport, error) {
 	var diagnosticReport DiagnosticReport
 	if err := json.Unmarshal(b, &diagnosticReport); err != nil {

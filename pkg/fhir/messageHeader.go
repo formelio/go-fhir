@@ -4,48 +4,52 @@ import "encoding/json"
 
 // MessageHeader is documented here http://hl7.org/fhir/StructureDefinition/MessageHeader
 type MessageHeader struct {
-	Id                *string                    `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                      `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                    `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                    `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                 `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Event             Coding                     `bson:"event" json:"event"`
-	Destination       []MessageHeaderDestination `bson:"destination,omitempty" json:"destination,omitempty"`
-	Timestamp         string                     `bson:"timestamp" json:"timestamp"`
-	Enterer           *Reference                 `bson:"enterer,omitempty" json:"enterer,omitempty"`
-	Author            *Reference                 `bson:"author,omitempty" json:"author,omitempty"`
-	Source            MessageHeaderSource        `bson:"source" json:"source"`
-	Reason            *CodeableConcept           `bson:"reason,omitempty" json:"reason,omitempty"`
-	Response          *MessageHeaderResponse     `bson:"response,omitempty" json:"response,omitempty"`
-	Focus             []Reference                `bson:"focus,omitempty" json:"focus,omitempty"`
+	Id                *string                    `bson:"id" json:"id"`
+	Meta              *Meta                      `bson:"meta" json:"meta"`
+	ImplicitRules     *string                    `bson:"implicitRules" json:"implicitRules"`
+	Language          *string                    `bson:"language" json:"language"`
+	Text              *Narrative                 `bson:"text" json:"text"`
+	Contained         []json.RawMessage          `bson:"contained" json:"contained"`
+	Extension         []Extension                `bson:"extension" json:"extension"`
+	ModifierExtension []Extension                `bson:"modifierExtension" json:"modifierExtension"`
+	Event             Coding                     `bson:"event,omitempty" json:"event,omitempty"`
+	Destination       []MessageHeaderDestination `bson:"destination" json:"destination"`
+	Receiver          *Reference                 `bson:"receiver" json:"receiver"`
+	Sender            *Reference                 `bson:"sender" json:"sender"`
+	Timestamp         string                     `bson:"timestamp,omitempty" json:"timestamp,omitempty"`
+	Enterer           *Reference                 `bson:"enterer" json:"enterer"`
+	Author            *Reference                 `bson:"author" json:"author"`
+	Source            MessageHeaderSource        `bson:"source,omitempty" json:"source,omitempty"`
+	Responsible       *Reference                 `bson:"responsible" json:"responsible"`
+	Reason            *CodeableConcept           `bson:"reason" json:"reason"`
+	Response          *MessageHeaderResponse     `bson:"response" json:"response"`
+	Focus             []Reference                `bson:"focus" json:"focus"`
 }
 type MessageHeaderDestination struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Name              *string     `bson:"name,omitempty" json:"name,omitempty"`
-	Target            *Reference  `bson:"target,omitempty" json:"target,omitempty"`
-	Endpoint          string      `bson:"endpoint" json:"endpoint"`
+	Id                *string     `bson:"id" json:"id"`
+	Extension         []Extension `bson:"extension" json:"extension"`
+	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Name              *string     `bson:"name" json:"name"`
+	Target            *Reference  `bson:"target" json:"target"`
+	Endpoint          string      `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
 }
 type MessageHeaderSource struct {
-	Id                *string       `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension   `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension   `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Name              *string       `bson:"name,omitempty" json:"name,omitempty"`
-	Software          *string       `bson:"software,omitempty" json:"software,omitempty"`
-	Version           *string       `bson:"version,omitempty" json:"version,omitempty"`
-	Contact           *ContactPoint `bson:"contact,omitempty" json:"contact,omitempty"`
-	Endpoint          string        `bson:"endpoint" json:"endpoint"`
+	Id                *string       `bson:"id" json:"id"`
+	Extension         []Extension   `bson:"extension" json:"extension"`
+	ModifierExtension []Extension   `bson:"modifierExtension" json:"modifierExtension"`
+	Name              *string       `bson:"name" json:"name"`
+	Software          *string       `bson:"software" json:"software"`
+	Version           *string       `bson:"version" json:"version"`
+	Contact           *ContactPoint `bson:"contact" json:"contact"`
+	Endpoint          string        `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
 }
 type MessageHeaderResponse struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        string      `bson:"identifier" json:"identifier"`
-	Code              string      `bson:"code" json:"code"`
-	Details           *Reference  `bson:"details,omitempty" json:"details,omitempty"`
+	Id                *string      `bson:"id" json:"id"`
+	Extension         []Extension  `bson:"extension" json:"extension"`
+	ModifierExtension []Extension  `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier        string       `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Code              ResponseType `bson:"code,omitempty" json:"code,omitempty"`
+	Details           *Reference   `bson:"details" json:"details"`
 }
 type OtherMessageHeader MessageHeader
 
@@ -60,7 +64,7 @@ func (r MessageHeader) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalMessageHeader unmarshals a MessageHeader.
+// UnmarshalMessageHeader unmarshalls a MessageHeader.
 func UnmarshalMessageHeader(b []byte) (MessageHeader, error) {
 	var messageHeader MessageHeader
 	if err := json.Unmarshal(b, &messageHeader); err != nil {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/ivido/go-fhir-library/generator/fhir"
+	"github.com/ivido/go-fhir-stu3/generator/fhir"
 )
 
 /*
@@ -111,7 +111,7 @@ func typeCodeToTypeIdentifier(typeCode string) string {
 	case "dateTime":
 		return "string"
 	case "decimal":
-		return "string"
+		return "float64"
 	case "id":
 		return "string"
 	case "instant":

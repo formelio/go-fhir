@@ -4,30 +4,31 @@ import "encoding/json"
 
 // Subscription is documented here http://hl7.org/fhir/StructureDefinition/Subscription
 type Subscription struct {
-	Id                *string             `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta               `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string             `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string             `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
-	Extension         []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Status            string              `bson:"status" json:"status"`
-	Contact           []ContactPoint      `bson:"contact,omitempty" json:"contact,omitempty"`
-	End               *string             `bson:"end,omitempty" json:"end,omitempty"`
-	Reason            string              `bson:"reason" json:"reason"`
-	Criteria          string              `bson:"criteria" json:"criteria"`
-	Error             *string             `bson:"error,omitempty" json:"error,omitempty"`
-	Channel           SubscriptionChannel `bson:"channel" json:"channel"`
-	Tag               []Coding            `bson:"tag,omitempty" json:"tag,omitempty"`
+	Id                *string             `bson:"id" json:"id"`
+	Meta              *Meta               `bson:"meta" json:"meta"`
+	ImplicitRules     *string             `bson:"implicitRules" json:"implicitRules"`
+	Language          *string             `bson:"language" json:"language"`
+	Text              *Narrative          `bson:"text" json:"text"`
+	Contained         []json.RawMessage   `bson:"contained" json:"contained"`
+	Extension         []Extension         `bson:"extension" json:"extension"`
+	ModifierExtension []Extension         `bson:"modifierExtension" json:"modifierExtension"`
+	Status            SubscriptionStatus  `bson:"status,omitempty" json:"status,omitempty"`
+	Contact           []ContactPoint      `bson:"contact" json:"contact"`
+	End               *string             `bson:"end" json:"end"`
+	Reason            string              `bson:"reason,omitempty" json:"reason,omitempty"`
+	Criteria          string              `bson:"criteria,omitempty" json:"criteria,omitempty"`
+	Error             *string             `bson:"error" json:"error"`
+	Channel           SubscriptionChannel `bson:"channel,omitempty" json:"channel,omitempty"`
+	Tag               []Coding            `bson:"tag" json:"tag"`
 }
 type SubscriptionChannel struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              string      `bson:"type" json:"type"`
-	Endpoint          *string     `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
-	Payload           *string     `bson:"payload,omitempty" json:"payload,omitempty"`
-	Header            []string    `bson:"header,omitempty" json:"header,omitempty"`
+	Id                *string                 `bson:"id" json:"id"`
+	Extension         []Extension             `bson:"extension" json:"extension"`
+	ModifierExtension []Extension             `bson:"modifierExtension" json:"modifierExtension"`
+	Type              SubscriptionChannelType `bson:"type,omitempty" json:"type,omitempty"`
+	Endpoint          *string                 `bson:"endpoint" json:"endpoint"`
+	Payload           *string                 `bson:"payload" json:"payload"`
+	Header            []string                `bson:"header" json:"header"`
 }
 type OtherSubscription Subscription
 
@@ -42,7 +43,7 @@ func (r Subscription) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalSubscription unmarshals a Subscription.
+// UnmarshalSubscription unmarshalls a Subscription.
 func UnmarshalSubscription(b []byte) (Subscription, error) {
 	var subscription Subscription
 	if err := json.Unmarshal(b, &subscription); err != nil {

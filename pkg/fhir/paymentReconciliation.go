@@ -4,46 +4,47 @@ import "encoding/json"
 
 // PaymentReconciliation is documented here http://hl7.org/fhir/StructureDefinition/PaymentReconciliation
 type PaymentReconciliation struct {
-	Id                  *string                            `bson:"id,omitempty" json:"id,omitempty"`
-	Meta                *Meta                              `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules       *string                            `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language            *string                            `bson:"language,omitempty" json:"language,omitempty"`
-	Text                *Narrative                         `bson:"text,omitempty" json:"text,omitempty"`
-	Extension           []Extension                        `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension                        `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier          []Identifier                       `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status              *string                            `bson:"status,omitempty" json:"status,omitempty"`
-	Period              *Period                            `bson:"period,omitempty" json:"period,omitempty"`
-	Created             *string                            `bson:"created,omitempty" json:"created,omitempty"`
-	Organization        *Reference                         `bson:"organization,omitempty" json:"organization,omitempty"`
-	Request             *Reference                         `bson:"request,omitempty" json:"request,omitempty"`
-	Outcome             *CodeableConcept                   `bson:"outcome,omitempty" json:"outcome,omitempty"`
-	Disposition         *string                            `bson:"disposition,omitempty" json:"disposition,omitempty"`
-	RequestProvider     *Reference                         `bson:"requestProvider,omitempty" json:"requestProvider,omitempty"`
-	RequestOrganization *Reference                         `bson:"requestOrganization,omitempty" json:"requestOrganization,omitempty"`
-	Detail              []PaymentReconciliationDetail      `bson:"detail,omitempty" json:"detail,omitempty"`
-	Form                *CodeableConcept                   `bson:"form,omitempty" json:"form,omitempty"`
-	Total               *Money                             `bson:"total,omitempty" json:"total,omitempty"`
-	ProcessNote         []PaymentReconciliationProcessNote `bson:"processNote,omitempty" json:"processNote,omitempty"`
+	Id                  *string                            `bson:"id" json:"id"`
+	Meta                *Meta                              `bson:"meta" json:"meta"`
+	ImplicitRules       *string                            `bson:"implicitRules" json:"implicitRules"`
+	Language            *string                            `bson:"language" json:"language"`
+	Text                *Narrative                         `bson:"text" json:"text"`
+	Contained           []json.RawMessage                  `bson:"contained" json:"contained"`
+	Extension           []Extension                        `bson:"extension" json:"extension"`
+	ModifierExtension   []Extension                        `bson:"modifierExtension" json:"modifierExtension"`
+	Identifier          []Identifier                       `bson:"identifier" json:"identifier"`
+	Status              *string                            `bson:"status" json:"status"`
+	Period              *Period                            `bson:"period" json:"period"`
+	Created             *string                            `bson:"created" json:"created"`
+	Organization        *Reference                         `bson:"organization" json:"organization"`
+	Request             *Reference                         `bson:"request" json:"request"`
+	Outcome             *CodeableConcept                   `bson:"outcome" json:"outcome"`
+	Disposition         *string                            `bson:"disposition" json:"disposition"`
+	RequestProvider     *Reference                         `bson:"requestProvider" json:"requestProvider"`
+	RequestOrganization *Reference                         `bson:"requestOrganization" json:"requestOrganization"`
+	Detail              []PaymentReconciliationDetail      `bson:"detail" json:"detail"`
+	Form                *CodeableConcept                   `bson:"form" json:"form"`
+	Total               *Money                             `bson:"total" json:"total"`
+	ProcessNote         []PaymentReconciliationProcessNote `bson:"processNote" json:"processNote"`
 }
 type PaymentReconciliationDetail struct {
-	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              CodeableConcept `bson:"type" json:"type"`
-	Request           *Reference      `bson:"request,omitempty" json:"request,omitempty"`
-	Response          *Reference      `bson:"response,omitempty" json:"response,omitempty"`
-	Submitter         *Reference      `bson:"submitter,omitempty" json:"submitter,omitempty"`
-	Payee             *Reference      `bson:"payee,omitempty" json:"payee,omitempty"`
-	Date              *string         `bson:"date,omitempty" json:"date,omitempty"`
-	Amount            *Money          `bson:"amount,omitempty" json:"amount,omitempty"`
+	Id                *string         `bson:"id" json:"id"`
+	Extension         []Extension     `bson:"extension" json:"extension"`
+	ModifierExtension []Extension     `bson:"modifierExtension" json:"modifierExtension"`
+	Type              CodeableConcept `bson:"type,omitempty" json:"type,omitempty"`
+	Request           *Reference      `bson:"request" json:"request"`
+	Response          *Reference      `bson:"response" json:"response"`
+	Submitter         *Reference      `bson:"submitter" json:"submitter"`
+	Payee             *Reference      `bson:"payee" json:"payee"`
+	Date              *string         `bson:"date" json:"date"`
+	Amount            *Money          `bson:"amount" json:"amount"`
 }
 type PaymentReconciliationProcessNote struct {
-	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              *CodeableConcept `bson:"type,omitempty" json:"type,omitempty"`
-	Text              *string          `bson:"text,omitempty" json:"text,omitempty"`
+	Id                *string          `bson:"id" json:"id"`
+	Extension         []Extension      `bson:"extension" json:"extension"`
+	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Type              *CodeableConcept `bson:"type" json:"type"`
+	Text              *string          `bson:"text" json:"text"`
 }
 type OtherPaymentReconciliation PaymentReconciliation
 
@@ -58,7 +59,7 @@ func (r PaymentReconciliation) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalPaymentReconciliation unmarshals a PaymentReconciliation.
+// UnmarshalPaymentReconciliation unmarshalls a PaymentReconciliation.
 func UnmarshalPaymentReconciliation(b []byte) (PaymentReconciliation, error) {
 	var paymentReconciliation PaymentReconciliation
 	if err := json.Unmarshal(b, &paymentReconciliation); err != nil {
