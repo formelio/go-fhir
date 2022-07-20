@@ -20,8 +20,10 @@ const (
 	FieldTypeResource
 	// For fields that have type Code, we only create structs for it if the value set binding is required.
 	FieldTypeCode
-	// For fields that only have a single type and do not fit any of the above
-	FieldTypeSingularDefault
+	// For fields that only have a single type that does need to be generated
+	FieldTypeSingularPrimitive
+	// For fields that only have a single type that needs to be generated in the same file
+	FieldTypeSingularComplex
 	// For fields that have polymorphic types
 	FieldTypePolymorphic
 	// For fields that could not be processed to a known type
@@ -44,17 +46,14 @@ func generateFields(
 			return i, nil
 		}
 
-		// direct childs
 		name := FirstUpper(pathSplit[level])
-
-		// support contained resources later
-		if name == "Contained" {
-			continue
-		}
-
 		fieldType := findFieldType(element)
+
 		// We find the type identifier based on the type of the field
 		typeIdentifier, err := findTypeIdentifier(fieldType, element, parentName, name)
+		if err != nil {
+			return 0, err
+		}
 
 		if fieldType == FieldTypePolymorphic {
 			generatePolymorphicType(requiredTypes, file, fields, typeIdentifier, element)
@@ -62,35 +61,26 @@ func generateFields(
 		}
 
 		statement := fields.Id(name)
-
 		// Add field operators to denote whether a field is a list or a nilable value
-		if fieldType != FieldTypeResource {
-			generateOperators(statement, *element.Max == "*", *element.Min != 0)
-		}
+		generateOperators(statement, *element.Max == "*", *element.Min != 0)
 
-		if err != nil {
-			return 0, err
-		}
-
-		if fieldType == FieldTypeSingularDefault {
-			// If the typeIdentifier is a combination of parent+name we generate that type in the same file
-			// Otherwise we mark the type as required, since it requires a struct to be generated
-			if typeIdentifier == parentName+name {
+		if fieldType == FieldTypeResource {
+			// For Resource we set the field type to json.RawMessage
+			statement.Qual("encoding/json", "RawMessage")
+		} else {
+			// If the field uses a complex element that needs to be generated, we add the complex element type to the required types
+			if fieldType == FieldTypeSingularPrimitive && unicode.IsUpper(rune(typeIdentifier[0])) {
+				requiredTypes[typeIdentifier] = true
+			} else if fieldType == FieldTypeSingularComplex {
+				// We need to generate a complex element type in the same file,
 				i, err = generateElementType(requiredTypes, file, typeIdentifier, elementDefinitions, i, level)
 				if err != nil {
 					return 0, err
 				}
-			} else if unicode.IsUpper(rune(typeIdentifier[0])) {
-				requiredTypes[typeIdentifier] = true
 			}
-		}
 
-		// If the field is not a resource we set the type identifier to the one found
-		// Otherwise, we set the type identifier to RawMessage and it should be processed when needed
-		if fieldType != FieldTypeResource {
+			// For other tpes of fields we set the field type to the type identifier found
 			statement.Id(typeIdentifier)
-		} else {
-			statement.Qual("encoding/json", "RawMessage")
 		}
 
 		// If the field is not required, we add add `omitempty` to the field tags
@@ -101,22 +91,28 @@ func generateFields(
 
 // Finds the type of the field, based on this type different generation logic is used
 func findFieldType(element fhir.ElementDefinition) FieldType {
-	if len(element.Type) == 0 {
+	switch len(element.Type) {
+	// The element doesn't have a type, check if it contains a reference
+	case 0:
 		if element.ContentReference != nil && (*element.ContentReference)[:1] == "#" {
 			return FieldTypeReferenced
 		} else {
-
 			return FieldTypeUnknown
 		}
-	} else if len(element.Type) == 1 {
+	// The field has a single type, return the type based on the .code
+	case 1:
 		if elementTypeCode := element.Type[0].Code; elementTypeCode == "Resource" {
 			return FieldTypeResource
 		} else if elementTypeCode == "code" {
 			return FieldTypeCode
+		} else if (elementTypeCode == "Element" && element.Type[0].Code != "id") || elementTypeCode == "BackboneElement" {
+			return FieldTypeSingularComplex
 		} else {
-			return FieldTypeSingularDefault
+			return FieldTypeSingularPrimitive
 		}
-	} else {
+	// The field has multiple types, it can be a polymorphic field or a single-type field that allows only certain values for the type.
+	// For example only Patient or Practitioner references, we do not support this yet.
+	default:
 		elementTypeCode := element.Type[0].Code
 		for _, elementType := range element.Type {
 			if elementType.Code != elementTypeCode {
@@ -124,6 +120,7 @@ func findFieldType(element fhir.ElementDefinition) FieldType {
 				return FieldTypePolymorphic
 			}
 		}
+		// All of the typeCodes are the same, we treat this as a single-type field
 		element.Type = element.Type[:1]
 		return findFieldType(element)
 	}
@@ -148,16 +145,10 @@ func findTypeIdentifier(fieldType FieldType, element fhir.ElementDefinition, par
 			typeIdentifier = "string"
 		}
 	// For singular fields, we build the type identifier based on the type.Code and parentName
-	case FieldTypeSingularDefault:
-		if parentName == "Element" && name == "Id" || parentName == "Extension" && name == "Url" {
-			typeIdentifier = "string"
-		} else {
-			typeIdentifier = typeCodeToTypeIdentifier(element.Type[0].Code)
-		}
-
-		if typeIdentifier == "Element" || typeIdentifier == "BackboneElement" {
-			typeIdentifier = parentName + name
-		}
+	case FieldTypeSingularPrimitive:
+		typeIdentifier = typeCodeToTypeIdentifier(element.Type[0].Code)
+	case FieldTypeSingularComplex:
+		typeIdentifier = parentName + name
 	case FieldTypePolymorphic:
 		typeIdentifier = name
 	}
@@ -186,6 +177,7 @@ func generatePolymorphicType(
 	file *jen.File, fields *jen.Group,
 	typeIdentifier string,
 	element fhir.ElementDefinition) {
+
 	if !strings.HasSuffix(typeIdentifier, "[x]") {
 		log.Panicf("Polymorphic type does not end with [x]: %s", typeIdentifier)
 	} else {
@@ -257,56 +249,4 @@ func getValueSetNameIfRequired(element fhir.ElementDefinition) (*string, error) 
 		}
 	}
 	return nil, nil
-}
-
-func typeCodeToTypeIdentifier(typeCode string) string {
-	switch typeCode {
-	case "base64Binary":
-		return "string"
-	case "boolean":
-		return "bool"
-	case "canonical":
-		return "string"
-	case "code":
-		return "string"
-	case "date":
-		return "string"
-	case "dateTime":
-		return "string"
-	case "decimal":
-		return "string"
-	case "id":
-		return "string"
-	case "instant":
-		return "string"
-	case "integer":
-		return "int"
-	case "markdown":
-		return "string"
-	case "oid":
-		return "string"
-	case "positiveInt":
-		return "int"
-	case "string":
-		return "string"
-	case "time":
-		return "string"
-	case "unsignedInt":
-		return "int"
-	case "uri":
-		return "string"
-	case "url":
-		return "string"
-	case "uuid":
-		return "string"
-	case "xhtml":
-		return "string"
-	case "http://hl7.org/fhirpath/System.String":
-		return "string"
-	default:
-		if typeCode != FirstUpper(typeCode) {
-			fmt.Println("Unknown type code:", typeCode)
-		}
-		return typeCode
-	}
 }
