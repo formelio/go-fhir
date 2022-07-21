@@ -42,8 +42,8 @@ var generateCmd = &cobra.Command{
 		// Generate ValueSets that were added to context.RequiredValueSetBindings during the generation of other structs.
 		generateValueSets()
 
-		// Generate IResource interface that is used to allow polymorphism in the generated code
-		// generateIResource()
+		// Generate ResourceTypeToIResourceMap, this will be used when unmarshalling fields with type "Resource".
+		generateResourceTypeToIResourceMap()
 	},
 }
 

@@ -47,10 +47,13 @@ func generateElement(requiredTypes map[string]bool, definition fhir.StructureDef
 	file := jen.NewFile("fhir")
 
 	// generate struct
-	err := generateStruct(file, definition, elementDefinitions, requiredTypes)
+	_, err := generateStruct(file, definition, elementDefinitions, requiredTypes)
 	if err != nil {
 		return nil, err
 	}
+	// if resourceFields != nil {
+	// 	return nil, fmt.Errorf("%v
+	// }
 
 	return file, nil
 }

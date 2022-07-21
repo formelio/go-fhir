@@ -49,15 +49,18 @@ func generateResource(definition fhir.StructureDefinition) (*jen.File, error) {
 		return nil, err
 	}
 
-	/* generate OtherType that is used in the Marshall function:
-	type Other<resourceType> <resourceType>
-	*/
-	file.Type().Id("Other" + definition.Name).Id(definition.Name)
+	// generate OtherType that is used in the Marshall function:
+	generateOtherType(file, definition.Name)
 
 	// generate marshal
 	generateMarshall(file, definition.Name)
 
 	// generate unmarshal
 	generateUnmarshall(file, definition.Name)
+
+	// generate GetResourceType()
+	generateGetResourceType(file, definition.Name)
+	context.GeneratedResourceTypes = append(context.GeneratedResourceTypes, definition.Name)
+
 	return file, nil
 }

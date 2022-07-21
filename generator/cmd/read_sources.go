@@ -50,7 +50,7 @@ func processResource(resource Resource, resourceBytes []byte) error {
 			processResource(entryResource, *entry.Resource)
 		}
 	case "StructureDefinition":
-		if resource.Name != nil && *resource.Name != "Element" && *resource.Name != "BackboneElement" {
+		if resource.Name != nil && *resource.Name != "Resource" && *resource.Name != "Element" && *resource.Name != "BackboneElement" {
 			context.Resources[resource.ResourceType][*resource.Name] = resourceBytes
 		}
 	case "ValueSet", "CodeSystem":

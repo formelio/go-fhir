@@ -36,14 +36,15 @@ func generateFields(
 	parentName string,
 	elementDefinitions []fhir.ElementDefinition,
 	start, level int,
-) (int, error) {
+) (int, []string, error) {
+	resourceFields := []string{}
 	for i := start; i < len(elementDefinitions); i++ {
 		element := elementDefinitions[i]
 		pathSplit := strings.Split(element.Path, ".")
 
 		// If the path is not long enough, or too long, we return
 		if len(pathSplit) != level+1 {
-			return i, nil
+			return i, resourceFields, nil
 		}
 
 		name := FirstUpper(pathSplit[level])
@@ -52,11 +53,15 @@ func generateFields(
 		// We find the type identifier based on the type of the field
 		typeIdentifier, err := findTypeIdentifier(fieldType, element, parentName, name)
 		if err != nil {
-			return 0, err
+			return 0, resourceFields, err
 		}
 
 		if fieldType == FieldTypePolymorphic {
-			generatePolymorphicType(requiredTypes, file, fields, typeIdentifier, element)
+			generatePolymorphicType(requiredTypes, fields, typeIdentifier, element)
+			continue
+		} else if fieldType == FieldTypeResource {
+			generateResourceField(fields, element, typeIdentifier, pathSplit[level])
+			resourceFields = append(resourceFields, typeIdentifier)
 			continue
 		}
 
@@ -64,28 +69,23 @@ func generateFields(
 		// Add field operators to denote whether a field is a list or a nilable value
 		generateOperators(statement, *element.Max == "*", *element.Min != 0)
 
-		if fieldType == FieldTypeResource {
-			// For Resource we set the field type to json.RawMessage
-			statement.Qual("encoding/json", "RawMessage")
-		} else {
-			// If the field uses a complex element that needs to be generated, we add the complex element type to the required types
-			if fieldType == FieldTypeSingularPrimitive && unicode.IsUpper(rune(typeIdentifier[0])) {
-				requiredTypes[typeIdentifier] = true
-			} else if fieldType == FieldTypeSingularComplex {
-				// We need to generate a complex element type in the same file,
-				i, err = generateElementType(requiredTypes, file, typeIdentifier, elementDefinitions, i, level)
-				if err != nil {
-					return 0, err
-				}
+		// If the field uses a complex element that needs to be generated, we add the complex element type to the required types
+		if fieldType == FieldTypeSingularPrimitive && unicode.IsUpper(rune(typeIdentifier[0])) {
+			requiredTypes[typeIdentifier] = true
+		} else if fieldType == FieldTypeSingularComplex {
+			// We need to generate a complex element type in the same file,
+			i, err = generateElementType(requiredTypes, file, typeIdentifier, elementDefinitions, i, level)
+			if err != nil {
+				return 0, resourceFields, err
 			}
-			// For other tpes of fields we set the field type to the type identifier found
-			statement.Id(typeIdentifier)
 		}
+		// For other tpes of fields we set the field type to the type identifier found
+		statement.Id(typeIdentifier)
 
 		// If the field is not required, we add add `omitempty` to the field tags
 		generateJsonTags(statement, pathSplit[level], *element.Min == 0)
 	}
-	return 0, nil
+	return 0, resourceFields, nil
 }
 
 // Finds the type of the field, based on this type different generation logic is used
@@ -147,7 +147,7 @@ func findTypeIdentifier(fieldType FieldType, element fhir.ElementDefinition, par
 		typeIdentifier = typeCodeToTypeIdentifier(element.Type[0].Code)
 	case FieldTypeSingularComplex:
 		typeIdentifier = parentName + name
-	case FieldTypePolymorphic:
+	case FieldTypePolymorphic, FieldTypeResource:
 		typeIdentifier = name
 	}
 	return typeIdentifier, nil
@@ -162,9 +162,15 @@ func generateElementType(
 ) (int, error) {
 	var err error
 	var indexToContinueFrom int
+	var resourceFields []string
 	file.Type().Id(typeIdentifier).StructFunc(func(childFields *jen.Group) {
-		indexToContinueFrom, err = generateFields(requiredTypes, file, childFields, typeIdentifier, elementDefinitions, startIndex+1, level+1)
+		indexToContinueFrom, resourceFields, err = generateFields(requiredTypes, file, childFields, typeIdentifier, elementDefinitions, startIndex+1, level+1)
 	})
+	if len(resourceFields) != 0 {
+		generateOtherType(file, typeIdentifier)
+		generateElementUnmarshall(file, resourceFields, typeIdentifier)
+		generateElementMarshall(file, resourceFields, typeIdentifier)
+	}
 	// We substract 1 to the index to continue from, because it will be incremented in the next for loop
 	indexToContinueFrom--
 	return indexToContinueFrom, err
@@ -172,7 +178,7 @@ func generateElementType(
 
 func generatePolymorphicType(
 	requiredTypes map[string]bool,
-	file *jen.File, fields *jen.Group,
+	fields *jen.Group,
 	typeIdentifier string,
 	element fhir.ElementDefinition) {
 
@@ -201,6 +207,20 @@ func generatePolymorphicType(
 		addPolymorphicStatement(fields, fieldName, jsonFieldName, elementTypeCode, false, *element.Max == "*")
 	}
 
+}
+
+func generateResourceField(fields *jen.Group, element fhir.ElementDefinition, typeIdentifier, jsonTag string) {
+	isList := *element.Max == "*"
+
+	rawStatement := fields.Id("Raw" + typeIdentifier)
+	generateOperators(rawStatement, isList, true)
+	rawStatement.Qual("encoding/json", "RawMessage")
+	generateJsonTags(rawStatement, jsonTag, true)
+
+	iResourceStatement := fields.Id(typeIdentifier)
+	generateOperators(iResourceStatement, isList, true)
+	iResourceStatement.Id("IResource")
+	generateJsonTags(iResourceStatement, "-", true)
 }
 
 func addPolymorphicStatement(fields *jen.Group, fieldName, jsonFieldName, typeIdentifier string, required, list bool) {
