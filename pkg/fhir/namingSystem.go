@@ -9,7 +9,8 @@ type NamingSystem struct {
 	ImplicitRules     *string                `bson:"implicitRules" json:"implicitRules"`
 	Language          *string                `bson:"language" json:"language"`
 	Text              *Narrative             `bson:"text" json:"text"`
-	Contained         []json.RawMessage      `bson:"contained" json:"contained"`
+	RawContained      []json.RawMessage      `bson:"contained" json:"contained"`
+	Contained         []IResource            `bson:"-" json:"-"`
 	Extension         []Extension            `bson:"extension" json:"extension"`
 	ModifierExtension []Extension            `bson:"modifierExtension" json:"modifierExtension"`
 	Name              string                 `bson:"name,omitempty" json:"name,omitempty"`
@@ -37,10 +38,23 @@ type NamingSystemUniqueId struct {
 	Comment           *string                    `bson:"comment" json:"comment"`
 	Period            *Period                    `bson:"period" json:"period"`
 }
+
+// OtherNamingSystem is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherNamingSystem NamingSystem
 
 // MarshalJSON marshals the given NamingSystem as JSON into a byte slice
 func (r NamingSystem) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherNamingSystem
 		ResourceType string `json:"resourceType"`
@@ -50,11 +64,26 @@ func (r NamingSystem) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalNamingSystem unmarshalls a NamingSystem.
-func UnmarshalNamingSystem(b []byte) (NamingSystem, error) {
-	var namingSystem NamingSystem
-	if err := json.Unmarshal(b, &namingSystem); err != nil {
-		return namingSystem, err
+// UnmarshalJSON unmarshals the given byte slice into NamingSystem
+func (r *NamingSystem) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherNamingSystem)(r)); err != nil {
+		return err
 	}
-	return namingSystem, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r NamingSystem) GetResourceType() ResourceType {
+	return ResourceTypeNamingSystem
 }

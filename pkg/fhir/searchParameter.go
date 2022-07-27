@@ -9,7 +9,8 @@ type SearchParameter struct {
 	ImplicitRules     *string                    `bson:"implicitRules" json:"implicitRules"`
 	Language          *string                    `bson:"language" json:"language"`
 	Text              *Narrative                 `bson:"text" json:"text"`
-	Contained         []json.RawMessage          `bson:"contained" json:"contained"`
+	RawContained      []json.RawMessage          `bson:"contained" json:"contained"`
+	Contained         []IResource                `bson:"-" json:"-"`
 	Extension         []Extension                `bson:"extension" json:"extension"`
 	ModifierExtension []Extension                `bson:"modifierExtension" json:"modifierExtension"`
 	Url               string                     `bson:"url,omitempty" json:"url,omitempty"`
@@ -44,10 +45,23 @@ type SearchParameterComponent struct {
 	Definition        Reference   `bson:"definition,omitempty" json:"definition,omitempty"`
 	Expression        string      `bson:"expression,omitempty" json:"expression,omitempty"`
 }
+
+// OtherSearchParameter is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherSearchParameter SearchParameter
 
 // MarshalJSON marshals the given SearchParameter as JSON into a byte slice
 func (r SearchParameter) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherSearchParameter
 		ResourceType string `json:"resourceType"`
@@ -57,11 +71,26 @@ func (r SearchParameter) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalSearchParameter unmarshalls a SearchParameter.
-func UnmarshalSearchParameter(b []byte) (SearchParameter, error) {
-	var searchParameter SearchParameter
-	if err := json.Unmarshal(b, &searchParameter); err != nil {
-		return searchParameter, err
+// UnmarshalJSON unmarshals the given byte slice into SearchParameter
+func (r *SearchParameter) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherSearchParameter)(r)); err != nil {
+		return err
 	}
-	return searchParameter, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r SearchParameter) GetResourceType() ResourceType {
+	return ResourceTypeSearchParameter
 }

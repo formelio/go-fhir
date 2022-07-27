@@ -147,7 +147,7 @@ func findTypeIdentifier(fieldType FieldType, element fhir.ElementDefinition, par
 		typeIdentifier = typeCodeToTypeIdentifier(element.Type[0].Code)
 	case FieldTypeSingularComplex:
 		typeIdentifier = parentName + name
-	case FieldTypePolymorphic, FieldTypeResource:
+	default:
 		typeIdentifier = name
 	}
 	return typeIdentifier, nil
@@ -168,8 +168,8 @@ func generateElementType(
 	})
 	if len(resourceFields) != 0 {
 		generateOtherType(file, typeIdentifier)
-		generateElementUnmarshall(file, resourceFields, typeIdentifier)
-		generateElementMarshall(file, resourceFields, typeIdentifier)
+		generateElementUnmarshal(file, resourceFields, typeIdentifier)
+		generateElementMarshal(file, resourceFields, typeIdentifier)
 	}
 	// We substract 1 to the index to continue from, because it will be incremented in the next for loop
 	indexToContinueFrom--

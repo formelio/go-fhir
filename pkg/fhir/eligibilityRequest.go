@@ -9,7 +9,8 @@ type EligibilityRequest struct {
 	ImplicitRules       *string           `bson:"implicitRules" json:"implicitRules"`
 	Language            *string           `bson:"language" json:"language"`
 	Text                *Narrative        `bson:"text" json:"text"`
-	Contained           []json.RawMessage `bson:"contained" json:"contained"`
+	RawContained        []json.RawMessage `bson:"contained" json:"contained"`
+	Contained           []IResource       `bson:"-" json:"-"`
 	Extension           []Extension       `bson:"extension" json:"extension"`
 	ModifierExtension   []Extension       `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier          []Identifier      `bson:"identifier" json:"identifier"`
@@ -29,10 +30,23 @@ type EligibilityRequest struct {
 	BenefitCategory     *CodeableConcept  `bson:"benefitCategory" json:"benefitCategory"`
 	BenefitSubCategory  *CodeableConcept  `bson:"benefitSubCategory" json:"benefitSubCategory"`
 }
+
+// OtherEligibilityRequest is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherEligibilityRequest EligibilityRequest
 
 // MarshalJSON marshals the given EligibilityRequest as JSON into a byte slice
 func (r EligibilityRequest) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherEligibilityRequest
 		ResourceType string `json:"resourceType"`
@@ -42,11 +56,26 @@ func (r EligibilityRequest) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalEligibilityRequest unmarshalls a EligibilityRequest.
-func UnmarshalEligibilityRequest(b []byte) (EligibilityRequest, error) {
-	var eligibilityRequest EligibilityRequest
-	if err := json.Unmarshal(b, &eligibilityRequest); err != nil {
-		return eligibilityRequest, err
+// UnmarshalJSON unmarshals the given byte slice into EligibilityRequest
+func (r *EligibilityRequest) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherEligibilityRequest)(r)); err != nil {
+		return err
 	}
-	return eligibilityRequest, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r EligibilityRequest) GetResourceType() ResourceType {
+	return ResourceTypeEligibilityRequest
 }

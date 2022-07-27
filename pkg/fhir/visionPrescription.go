@@ -9,7 +9,8 @@ type VisionPrescription struct {
 	ImplicitRules         *string                      `bson:"implicitRules" json:"implicitRules"`
 	Language              *string                      `bson:"language" json:"language"`
 	Text                  *Narrative                   `bson:"text" json:"text"`
-	Contained             []json.RawMessage            `bson:"contained" json:"contained"`
+	RawContained          []json.RawMessage            `bson:"contained" json:"contained"`
+	Contained             []IResource                  `bson:"-" json:"-"`
 	Extension             []Extension                  `bson:"extension" json:"extension"`
 	ModifierExtension     []Extension                  `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier            []Identifier                 `bson:"identifier" json:"identifier"`
@@ -42,10 +43,23 @@ type VisionPrescriptionDispense struct {
 	Brand             *string          `bson:"brand" json:"brand"`
 	Note              []Annotation     `bson:"note" json:"note"`
 }
+
+// OtherVisionPrescription is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherVisionPrescription VisionPrescription
 
 // MarshalJSON marshals the given VisionPrescription as JSON into a byte slice
 func (r VisionPrescription) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherVisionPrescription
 		ResourceType string `json:"resourceType"`
@@ -55,11 +69,26 @@ func (r VisionPrescription) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalVisionPrescription unmarshalls a VisionPrescription.
-func UnmarshalVisionPrescription(b []byte) (VisionPrescription, error) {
-	var visionPrescription VisionPrescription
-	if err := json.Unmarshal(b, &visionPrescription); err != nil {
-		return visionPrescription, err
+// UnmarshalJSON unmarshals the given byte slice into VisionPrescription
+func (r *VisionPrescription) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherVisionPrescription)(r)); err != nil {
+		return err
 	}
-	return visionPrescription, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r VisionPrescription) GetResourceType() ResourceType {
+	return ResourceTypeVisionPrescription
 }

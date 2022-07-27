@@ -9,7 +9,8 @@ type Immunization struct {
 	ImplicitRules       *string                           `bson:"implicitRules" json:"implicitRules"`
 	Language            *string                           `bson:"language" json:"language"`
 	Text                *Narrative                        `bson:"text" json:"text"`
-	Contained           []json.RawMessage                 `bson:"contained" json:"contained"`
+	RawContained        []json.RawMessage                 `bson:"contained" json:"contained"`
+	Contained           []IResource                       `bson:"-" json:"-"`
 	Extension           []Extension                       `bson:"extension" json:"extension"`
 	ModifierExtension   []Extension                       `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier          []Identifier                      `bson:"identifier" json:"identifier"`
@@ -69,10 +70,23 @@ type ImmunizationVaccinationProtocol struct {
 	DoseStatus        CodeableConcept   `bson:"doseStatus,omitempty" json:"doseStatus,omitempty"`
 	DoseStatusReason  *CodeableConcept  `bson:"doseStatusReason" json:"doseStatusReason"`
 }
+
+// OtherImmunization is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherImmunization Immunization
 
 // MarshalJSON marshals the given Immunization as JSON into a byte slice
 func (r Immunization) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherImmunization
 		ResourceType string `json:"resourceType"`
@@ -82,11 +96,26 @@ func (r Immunization) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalImmunization unmarshalls a Immunization.
-func UnmarshalImmunization(b []byte) (Immunization, error) {
-	var immunization Immunization
-	if err := json.Unmarshal(b, &immunization); err != nil {
-		return immunization, err
+// UnmarshalJSON unmarshals the given byte slice into Immunization
+func (r *Immunization) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherImmunization)(r)); err != nil {
+		return err
 	}
-	return immunization, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r Immunization) GetResourceType() ResourceType {
+	return ResourceTypeImmunization
 }

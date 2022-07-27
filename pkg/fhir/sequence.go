@@ -9,7 +9,8 @@ type Sequence struct {
 	ImplicitRules     *string               `bson:"implicitRules" json:"implicitRules"`
 	Language          *string               `bson:"language" json:"language"`
 	Text              *Narrative            `bson:"text" json:"text"`
-	Contained         []json.RawMessage     `bson:"contained" json:"contained"`
+	RawContained      []json.RawMessage     `bson:"contained" json:"contained"`
+	Contained         []IResource           `bson:"-" json:"-"`
 	Extension         []Extension           `bson:"extension" json:"extension"`
 	ModifierExtension []Extension           `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier        []Identifier          `bson:"identifier" json:"identifier"`
@@ -82,10 +83,23 @@ type SequenceRepository struct {
 	VariantsetId      *string     `bson:"variantsetId" json:"variantsetId"`
 	ReadsetId         *string     `bson:"readsetId" json:"readsetId"`
 }
+
+// OtherSequence is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherSequence Sequence
 
 // MarshalJSON marshals the given Sequence as JSON into a byte slice
 func (r Sequence) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherSequence
 		ResourceType string `json:"resourceType"`
@@ -95,11 +109,26 @@ func (r Sequence) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalSequence unmarshalls a Sequence.
-func UnmarshalSequence(b []byte) (Sequence, error) {
-	var sequence Sequence
-	if err := json.Unmarshal(b, &sequence); err != nil {
-		return sequence, err
+// UnmarshalJSON unmarshals the given byte slice into Sequence
+func (r *Sequence) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherSequence)(r)); err != nil {
+		return err
 	}
-	return sequence, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r Sequence) GetResourceType() ResourceType {
+	return ResourceTypeSequence
 }

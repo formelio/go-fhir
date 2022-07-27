@@ -44,19 +44,23 @@ func generateResource(definition fhir.StructureDefinition) (*jen.File, error) {
 	file := jen.NewFile("fhir")
 
 	// Generate the struct
-	generateStruct(file, definition, elementDefinitions, context.RequiredElements)
+	resourceFields, err := generateStruct(file, definition, elementDefinitions, context.RequiredElements)
 	if err != nil {
 		return nil, err
 	}
+
+	// Resources can only contain references to other resources.
+	// If there are fields that are of Resource type it must be .contained
+	hasContained := len(resourceFields) > 0
 
 	// generate OtherType that is used in the Marshall function:
 	generateOtherType(file, definition.Name)
 
 	// generate marshal
-	generateMarshall(file, definition.Name)
+	generateResourceMarshal(file, definition.Name, hasContained)
 
 	// generate unmarshal
-	generateUnmarshall(file, definition.Name)
+	generateResourceUnmarshal(file, definition.Name, hasContained)
 
 	// generate GetResourceType()
 	generateGetResourceType(file, definition.Name)

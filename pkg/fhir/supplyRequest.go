@@ -9,7 +9,8 @@ type SupplyRequest struct {
 	ImplicitRules         *string                   `bson:"implicitRules" json:"implicitRules"`
 	Language              *string                   `bson:"language" json:"language"`
 	Text                  *Narrative                `bson:"text" json:"text"`
-	Contained             []json.RawMessage         `bson:"contained" json:"contained"`
+	RawContained          []json.RawMessage         `bson:"contained" json:"contained"`
+	Contained             []IResource               `bson:"-" json:"-"`
 	Extension             []Extension               `bson:"extension" json:"extension"`
 	ModifierExtension     []Extension               `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier            *Identifier               `bson:"identifier" json:"identifier"`
@@ -43,10 +44,23 @@ type SupplyRequestRequester struct {
 	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
 	OnBehalfOf        *Reference  `bson:"onBehalfOf" json:"onBehalfOf"`
 }
+
+// OtherSupplyRequest is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherSupplyRequest SupplyRequest
 
 // MarshalJSON marshals the given SupplyRequest as JSON into a byte slice
 func (r SupplyRequest) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherSupplyRequest
 		ResourceType string `json:"resourceType"`
@@ -56,11 +70,26 @@ func (r SupplyRequest) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalSupplyRequest unmarshalls a SupplyRequest.
-func UnmarshalSupplyRequest(b []byte) (SupplyRequest, error) {
-	var supplyRequest SupplyRequest
-	if err := json.Unmarshal(b, &supplyRequest); err != nil {
-		return supplyRequest, err
+// UnmarshalJSON unmarshals the given byte slice into SupplyRequest
+func (r *SupplyRequest) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherSupplyRequest)(r)); err != nil {
+		return err
 	}
-	return supplyRequest, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r SupplyRequest) GetResourceType() ResourceType {
+	return ResourceTypeSupplyRequest
 }

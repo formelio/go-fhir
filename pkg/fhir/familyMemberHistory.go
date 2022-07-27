@@ -9,7 +9,8 @@ type FamilyMemberHistory struct {
 	ImplicitRules     *string                        `bson:"implicitRules" json:"implicitRules"`
 	Language          *string                        `bson:"language" json:"language"`
 	Text              *Narrative                     `bson:"text" json:"text"`
-	Contained         []json.RawMessage              `bson:"contained" json:"contained"`
+	RawContained      []json.RawMessage              `bson:"contained" json:"contained"`
+	Contained         []IResource                    `bson:"-" json:"-"`
 	Extension         []Extension                    `bson:"extension" json:"extension"`
 	ModifierExtension []Extension                    `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier        []Identifier                   `bson:"identifier" json:"identifier"`
@@ -51,10 +52,23 @@ type FamilyMemberHistoryCondition struct {
 	OnsetString       *string          `bson:"onsetString,omitempty" json:"onsetString,omitempty"`
 	Note              []Annotation     `bson:"note" json:"note"`
 }
+
+// OtherFamilyMemberHistory is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherFamilyMemberHistory FamilyMemberHistory
 
 // MarshalJSON marshals the given FamilyMemberHistory as JSON into a byte slice
 func (r FamilyMemberHistory) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherFamilyMemberHistory
 		ResourceType string `json:"resourceType"`
@@ -64,11 +78,26 @@ func (r FamilyMemberHistory) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalFamilyMemberHistory unmarshalls a FamilyMemberHistory.
-func UnmarshalFamilyMemberHistory(b []byte) (FamilyMemberHistory, error) {
-	var familyMemberHistory FamilyMemberHistory
-	if err := json.Unmarshal(b, &familyMemberHistory); err != nil {
-		return familyMemberHistory, err
+// UnmarshalJSON unmarshals the given byte slice into FamilyMemberHistory
+func (r *FamilyMemberHistory) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherFamilyMemberHistory)(r)); err != nil {
+		return err
 	}
-	return familyMemberHistory, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r FamilyMemberHistory) GetResourceType() ResourceType {
+	return ResourceTypeFamilyMemberHistory
 }

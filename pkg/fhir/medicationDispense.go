@@ -9,7 +9,8 @@ type MedicationDispense struct {
 	ImplicitRules                *string                         `bson:"implicitRules" json:"implicitRules"`
 	Language                     *string                         `bson:"language" json:"language"`
 	Text                         *Narrative                      `bson:"text" json:"text"`
-	Contained                    []json.RawMessage               `bson:"contained" json:"contained"`
+	RawContained                 []json.RawMessage               `bson:"contained" json:"contained"`
+	Contained                    []IResource                     `bson:"-" json:"-"`
 	Extension                    []Extension                     `bson:"extension" json:"extension"`
 	ModifierExtension            []Extension                     `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier                   []Identifier                    `bson:"identifier" json:"identifier"`
@@ -55,10 +56,23 @@ type MedicationDispenseSubstitution struct {
 	Reason            []CodeableConcept `bson:"reason" json:"reason"`
 	ResponsibleParty  []Reference       `bson:"responsibleParty" json:"responsibleParty"`
 }
+
+// OtherMedicationDispense is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherMedicationDispense MedicationDispense
 
 // MarshalJSON marshals the given MedicationDispense as JSON into a byte slice
 func (r MedicationDispense) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherMedicationDispense
 		ResourceType string `json:"resourceType"`
@@ -68,11 +82,26 @@ func (r MedicationDispense) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalMedicationDispense unmarshalls a MedicationDispense.
-func UnmarshalMedicationDispense(b []byte) (MedicationDispense, error) {
-	var medicationDispense MedicationDispense
-	if err := json.Unmarshal(b, &medicationDispense); err != nil {
-		return medicationDispense, err
+// UnmarshalJSON unmarshals the given byte slice into MedicationDispense
+func (r *MedicationDispense) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherMedicationDispense)(r)); err != nil {
+		return err
 	}
-	return medicationDispense, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r MedicationDispense) GetResourceType() ResourceType {
+	return ResourceTypeMedicationDispense
 }

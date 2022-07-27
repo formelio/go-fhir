@@ -26,6 +26,21 @@ func generateStruct(file *jen.File, definition fhir.StructureDefinition, element
 /*
 // MarshalJSON marshals the given <resourceType> as JSON into a byte slice
 func (r <resourceType>) MarshalJSON() ([]byte, error) {
+	IF(HAS_CONTAINED):
+	------------------
+		// If the field has contained resources, we need to marshal them individually and store them in RawContained
+		if len(r.Contained) > 0 {
+			r.RawContained = make([]json.RawMessage, len(r.Contained))
+			var err error
+			for i, contained := range r.Contained {
+				r.RawContained[i], err = json.Marshal(contained)
+				if err != nil {
+					return nil, err
+				}
+			}
+		}
+	------------------
+
 	return json.Marshal(struct {
 		Other<resourceType>
 		ResourceType string `json:"resourceType"`
@@ -35,49 +50,70 @@ func (r <resourceType>) MarshalJSON() ([]byte, error) {
 	})
 }
 */
-func generateMarshall(file *jen.File, resourceType string) {
+func generateResourceMarshal(file *jen.File, resourceType string, hasContained bool) {
 	file.Commentf("MarshalJSON marshals the given %s as JSON into a byte slice", resourceType)
-	file.Func().Params(jen.Id("r").Id(resourceType)).Id("MarshalJSON").Params().
-		Params(jen.Op("[]").Byte(), jen.Error()).Block(
-		jen.Return().Qual("encoding/json", "Marshal").Call(jen.Struct(
+	file.Func().Params(jen.Id("r").Id(resourceType)).Id("MarshalJSON").Params().Params(jen.Op("[]").Byte(), jen.Error()).BlockFunc(func(marshalBlock *jen.Group) {
+		marshalBlock.Comment("If the field has contained resources, we need to marshal them individually and store them in .RawContained")
+		if hasContained {
+			marshalBlock.If(jen.Len(jen.Id("r").Dot("Contained")).Op(">").Lit(0)).BlockFunc(func(containedBlock *jen.Group) {
+				containedBlock.Var().Id("err").Error()
+				containedBlock.Id("r").Dot("RawContained").Op("=").Make(jen.Op("[]").Qual("encoding/json", "RawMessage"), jen.Len(jen.Id("r").Dot("Contained")))
+				containedBlock.For(jen.List(jen.Id("i"), jen.Id("contained")).Op(":=").Range().Id("r").Dot("Contained")).BlockFunc(func(containedLoopBlock *jen.Group) {
+					containedLoopBlock.List(jen.Id("r").Dot("RawContained").Index(jen.Id("i")), jen.Id("err")).Op("=").Qual("encoding/json", "Marshal").Call(jen.Id("contained"))
+					containedLoopBlock.If(jen.Id("err").Op("!=").Nil()).Block(jen.Return(jen.List(jen.Nil(), jen.Id("err"))))
+				})
+			})
+		}
+
+		marshalBlock.Return().Qual("encoding/json", "Marshal").Call(jen.Struct(
 			jen.Id("Other"+resourceType),
 			jen.Id("ResourceType").String().Tag(map[string]string{"json": "resourceType"}),
 		).Values(jen.Dict{
 			jen.Id("Other" + resourceType): jen.Id("Other" + resourceType).Call(jen.Id("r")),
 			jen.Id("ResourceType"):         jen.Lit(resourceType),
-		})),
-	)
+		}))
+	})
 }
 
 /*
-// Unmarshal<resourceType> unmarshals a <resourceType>.
-func Unmarshal<resourceType>(b []byte) (<resourceType>, error) {
-	var <resourceType> <resourceType>
-	if err := json.Unmarshal(b, &<resourceType>); err != nil {
-		return <resourceType>, err
+func (r *<resourceType>) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*Other<resourceType>)(r)); err != nil {
+		return err
 	}
-	return <resourceType>, nil
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	r.RawContained = nil
+	return nil
 }
 */
-func generateUnmarshall(file *jen.File, resourceType string) {
-	file.Commentf("Unmarshal%s unmarshalls a %s.", resourceType, resourceType)
-	file.Func().Id("Unmarshal"+resourceType).
-		Params(jen.Id("b").Op("[]").Byte()).
-		Params(jen.Id(resourceType), jen.Error()).
-		Block(
-			jen.Var().Id(FirstLower(resourceType)).Id(resourceType),
-			jen.If(
-				jen.Err().Op(":=").Qual("encoding/json", "Unmarshal").Call(
-					jen.Id("b"),
-					jen.Op("&").Id(FirstLower(resourceType)),
-				),
-				jen.Err().Op("!=").Nil(),
-			).Block(
-				jen.Return(jen.Id(FirstLower(resourceType)), jen.Err()),
-			),
-			jen.Return(jen.Id(FirstLower(resourceType)), jen.Nil()),
+func generateResourceUnmarshal(file *jen.File, resourceType string, hasContained bool) {
+	file.Commentf("UnmarshalJSON unmarshals the given byte slice into %s", resourceType)
+	file.Func().Params(jen.Id("r").Op("*").Id(resourceType)).Id("UnmarshalJSON").Params(jen.Id("data").Op("[]").Byte()).Error().BlockFunc(func(unmarshalBlock *jen.Group) {
+		unmarshalBlock.If(jen.Id("err").Op(":=").Qual("encoding/json", "Unmarshal").Call(jen.Id("data"), jen.Params(jen.Op("*").Id("Other"+resourceType)).Params(jen.Id("r"))), jen.Id("err").Op("!=").Nil()).Block(
+			jen.Return(jen.Id("err")),
 		)
 
+		if hasContained {
+			unmarshalBlock.Comment("If the field has contained resources, we need to unmarshal them individually and store them in .Contained")
+			unmarshalBlock.If(jen.Len(jen.Id("r").Dot("RawContained")).Op(">").Lit(0)).BlockFunc(func(containedBlock *jen.Group) {
+				containedBlock.Var().Id("err").Error()
+				containedBlock.Id("r").Dot("Contained").Op("=").Make(jen.Op("[]").Id("IResource"), jen.Len(jen.Id("r").Dot("RawContained")))
+				containedBlock.For(jen.List(jen.Id("i"), jen.Id("rawContained")).Op(":=").Range().Id("r").Dot("RawContained")).BlockFunc(func(containedLoopBlock *jen.Group) {
+					containedLoopBlock.List(jen.Id("r").Dot("Contained").Index(jen.Id("i")), jen.Id("err")).Op("=").Id("UnmarshalResource").Call(jen.Id("rawContained"))
+					containedLoopBlock.If(jen.Id("err").Op("!=").Nil()).Block(jen.Return(jen.Id("err")))
+				})
+			})
+		}
+		unmarshalBlock.Return(jen.Nil())
+	})
 }
 
 /* generates either of the following two, depending if it is required or not
@@ -131,44 +167,30 @@ func (b *BundleEntry) UnmarshalJSON(data []byte) error {
 	if err != nil {
 		return err
 	}
-
-	var resource Resource
-	if err := json.Unmarshal(data, &resource); err != nil {
-		return err
-	}
-	// Get the correct implementation of IResource from the ResourceType
-	var resourceInterface = ResourceTypeToIResource(resource.ResourceType)
-	err := json.Unmarshal(*b.RawResource, resourceInterface)
+	var err error
+	r.Resource, err = UnmarshalResource(data)
 	if err != nil {
 		return err
 	}
-
-	b.Resource = &resourceInterface
-	b.RawResource = nil
+	r.RawResource = nil
 	return nil
 }
 */
-func generateElementUnmarshall(file *jen.File, resourceFields []string, typeIdentifier string) {
+func generateElementUnmarshal(file *jen.File, resourceFields []string, typeIdentifier string) {
 	file.Func().Params(jen.Id("r").Id("*" + typeIdentifier)).Id("UnmarshalJSON").Params(jen.Id("data").Op("[]").Byte()).Error().BlockFunc(func(unmarshal *jen.Group) {
 		unmarshal.If(jen.Id("err").Op(":=").Qual("encoding/json", "Unmarshal").Call(jen.Id("data"), jen.Params(jen.Op("*").Id("Other"+typeIdentifier)).Params(jen.Id("r"))), jen.Id("err").Op("!=").Nil()).Block(
 			jen.Return(jen.Id("err")),
 		)
+		if len(resourceFields) > 0 {
+			unmarshal.Var().Id("err").Error()
 
-		for _, resourceField := range resourceFields {
-			unmarshal.Var().Id(resourceField).Id("Resource")
-			unmarshal.If(jen.Id("err").Op(":=").Qual("encoding/json", "Unmarshal").Call(jen.Id("r").Dot("Raw"+resourceField), jen.Op("&").Id(resourceField)), jen.Id("err").Op("!=").Nil()).Block(
-				jen.Return(jen.Id("err")),
-			)
-			unmarshal.Comment("Get the correct implementation of IResource from the ResourceType")
-			unmarshal.Var().Id(resourceField + "Interface").Op("=").Id("ResourceTypeToIResource").Call(jen.Id(resourceField).Dot("ResourceType"))
-			unmarshal.Comment("Unmarshal the raw resource into the correct implementation of IResource")
-			unmarshal.If(jen.Id("err").Op(":=").Qual("encoding/json", "Unmarshal").Call(jen.Id("r").Dot("Raw"+resourceField), jen.Id(resourceField+"Interface")), jen.Id("err").Op("!=").Nil()).Block(
-				jen.Return(jen.Id("err")),
-			)
-			unmarshal.Id("r").Dot(resourceField).Op("=").Id(resourceField + "Interface")
-			unmarshal.Id("r").Dot("Raw" + resourceField).Op("=").Nil()
-			unmarshal.Return(jen.Nil())
+			for _, resourceField := range resourceFields {
+				unmarshal.List(jen.Id("r").Dot(resourceField), jen.Id("err")).Op("=").Id("UnmarshalResource").Call(jen.Id("r").Dot("Raw" + resourceField))
+				unmarshal.If(jen.Id("err").Op("!=").Nil()).Block(jen.Return(jen.Id("err")))
+				unmarshal.Id("r").Dot("Raw" + resourceField).Op("=").Nil()
+			}
 		}
+		unmarshal.Return(jen.Nil())
 	})
 }
 
@@ -184,7 +206,7 @@ func (r *<typeIdentifier>) MarshalJSON() ([]byte, error) {
 	return json.Marshal((*Other<typeIdentifier>)(<typeIdentifier>))
 }
 */
-func generateElementMarshall(file *jen.File, resourceFields []string, typeIdentifier string) {
+func generateElementMarshal(file *jen.File, resourceFields []string, typeIdentifier string) {
 	file.Func().Params(jen.Id("r").Op("*").Id(typeIdentifier)).Id("MarshalJSON").Params().Params(jen.Op("[]").Byte(), jen.Error()).BlockFunc(func(marshal *jen.Group) {
 		for _, resourceField := range resourceFields {
 			marshal.If(jen.Id("r").Dot(resourceField).Op("!=").Nil()).Block(

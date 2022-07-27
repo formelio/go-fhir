@@ -53,14 +53,43 @@ type ParametersParameter struct {
 	ValueSignature       *Signature            `bson:"valueSignature,omitempty" json:"valueSignature,omitempty"`
 	ValueTiming          *Timing               `bson:"valueTiming,omitempty" json:"valueTiming,omitempty"`
 	ValueMeta            *Meta                 `bson:"valueMeta,omitempty" json:"valueMeta,omitempty"`
-	RawResource             *json.RawMessage      `bson:"resource" json:"resource"`
-	Resource 
+	RawResource          json.RawMessage       `bson:"resource" json:"resource"`
+	Resource             IResource             `bson:"-" json:"-"`
 	Part                 []ParametersParameter `bson:"part" json:"part"`
 }
+
+// OtherParametersParameter is a helper type to use the default implementations of Marshall and Unmarshal
+type OtherParametersParameter ParametersParameter
+
+func (r *ParametersParameter) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherParametersParameter)(r)); err != nil {
+		return err
+	}
+	var err error
+	r.Resource, err = UnmarshalResource(r.RawResource)
+	if err != nil {
+		return err
+	}
+	r.RawResource = nil
+	return nil
+}
+func (r *ParametersParameter) MarshalJSON() ([]byte, error) {
+	if r.Resource != nil {
+		Resource, err := json.Marshal(r.Resource)
+		if err != nil {
+			return nil, err
+		}
+		r.RawResource = Resource
+	}
+	return json.Marshal((*OtherParametersParameter)(r))
+}
+
+// OtherParameters is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherParameters Parameters
 
 // MarshalJSON marshals the given Parameters as JSON into a byte slice
 func (r Parameters) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
 	return json.Marshal(struct {
 		OtherParameters
 		ResourceType string `json:"resourceType"`
@@ -70,11 +99,15 @@ func (r Parameters) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalParameters unmarshalls a Parameters.
-func UnmarshalParameters(b []byte) (Parameters, error) {
-	var parameters Parameters
-	if err := json.Unmarshal(b, &parameters); err != nil {
-		return parameters, err
+// UnmarshalJSON unmarshals the given byte slice into Parameters
+func (r *Parameters) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherParameters)(r)); err != nil {
+		return err
 	}
-	return parameters, nil
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r Parameters) GetResourceType() ResourceType {
+	return ResourceTypeParameters
 }

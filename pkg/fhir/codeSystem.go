@@ -9,7 +9,8 @@ type CodeSystem struct {
 	ImplicitRules     *string                     `bson:"implicitRules" json:"implicitRules"`
 	Language          *string                     `bson:"language" json:"language"`
 	Text              *Narrative                  `bson:"text" json:"text"`
-	Contained         []json.RawMessage           `bson:"contained" json:"contained"`
+	RawContained      []json.RawMessage           `bson:"contained" json:"contained"`
+	Contained         []IResource                 `bson:"-" json:"-"`
 	Extension         []Extension                 `bson:"extension" json:"extension"`
 	ModifierExtension []Extension                 `bson:"modifierExtension" json:"modifierExtension"`
 	Url               *string                     `bson:"url" json:"url"`
@@ -87,10 +88,23 @@ type CodeSystemConceptProperty struct {
 	ValueBoolean      *bool       `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
 	ValueDateTime     *string     `bson:"valueDateTime,omitempty" json:"valueDateTime,omitempty"`
 }
+
+// OtherCodeSystem is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherCodeSystem CodeSystem
 
 // MarshalJSON marshals the given CodeSystem as JSON into a byte slice
 func (r CodeSystem) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherCodeSystem
 		ResourceType string `json:"resourceType"`
@@ -100,11 +114,26 @@ func (r CodeSystem) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalCodeSystem unmarshalls a CodeSystem.
-func UnmarshalCodeSystem(b []byte) (CodeSystem, error) {
-	var codeSystem CodeSystem
-	if err := json.Unmarshal(b, &codeSystem); err != nil {
-		return codeSystem, err
+// UnmarshalJSON unmarshals the given byte slice into CodeSystem
+func (r *CodeSystem) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherCodeSystem)(r)); err != nil {
+		return err
 	}
-	return codeSystem, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r CodeSystem) GetResourceType() ResourceType {
+	return ResourceTypeCodeSystem
 }

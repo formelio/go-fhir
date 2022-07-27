@@ -9,7 +9,8 @@ type DeviceRequest struct {
 	ImplicitRules       *string                 `bson:"implicitRules" json:"implicitRules"`
 	Language            *string                 `bson:"language" json:"language"`
 	Text                *Narrative              `bson:"text" json:"text"`
-	Contained           []json.RawMessage       `bson:"contained" json:"contained"`
+	RawContained        []json.RawMessage       `bson:"contained" json:"contained"`
+	Contained           []IResource             `bson:"-" json:"-"`
 	Extension           []Extension             `bson:"extension" json:"extension"`
 	ModifierExtension   []Extension             `bson:"modifierExtension" json:"modifierExtension"`
 	Identifier          []Identifier            `bson:"identifier" json:"identifier"`
@@ -44,10 +45,23 @@ type DeviceRequestRequester struct {
 	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
 	OnBehalfOf        *Reference  `bson:"onBehalfOf" json:"onBehalfOf"`
 }
+
+// OtherDeviceRequest is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherDeviceRequest DeviceRequest
 
 // MarshalJSON marshals the given DeviceRequest as JSON into a byte slice
 func (r DeviceRequest) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherDeviceRequest
 		ResourceType string `json:"resourceType"`
@@ -57,11 +71,26 @@ func (r DeviceRequest) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalDeviceRequest unmarshalls a DeviceRequest.
-func UnmarshalDeviceRequest(b []byte) (DeviceRequest, error) {
-	var deviceRequest DeviceRequest
-	if err := json.Unmarshal(b, &deviceRequest); err != nil {
-		return deviceRequest, err
+// UnmarshalJSON unmarshals the given byte slice into DeviceRequest
+func (r *DeviceRequest) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherDeviceRequest)(r)); err != nil {
+		return err
 	}
-	return deviceRequest, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r DeviceRequest) GetResourceType() ResourceType {
+	return ResourceTypeDeviceRequest
 }

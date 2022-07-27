@@ -9,7 +9,8 @@ type ServiceDefinition struct {
 	ImplicitRules       *string             `bson:"implicitRules" json:"implicitRules"`
 	Language            *string             `bson:"language" json:"language"`
 	Text                *Narrative          `bson:"text" json:"text"`
-	Contained           []json.RawMessage   `bson:"contained" json:"contained"`
+	RawContained        []json.RawMessage   `bson:"contained" json:"contained"`
+	Contained           []IResource         `bson:"-" json:"-"`
 	Extension           []Extension         `bson:"extension" json:"extension"`
 	ModifierExtension   []Extension         `bson:"modifierExtension" json:"modifierExtension"`
 	Url                 *string             `bson:"url" json:"url"`
@@ -38,10 +39,23 @@ type ServiceDefinition struct {
 	DataRequirement     []DataRequirement   `bson:"dataRequirement" json:"dataRequirement"`
 	OperationDefinition *Reference          `bson:"operationDefinition" json:"operationDefinition"`
 }
+
+// OtherServiceDefinition is a helper type to use the default implementations of Marshall and Unmarshal
 type OtherServiceDefinition ServiceDefinition
 
 // MarshalJSON marshals the given ServiceDefinition as JSON into a byte slice
 func (r ServiceDefinition) MarshalJSON() ([]byte, error) {
+	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
+	if len(r.Contained) > 0 {
+		var err error
+		r.RawContained = make([]json.RawMessage, len(r.Contained))
+		for i, contained := range r.Contained {
+			r.RawContained[i], err = json.Marshal(contained)
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
 	return json.Marshal(struct {
 		OtherServiceDefinition
 		ResourceType string `json:"resourceType"`
@@ -51,11 +65,26 @@ func (r ServiceDefinition) MarshalJSON() ([]byte, error) {
 	})
 }
 
-// UnmarshalServiceDefinition unmarshalls a ServiceDefinition.
-func UnmarshalServiceDefinition(b []byte) (ServiceDefinition, error) {
-	var serviceDefinition ServiceDefinition
-	if err := json.Unmarshal(b, &serviceDefinition); err != nil {
-		return serviceDefinition, err
+// UnmarshalJSON unmarshals the given byte slice into ServiceDefinition
+func (r *ServiceDefinition) UnmarshalJSON(data []byte) error {
+	if err := json.Unmarshal(data, (*OtherServiceDefinition)(r)); err != nil {
+		return err
 	}
-	return serviceDefinition, nil
+	// If the field has contained resources, we need to unmarshal them individually and store them in .Contained
+	if len(r.RawContained) > 0 {
+		var err error
+		r.Contained = make([]IResource, len(r.RawContained))
+		for i, rawContained := range r.RawContained {
+			r.Contained[i], err = UnmarshalResource(rawContained)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// Returns the resourceType of the resource, makes this resource an instance of IResource
+func (r ServiceDefinition) GetResourceType() ResourceType {
+	return ResourceTypeServiceDefinition
 }
