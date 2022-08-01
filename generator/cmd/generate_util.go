@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/ivido/go-fhir-library/generator/fhir"
+	"github.com/ivido/go-fhir/generator/fhir"
 )
 
 /*

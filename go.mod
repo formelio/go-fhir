@@ -1,3 +1,3 @@
-module github.com/ivido/go-fhir-library
+module github.com/ivido/go-fhir
 
 go 1.18

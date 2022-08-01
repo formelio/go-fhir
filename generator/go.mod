@@ -1,4 +1,4 @@
-module github.com/ivido/go-fhir-library/generator
+module github.com/ivido/go-fhir/generator
 
 go 1.18
 

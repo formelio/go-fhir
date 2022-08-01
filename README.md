@@ -1,4 +1,4 @@
-# go-fhir-library
+# go-fhir
 Go FHIR library currently includes a STU3 FHIR library and a generator used to generate it. The original generator can be found here [golang-fhir-models](https://github.com/samply/golang-fhir-models)
 
 # STU3 FHIR library
