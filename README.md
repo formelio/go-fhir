@@ -6,7 +6,7 @@ Go FHIR library currently includes a STU3 FHIR library and a generator used to g
 This library was generated using the definitions found in [HL7](https://www.hl7.org/fhir/STU3/). 
 
 ## Functionalities
-1. Support of all of the fields found in the definitions of the resources. Including polymorphic value[x] fields.
+1. All of the fields found in the definitions of the resources are supported. Including polymorphic value[x] fields.
 2. Full JSON/BSON Marshal and Unmarshal support. Fields of type Resource are unmarshalled into an IResource interface, which each StructureDefinition implements.
 3. ValueSets that have a required binding are implemented as structs for easier use. 
 
@@ -21,11 +21,9 @@ This generator is used to generate the library. It generates all of the Structur
 1. Files used to generate the library located in `generator/fhir` are required for the generation and were generated using previous iterations of it. If another version of the FHIR library will be generated using those files, they will have to be manually tweaked to match the expected structure.
 
 # Future work
+1. Go FHIR Client, a client to retrieve and send resources from and to a FHIR server. 
 
 ## Issues
 1. No XML support
 2. No Testing/Validation of the library
 3. No modular support of other FHIR versions
-
-## Desired additions
-1. Go FHIR Client, a client to retrieve and send resources from and to a FHIR server. 
