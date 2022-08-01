@@ -4,42 +4,42 @@ import "encoding/json"
 
 // QuestionnaireResponse is documented here http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
 type QuestionnaireResponse struct {
-	Id                *string                     `bson:"id" json:"id"`
-	Meta              *Meta                       `bson:"meta" json:"meta"`
-	ImplicitRules     *string                     `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                     `bson:"language" json:"language"`
-	Text              *Narrative                  `bson:"text" json:"text"`
-	RawContained      []json.RawMessage           `bson:"contained" json:"contained"`
-	Contained         []IResource                 `bson:"-" json:"-"`
-	Extension         []Extension                 `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                 `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier                 `bson:"identifier" json:"identifier"`
-	BasedOn           []Reference                 `bson:"basedOn" json:"basedOn"`
-	Parent            []Reference                 `bson:"parent" json:"parent"`
-	Questionnaire     *Reference                  `bson:"questionnaire" json:"questionnaire"`
+	Id                *string                     `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                       `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                     `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                     `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative                  `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage           `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource                 `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier                 `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	BasedOn           []Reference                 `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	Parent            []Reference                 `bson:"parent,omitempty" json:"parent,omitempty"`
+	Questionnaire     *Reference                  `bson:"questionnaire,omitempty" json:"questionnaire,omitempty"`
 	Status            QuestionnaireResponseStatus `bson:"status,omitempty" json:"status,omitempty"`
-	Subject           *Reference                  `bson:"subject" json:"subject"`
-	Context           *Reference                  `bson:"context" json:"context"`
-	Authored          *string                     `bson:"authored" json:"authored"`
-	Author            *Reference                  `bson:"author" json:"author"`
-	Source            *Reference                  `bson:"source" json:"source"`
-	Item              []QuestionnaireResponseItem `bson:"item" json:"item"`
+	Subject           *Reference                  `bson:"subject,omitempty" json:"subject,omitempty"`
+	Context           *Reference                  `bson:"context,omitempty" json:"context,omitempty"`
+	Authored          *string                     `bson:"authored,omitempty" json:"authored,omitempty"`
+	Author            *Reference                  `bson:"author,omitempty" json:"author,omitempty"`
+	Source            *Reference                  `bson:"source,omitempty" json:"source,omitempty"`
+	Item              []QuestionnaireResponseItem `bson:"item,omitempty" json:"item,omitempty"`
 }
 type QuestionnaireResponseItem struct {
-	Id                *string                           `bson:"id" json:"id"`
-	Extension         []Extension                       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                       `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	LinkId            string                            `bson:"linkId,omitempty" json:"linkId,omitempty"`
-	Definition        *string                           `bson:"definition" json:"definition"`
-	Text              *string                           `bson:"text" json:"text"`
-	Subject           *Reference                        `bson:"subject" json:"subject"`
-	Answer            []QuestionnaireResponseItemAnswer `bson:"answer" json:"answer"`
-	Item              []QuestionnaireResponseItem       `bson:"item" json:"item"`
+	Definition        *string                           `bson:"definition,omitempty" json:"definition,omitempty"`
+	Text              *string                           `bson:"text,omitempty" json:"text,omitempty"`
+	Subject           *Reference                        `bson:"subject,omitempty" json:"subject,omitempty"`
+	Answer            []QuestionnaireResponseItemAnswer `bson:"answer,omitempty" json:"answer,omitempty"`
+	Item              []QuestionnaireResponseItem       `bson:"item,omitempty" json:"item,omitempty"`
 }
 type QuestionnaireResponseItemAnswer struct {
-	Id                *string                     `bson:"id" json:"id"`
-	Extension         []Extension                 `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                 `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	ValueBoolean      *bool                       `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
 	ValueDecimal      *float64                    `bson:"valueDecimal,omitempty" json:"valueDecimal,omitempty"`
 	ValueInteger      *int                        `bson:"valueInteger,omitempty" json:"valueInteger,omitempty"`
@@ -52,7 +52,7 @@ type QuestionnaireResponseItemAnswer struct {
 	ValueCoding       *Coding                     `bson:"valueCoding,omitempty" json:"valueCoding,omitempty"`
 	ValueQuantity     *Quantity                   `bson:"valueQuantity,omitempty" json:"valueQuantity,omitempty"`
 	ValueReference    *Reference                  `bson:"valueReference,omitempty" json:"valueReference,omitempty"`
-	Item              []QuestionnaireResponseItem `bson:"item" json:"item"`
+	Item              []QuestionnaireResponseItem `bson:"item,omitempty" json:"item,omitempty"`
 }
 
 // OtherQuestionnaireResponse is a helper type to use the default implementations of Marshall and Unmarshal

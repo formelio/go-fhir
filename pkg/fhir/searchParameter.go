@@ -4,44 +4,44 @@ import "encoding/json"
 
 // SearchParameter is documented here http://hl7.org/fhir/StructureDefinition/SearchParameter
 type SearchParameter struct {
-	Id                *string                    `bson:"id" json:"id"`
-	Meta              *Meta                      `bson:"meta" json:"meta"`
-	ImplicitRules     *string                    `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                    `bson:"language" json:"language"`
-	Text              *Narrative                 `bson:"text" json:"text"`
-	RawContained      []json.RawMessage          `bson:"contained" json:"contained"`
-	Contained         []IResource                `bson:"-" json:"-"`
-	Extension         []Extension                `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                    `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                      `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                    `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                    `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative                 `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage          `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource                `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Url               string                     `bson:"url,omitempty" json:"url,omitempty"`
-	Version           *string                    `bson:"version" json:"version"`
+	Version           *string                    `bson:"version,omitempty" json:"version,omitempty"`
 	Name              string                     `bson:"name,omitempty" json:"name,omitempty"`
 	Status            PublicationStatus          `bson:"status,omitempty" json:"status,omitempty"`
-	Experimental      *bool                      `bson:"experimental" json:"experimental"`
-	Date              *string                    `bson:"date" json:"date"`
-	Publisher         *string                    `bson:"publisher" json:"publisher"`
-	Contact           []ContactDetail            `bson:"contact" json:"contact"`
-	UseContext        []UsageContext             `bson:"useContext" json:"useContext"`
-	Jurisdiction      []CodeableConcept          `bson:"jurisdiction" json:"jurisdiction"`
-	Purpose           *string                    `bson:"purpose" json:"purpose"`
+	Experimental      *bool                      `bson:"experimental,omitempty" json:"experimental,omitempty"`
+	Date              *string                    `bson:"date,omitempty" json:"date,omitempty"`
+	Publisher         *string                    `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Contact           []ContactDetail            `bson:"contact,omitempty" json:"contact,omitempty"`
+	UseContext        []UsageContext             `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []CodeableConcept          `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Purpose           *string                    `bson:"purpose,omitempty" json:"purpose,omitempty"`
 	Code              string                     `bson:"code,omitempty" json:"code,omitempty"`
 	Base              []ResourceType             `bson:"base,omitempty" json:"base,omitempty"`
 	Type              SearchParamType            `bson:"type,omitempty" json:"type,omitempty"`
-	DerivedFrom       *string                    `bson:"derivedFrom" json:"derivedFrom"`
+	DerivedFrom       *string                    `bson:"derivedFrom,omitempty" json:"derivedFrom,omitempty"`
 	Description       string                     `bson:"description,omitempty" json:"description,omitempty"`
-	Expression        *string                    `bson:"expression" json:"expression"`
-	Xpath             *string                    `bson:"xpath" json:"xpath"`
-	XpathUsage        *XPathUsageType            `bson:"xpathUsage" json:"xpathUsage"`
-	Target            []ResourceType             `bson:"target" json:"target"`
-	Comparator        []SearchComparator         `bson:"comparator" json:"comparator"`
-	Modifier          []SearchModifierCode       `bson:"modifier" json:"modifier"`
-	Chain             []string                   `bson:"chain" json:"chain"`
-	Component         []SearchParameterComponent `bson:"component" json:"component"`
+	Expression        *string                    `bson:"expression,omitempty" json:"expression,omitempty"`
+	Xpath             *string                    `bson:"xpath,omitempty" json:"xpath,omitempty"`
+	XpathUsage        *XPathUsageType            `bson:"xpathUsage,omitempty" json:"xpathUsage,omitempty"`
+	Target            []ResourceType             `bson:"target,omitempty" json:"target,omitempty"`
+	Comparator        []SearchComparator         `bson:"comparator,omitempty" json:"comparator,omitempty"`
+	Modifier          []SearchModifierCode       `bson:"modifier,omitempty" json:"modifier,omitempty"`
+	Chain             []string                   `bson:"chain,omitempty" json:"chain,omitempty"`
+	Component         []SearchParameterComponent `bson:"component,omitempty" json:"component,omitempty"`
 }
 type SearchParameterComponent struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Definition        Reference   `bson:"definition,omitempty" json:"definition,omitempty"`
 	Expression        string      `bson:"expression,omitempty" json:"expression,omitempty"`
 }

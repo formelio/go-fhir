@@ -4,20 +4,20 @@ import "encoding/json"
 
 // Basic is documented here http://hl7.org/fhir/StructureDefinition/Basic
 type Basic struct {
-	Id                *string           `bson:"id" json:"id"`
-	Meta              *Meta             `bson:"meta" json:"meta"`
-	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
-	Language          *string           `bson:"language" json:"language"`
-	Text              *Narrative        `bson:"text" json:"text"`
-	RawContained      []json.RawMessage `bson:"contained" json:"contained"`
-	Contained         []IResource       `bson:"-" json:"-"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Code              CodeableConcept   `bson:"code,omitempty" json:"code,omitempty"`
-	Subject           *Reference        `bson:"subject" json:"subject"`
-	Created           *string           `bson:"created" json:"created"`
-	Author            *Reference        `bson:"author" json:"author"`
+	Subject           *Reference        `bson:"subject,omitempty" json:"subject,omitempty"`
+	Created           *string           `bson:"created,omitempty" json:"created,omitempty"`
+	Author            *Reference        `bson:"author,omitempty" json:"author,omitempty"`
 }
 
 // OtherBasic is a helper type to use the default implementations of Marshall and Unmarshal

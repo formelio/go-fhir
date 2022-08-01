@@ -2,14 +2,14 @@ package fhir
 
 // Attachment is documented here http://hl7.org/fhir/StructureDefinition/Attachment
 type Attachment struct {
-	Id          *string     `bson:"id" json:"id"`
-	Extension   []Extension `bson:"extension" json:"extension"`
-	ContentType *string     `bson:"contentType" json:"contentType"`
-	Language    *string     `bson:"language" json:"language"`
-	Data        *string     `bson:"data" json:"data"`
-	Url         *string     `bson:"url" json:"url"`
-	Size        *int        `bson:"size" json:"size"`
-	Hash        *string     `bson:"hash" json:"hash"`
-	Title       *string     `bson:"title" json:"title"`
-	Creation    *string     `bson:"creation" json:"creation"`
+	Id          *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension   []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ContentType *string     `bson:"contentType,omitempty" json:"contentType,omitempty"`
+	Language    *string     `bson:"language,omitempty" json:"language,omitempty"`
+	Data        *string     `bson:"data,omitempty" json:"data,omitempty"`
+	Url         *string     `bson:"url,omitempty" json:"url,omitempty"`
+	Size        *int        `bson:"size,omitempty" json:"size,omitempty"`
+	Hash        *string     `bson:"hash,omitempty" json:"hash,omitempty"`
+	Title       *string     `bson:"title,omitempty" json:"title,omitempty"`
+	Creation    *string     `bson:"creation,omitempty" json:"creation,omitempty"`
 }

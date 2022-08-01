@@ -4,88 +4,88 @@ import "encoding/json"
 
 // Encounter is documented here http://hl7.org/fhir/StructureDefinition/Encounter
 type Encounter struct {
-	Id                *string                   `bson:"id" json:"id"`
-	Meta              *Meta                     `bson:"meta" json:"meta"`
-	ImplicitRules     *string                   `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                   `bson:"language" json:"language"`
-	Text              *Narrative                `bson:"text" json:"text"`
-	RawContained      []json.RawMessage         `bson:"contained" json:"contained"`
-	Contained         []IResource               `bson:"-" json:"-"`
-	Extension         []Extension               `bson:"extension" json:"extension"`
-	ModifierExtension []Extension               `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier              `bson:"identifier" json:"identifier"`
+	Id                *string                   `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                     `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                   `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                   `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage         `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource               `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status            EncounterStatus           `bson:"status,omitempty" json:"status,omitempty"`
-	StatusHistory     []EncounterStatusHistory  `bson:"statusHistory" json:"statusHistory"`
-	Class             *Coding                   `bson:"class" json:"class"`
-	ClassHistory      []EncounterClassHistory   `bson:"classHistory" json:"classHistory"`
-	Type              []CodeableConcept         `bson:"type" json:"type"`
-	Priority          *CodeableConcept          `bson:"priority" json:"priority"`
-	Subject           *Reference                `bson:"subject" json:"subject"`
-	EpisodeOfCare     []Reference               `bson:"episodeOfCare" json:"episodeOfCare"`
-	IncomingReferral  []Reference               `bson:"incomingReferral" json:"incomingReferral"`
-	Participant       []EncounterParticipant    `bson:"participant" json:"participant"`
-	Appointment       *Reference                `bson:"appointment" json:"appointment"`
-	Period            *Period                   `bson:"period" json:"period"`
-	Length            *Duration                 `bson:"length" json:"length"`
-	Reason            []CodeableConcept         `bson:"reason" json:"reason"`
-	Diagnosis         []EncounterDiagnosis      `bson:"diagnosis" json:"diagnosis"`
-	Account           []Reference               `bson:"account" json:"account"`
-	Hospitalization   *EncounterHospitalization `bson:"hospitalization" json:"hospitalization"`
-	Location          []EncounterLocation       `bson:"location" json:"location"`
-	ServiceProvider   *Reference                `bson:"serviceProvider" json:"serviceProvider"`
-	PartOf            *Reference                `bson:"partOf" json:"partOf"`
+	StatusHistory     []EncounterStatusHistory  `bson:"statusHistory,omitempty" json:"statusHistory,omitempty"`
+	Class             *Coding                   `bson:"class,omitempty" json:"class,omitempty"`
+	ClassHistory      []EncounterClassHistory   `bson:"classHistory,omitempty" json:"classHistory,omitempty"`
+	Type              []CodeableConcept         `bson:"type,omitempty" json:"type,omitempty"`
+	Priority          *CodeableConcept          `bson:"priority,omitempty" json:"priority,omitempty"`
+	Subject           *Reference                `bson:"subject,omitempty" json:"subject,omitempty"`
+	EpisodeOfCare     []Reference               `bson:"episodeOfCare,omitempty" json:"episodeOfCare,omitempty"`
+	IncomingReferral  []Reference               `bson:"incomingReferral,omitempty" json:"incomingReferral,omitempty"`
+	Participant       []EncounterParticipant    `bson:"participant,omitempty" json:"participant,omitempty"`
+	Appointment       *Reference                `bson:"appointment,omitempty" json:"appointment,omitempty"`
+	Period            *Period                   `bson:"period,omitempty" json:"period,omitempty"`
+	Length            *Duration                 `bson:"length,omitempty" json:"length,omitempty"`
+	Reason            []CodeableConcept         `bson:"reason,omitempty" json:"reason,omitempty"`
+	Diagnosis         []EncounterDiagnosis      `bson:"diagnosis,omitempty" json:"diagnosis,omitempty"`
+	Account           []Reference               `bson:"account,omitempty" json:"account,omitempty"`
+	Hospitalization   *EncounterHospitalization `bson:"hospitalization,omitempty" json:"hospitalization,omitempty"`
+	Location          []EncounterLocation       `bson:"location,omitempty" json:"location,omitempty"`
+	ServiceProvider   *Reference                `bson:"serviceProvider,omitempty" json:"serviceProvider,omitempty"`
+	PartOf            *Reference                `bson:"partOf,omitempty" json:"partOf,omitempty"`
 }
 type EncounterStatusHistory struct {
-	Id                *string         `bson:"id" json:"id"`
-	Extension         []Extension     `bson:"extension" json:"extension"`
-	ModifierExtension []Extension     `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Status            EncounterStatus `bson:"status,omitempty" json:"status,omitempty"`
 	Period            Period          `bson:"period,omitempty" json:"period,omitempty"`
 }
 type EncounterClassHistory struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Class             Coding      `bson:"class,omitempty" json:"class,omitempty"`
 	Period            Period      `bson:"period,omitempty" json:"period,omitempty"`
 }
 type EncounterParticipant struct {
-	Id                *string           `bson:"id" json:"id"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Type              []CodeableConcept `bson:"type" json:"type"`
-	Period            *Period           `bson:"period" json:"period"`
-	Individual        *Reference        `bson:"individual" json:"individual"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Type              []CodeableConcept `bson:"type,omitempty" json:"type,omitempty"`
+	Period            *Period           `bson:"period,omitempty" json:"period,omitempty"`
+	Individual        *Reference        `bson:"individual,omitempty" json:"individual,omitempty"`
 }
 type EncounterDiagnosis struct {
-	Id                *string          `bson:"id" json:"id"`
-	Extension         []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Condition         Reference        `bson:"condition,omitempty" json:"condition,omitempty"`
-	Role              *CodeableConcept `bson:"role" json:"role"`
-	Rank              *int             `bson:"rank" json:"rank"`
+	Role              *CodeableConcept `bson:"role,omitempty" json:"role,omitempty"`
+	Rank              *int             `bson:"rank,omitempty" json:"rank,omitempty"`
 }
 type EncounterHospitalization struct {
-	Id                     *string           `bson:"id" json:"id"`
-	Extension              []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension      []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	PreAdmissionIdentifier *Identifier       `bson:"preAdmissionIdentifier" json:"preAdmissionIdentifier"`
-	Origin                 *Reference        `bson:"origin" json:"origin"`
-	AdmitSource            *CodeableConcept  `bson:"admitSource" json:"admitSource"`
-	ReAdmission            *CodeableConcept  `bson:"reAdmission" json:"reAdmission"`
-	DietPreference         []CodeableConcept `bson:"dietPreference" json:"dietPreference"`
-	SpecialCourtesy        []CodeableConcept `bson:"specialCourtesy" json:"specialCourtesy"`
-	SpecialArrangement     []CodeableConcept `bson:"specialArrangement" json:"specialArrangement"`
-	Destination            *Reference        `bson:"destination" json:"destination"`
-	DischargeDisposition   *CodeableConcept  `bson:"dischargeDisposition" json:"dischargeDisposition"`
+	Id                     *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension              []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension      []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	PreAdmissionIdentifier *Identifier       `bson:"preAdmissionIdentifier,omitempty" json:"preAdmissionIdentifier,omitempty"`
+	Origin                 *Reference        `bson:"origin,omitempty" json:"origin,omitempty"`
+	AdmitSource            *CodeableConcept  `bson:"admitSource,omitempty" json:"admitSource,omitempty"`
+	ReAdmission            *CodeableConcept  `bson:"reAdmission,omitempty" json:"reAdmission,omitempty"`
+	DietPreference         []CodeableConcept `bson:"dietPreference,omitempty" json:"dietPreference,omitempty"`
+	SpecialCourtesy        []CodeableConcept `bson:"specialCourtesy,omitempty" json:"specialCourtesy,omitempty"`
+	SpecialArrangement     []CodeableConcept `bson:"specialArrangement,omitempty" json:"specialArrangement,omitempty"`
+	Destination            *Reference        `bson:"destination,omitempty" json:"destination,omitempty"`
+	DischargeDisposition   *CodeableConcept  `bson:"dischargeDisposition,omitempty" json:"dischargeDisposition,omitempty"`
 }
 type EncounterLocation struct {
-	Id                *string                  `bson:"id" json:"id"`
-	Extension         []Extension              `bson:"extension" json:"extension"`
-	ModifierExtension []Extension              `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                  `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension              `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Location          Reference                `bson:"location,omitempty" json:"location,omitempty"`
-	Status            *EncounterLocationStatus `bson:"status" json:"status"`
-	Period            *Period                  `bson:"period" json:"period"`
+	Status            *EncounterLocationStatus `bson:"status,omitempty" json:"status,omitempty"`
+	Period            *Period                  `bson:"period,omitempty" json:"period,omitempty"`
 }
 
 // OtherEncounter is a helper type to use the default implementations of Marshall and Unmarshal

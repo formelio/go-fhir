@@ -4,131 +4,131 @@ import "encoding/json"
 
 // PlanDefinition is documented here http://hl7.org/fhir/StructureDefinition/PlanDefinition
 type PlanDefinition struct {
-	Id                *string                `bson:"id" json:"id"`
-	Meta              *Meta                  `bson:"meta" json:"meta"`
-	ImplicitRules     *string                `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                `bson:"language" json:"language"`
-	Text              *Narrative             `bson:"text" json:"text"`
-	RawContained      []json.RawMessage      `bson:"contained" json:"contained"`
-	Contained         []IResource            `bson:"-" json:"-"`
-	Extension         []Extension            `bson:"extension" json:"extension"`
-	ModifierExtension []Extension            `bson:"modifierExtension" json:"modifierExtension"`
-	Url               *string                `bson:"url" json:"url"`
-	Identifier        []Identifier           `bson:"identifier" json:"identifier"`
-	Version           *string                `bson:"version" json:"version"`
-	Name              *string                `bson:"name" json:"name"`
-	Title             *string                `bson:"title" json:"title"`
-	Type              *CodeableConcept       `bson:"type" json:"type"`
+	Id                *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                  `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource            `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Url               *string                `bson:"url,omitempty" json:"url,omitempty"`
+	Identifier        []Identifier           `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Version           *string                `bson:"version,omitempty" json:"version,omitempty"`
+	Name              *string                `bson:"name,omitempty" json:"name,omitempty"`
+	Title             *string                `bson:"title,omitempty" json:"title,omitempty"`
+	Type              *CodeableConcept       `bson:"type,omitempty" json:"type,omitempty"`
 	Status            PublicationStatus      `bson:"status,omitempty" json:"status,omitempty"`
-	Experimental      *bool                  `bson:"experimental" json:"experimental"`
-	Date              *string                `bson:"date" json:"date"`
-	Publisher         *string                `bson:"publisher" json:"publisher"`
-	Description       *string                `bson:"description" json:"description"`
-	Purpose           *string                `bson:"purpose" json:"purpose"`
-	Usage             *string                `bson:"usage" json:"usage"`
-	ApprovalDate      *string                `bson:"approvalDate" json:"approvalDate"`
-	LastReviewDate    *string                `bson:"lastReviewDate" json:"lastReviewDate"`
-	EffectivePeriod   *Period                `bson:"effectivePeriod" json:"effectivePeriod"`
-	UseContext        []UsageContext         `bson:"useContext" json:"useContext"`
-	Jurisdiction      []CodeableConcept      `bson:"jurisdiction" json:"jurisdiction"`
-	Topic             []CodeableConcept      `bson:"topic" json:"topic"`
-	Contributor       []Contributor          `bson:"contributor" json:"contributor"`
-	Contact           []ContactDetail        `bson:"contact" json:"contact"`
-	Copyright         *string                `bson:"copyright" json:"copyright"`
-	RelatedArtifact   []RelatedArtifact      `bson:"relatedArtifact" json:"relatedArtifact"`
-	Library           []Reference            `bson:"library" json:"library"`
-	Goal              []PlanDefinitionGoal   `bson:"goal" json:"goal"`
-	Action            []PlanDefinitionAction `bson:"action" json:"action"`
+	Experimental      *bool                  `bson:"experimental,omitempty" json:"experimental,omitempty"`
+	Date              *string                `bson:"date,omitempty" json:"date,omitempty"`
+	Publisher         *string                `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Description       *string                `bson:"description,omitempty" json:"description,omitempty"`
+	Purpose           *string                `bson:"purpose,omitempty" json:"purpose,omitempty"`
+	Usage             *string                `bson:"usage,omitempty" json:"usage,omitempty"`
+	ApprovalDate      *string                `bson:"approvalDate,omitempty" json:"approvalDate,omitempty"`
+	LastReviewDate    *string                `bson:"lastReviewDate,omitempty" json:"lastReviewDate,omitempty"`
+	EffectivePeriod   *Period                `bson:"effectivePeriod,omitempty" json:"effectivePeriod,omitempty"`
+	UseContext        []UsageContext         `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []CodeableConcept      `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Topic             []CodeableConcept      `bson:"topic,omitempty" json:"topic,omitempty"`
+	Contributor       []Contributor          `bson:"contributor,omitempty" json:"contributor,omitempty"`
+	Contact           []ContactDetail        `bson:"contact,omitempty" json:"contact,omitempty"`
+	Copyright         *string                `bson:"copyright,omitempty" json:"copyright,omitempty"`
+	RelatedArtifact   []RelatedArtifact      `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
+	Library           []Reference            `bson:"library,omitempty" json:"library,omitempty"`
+	Goal              []PlanDefinitionGoal   `bson:"goal,omitempty" json:"goal,omitempty"`
+	Action            []PlanDefinitionAction `bson:"action,omitempty" json:"action,omitempty"`
 }
 type PlanDefinitionGoal struct {
-	Id                *string                    `bson:"id" json:"id"`
-	Extension         []Extension                `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                `bson:"modifierExtension" json:"modifierExtension"`
-	Category          *CodeableConcept           `bson:"category" json:"category"`
+	Id                *string                    `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Category          *CodeableConcept           `bson:"category,omitempty" json:"category,omitempty"`
 	Description       CodeableConcept            `bson:"description,omitempty" json:"description,omitempty"`
-	Priority          *CodeableConcept           `bson:"priority" json:"priority"`
-	Start             *CodeableConcept           `bson:"start" json:"start"`
-	Addresses         []CodeableConcept          `bson:"addresses" json:"addresses"`
-	Documentation     []RelatedArtifact          `bson:"documentation" json:"documentation"`
-	Target            []PlanDefinitionGoalTarget `bson:"target" json:"target"`
+	Priority          *CodeableConcept           `bson:"priority,omitempty" json:"priority,omitempty"`
+	Start             *CodeableConcept           `bson:"start,omitempty" json:"start,omitempty"`
+	Addresses         []CodeableConcept          `bson:"addresses,omitempty" json:"addresses,omitempty"`
+	Documentation     []RelatedArtifact          `bson:"documentation,omitempty" json:"documentation,omitempty"`
+	Target            []PlanDefinitionGoalTarget `bson:"target,omitempty" json:"target,omitempty"`
 }
 type PlanDefinitionGoalTarget struct {
-	Id                    *string          `bson:"id" json:"id"`
-	Extension             []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension     []Extension      `bson:"modifierExtension" json:"modifierExtension"`
-	Measure               *CodeableConcept `bson:"measure" json:"measure"`
+	Id                    *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension             []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Measure               *CodeableConcept `bson:"measure,omitempty" json:"measure,omitempty"`
 	DetailQuantity        *Quantity        `bson:"detailQuantity,omitempty" json:"detailQuantity,omitempty"`
 	DetailRange           *Range           `bson:"detailRange,omitempty" json:"detailRange,omitempty"`
 	DetailCodeableConcept *CodeableConcept `bson:"detailCodeableConcept,omitempty" json:"detailCodeableConcept,omitempty"`
-	Due                   *Duration        `bson:"due" json:"due"`
+	Due                   *Duration        `bson:"due,omitempty" json:"due,omitempty"`
 }
 type PlanDefinitionAction struct {
-	Id                  *string                             `bson:"id" json:"id"`
-	Extension           []Extension                         `bson:"extension" json:"extension"`
-	ModifierExtension   []Extension                         `bson:"modifierExtension" json:"modifierExtension"`
-	Label               *string                             `bson:"label" json:"label"`
-	Title               *string                             `bson:"title" json:"title"`
-	Description         *string                             `bson:"description" json:"description"`
-	TextEquivalent      *string                             `bson:"textEquivalent" json:"textEquivalent"`
-	Code                []CodeableConcept                   `bson:"code" json:"code"`
-	Reason              []CodeableConcept                   `bson:"reason" json:"reason"`
-	Documentation       []RelatedArtifact                   `bson:"documentation" json:"documentation"`
-	GoalId              []string                            `bson:"goalId" json:"goalId"`
-	TriggerDefinition   []TriggerDefinition                 `bson:"triggerDefinition" json:"triggerDefinition"`
-	Condition           []PlanDefinitionActionCondition     `bson:"condition" json:"condition"`
-	Input               []DataRequirement                   `bson:"input" json:"input"`
-	Output              []DataRequirement                   `bson:"output" json:"output"`
-	RelatedAction       []PlanDefinitionActionRelatedAction `bson:"relatedAction" json:"relatedAction"`
+	Id                  *string                             `bson:"id,omitempty" json:"id,omitempty"`
+	Extension           []Extension                         `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []Extension                         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Label               *string                             `bson:"label,omitempty" json:"label,omitempty"`
+	Title               *string                             `bson:"title,omitempty" json:"title,omitempty"`
+	Description         *string                             `bson:"description,omitempty" json:"description,omitempty"`
+	TextEquivalent      *string                             `bson:"textEquivalent,omitempty" json:"textEquivalent,omitempty"`
+	Code                []CodeableConcept                   `bson:"code,omitempty" json:"code,omitempty"`
+	Reason              []CodeableConcept                   `bson:"reason,omitempty" json:"reason,omitempty"`
+	Documentation       []RelatedArtifact                   `bson:"documentation,omitempty" json:"documentation,omitempty"`
+	GoalId              []string                            `bson:"goalId,omitempty" json:"goalId,omitempty"`
+	TriggerDefinition   []TriggerDefinition                 `bson:"triggerDefinition,omitempty" json:"triggerDefinition,omitempty"`
+	Condition           []PlanDefinitionActionCondition     `bson:"condition,omitempty" json:"condition,omitempty"`
+	Input               []DataRequirement                   `bson:"input,omitempty" json:"input,omitempty"`
+	Output              []DataRequirement                   `bson:"output,omitempty" json:"output,omitempty"`
+	RelatedAction       []PlanDefinitionActionRelatedAction `bson:"relatedAction,omitempty" json:"relatedAction,omitempty"`
 	TimingDateTime      *string                             `bson:"timingDateTime,omitempty" json:"timingDateTime,omitempty"`
 	TimingPeriod        *Period                             `bson:"timingPeriod,omitempty" json:"timingPeriod,omitempty"`
 	TimingDuration      *Duration                           `bson:"timingDuration,omitempty" json:"timingDuration,omitempty"`
 	TimingRange         *Range                              `bson:"timingRange,omitempty" json:"timingRange,omitempty"`
 	TimingTiming        *Timing                             `bson:"timingTiming,omitempty" json:"timingTiming,omitempty"`
-	Participant         []PlanDefinitionActionParticipant   `bson:"participant" json:"participant"`
-	Type                *Coding                             `bson:"type" json:"type"`
-	GroupingBehavior    *ActionGroupingBehavior             `bson:"groupingBehavior" json:"groupingBehavior"`
-	SelectionBehavior   *ActionSelectionBehavior            `bson:"selectionBehavior" json:"selectionBehavior"`
-	RequiredBehavior    *ActionRequiredBehavior             `bson:"requiredBehavior" json:"requiredBehavior"`
-	PrecheckBehavior    *ActionPrecheckBehavior             `bson:"precheckBehavior" json:"precheckBehavior"`
-	CardinalityBehavior *ActionCardinalityBehavior          `bson:"cardinalityBehavior" json:"cardinalityBehavior"`
-	Definition          *Reference                          `bson:"definition" json:"definition"`
-	Transform           *Reference                          `bson:"transform" json:"transform"`
-	DynamicValue        []PlanDefinitionActionDynamicValue  `bson:"dynamicValue" json:"dynamicValue"`
-	Action              []PlanDefinitionAction              `bson:"action" json:"action"`
+	Participant         []PlanDefinitionActionParticipant   `bson:"participant,omitempty" json:"participant,omitempty"`
+	Type                *Coding                             `bson:"type,omitempty" json:"type,omitempty"`
+	GroupingBehavior    *ActionGroupingBehavior             `bson:"groupingBehavior,omitempty" json:"groupingBehavior,omitempty"`
+	SelectionBehavior   *ActionSelectionBehavior            `bson:"selectionBehavior,omitempty" json:"selectionBehavior,omitempty"`
+	RequiredBehavior    *ActionRequiredBehavior             `bson:"requiredBehavior,omitempty" json:"requiredBehavior,omitempty"`
+	PrecheckBehavior    *ActionPrecheckBehavior             `bson:"precheckBehavior,omitempty" json:"precheckBehavior,omitempty"`
+	CardinalityBehavior *ActionCardinalityBehavior          `bson:"cardinalityBehavior,omitempty" json:"cardinalityBehavior,omitempty"`
+	Definition          *Reference                          `bson:"definition,omitempty" json:"definition,omitempty"`
+	Transform           *Reference                          `bson:"transform,omitempty" json:"transform,omitempty"`
+	DynamicValue        []PlanDefinitionActionDynamicValue  `bson:"dynamicValue,omitempty" json:"dynamicValue,omitempty"`
+	Action              []PlanDefinitionAction              `bson:"action,omitempty" json:"action,omitempty"`
 }
 type PlanDefinitionActionCondition struct {
-	Id                *string             `bson:"id" json:"id"`
-	Extension         []Extension         `bson:"extension" json:"extension"`
-	ModifierExtension []Extension         `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string             `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Kind              ActionConditionKind `bson:"kind,omitempty" json:"kind,omitempty"`
-	Description       *string             `bson:"description" json:"description"`
-	Language          *string             `bson:"language" json:"language"`
-	Expression        *string             `bson:"expression" json:"expression"`
+	Description       *string             `bson:"description,omitempty" json:"description,omitempty"`
+	Language          *string             `bson:"language,omitempty" json:"language,omitempty"`
+	Expression        *string             `bson:"expression,omitempty" json:"expression,omitempty"`
 }
 type PlanDefinitionActionRelatedAction struct {
-	Id                *string                `bson:"id" json:"id"`
-	Extension         []Extension            `bson:"extension" json:"extension"`
-	ModifierExtension []Extension            `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	ActionId          string                 `bson:"actionId,omitempty" json:"actionId,omitempty"`
 	Relationship      ActionRelationshipType `bson:"relationship,omitempty" json:"relationship,omitempty"`
 	OffsetDuration    *Duration              `bson:"offsetDuration,omitempty" json:"offsetDuration,omitempty"`
 	OffsetRange       *Range                 `bson:"offsetRange,omitempty" json:"offsetRange,omitempty"`
 }
 type PlanDefinitionActionParticipant struct {
-	Id                *string               `bson:"id" json:"id"`
-	Extension         []Extension           `bson:"extension" json:"extension"`
-	ModifierExtension []Extension           `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string               `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Type              ActionParticipantType `bson:"type,omitempty" json:"type,omitempty"`
-	Role              *CodeableConcept      `bson:"role" json:"role"`
+	Role              *CodeableConcept      `bson:"role,omitempty" json:"role,omitempty"`
 }
 type PlanDefinitionActionDynamicValue struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
-	Description       *string     `bson:"description" json:"description"`
-	Path              *string     `bson:"path" json:"path"`
-	Language          *string     `bson:"language" json:"language"`
-	Expression        *string     `bson:"expression" json:"expression"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Description       *string     `bson:"description,omitempty" json:"description,omitempty"`
+	Path              *string     `bson:"path,omitempty" json:"path,omitempty"`
+	Language          *string     `bson:"language,omitempty" json:"language,omitempty"`
+	Expression        *string     `bson:"expression,omitempty" json:"expression,omitempty"`
 }
 
 // OtherPlanDefinition is a helper type to use the default implementations of Marshall and Unmarshal

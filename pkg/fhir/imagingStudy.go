@@ -4,60 +4,60 @@ import "encoding/json"
 
 // ImagingStudy is documented here http://hl7.org/fhir/StructureDefinition/ImagingStudy
 type ImagingStudy struct {
-	Id                 *string               `bson:"id" json:"id"`
-	Meta               *Meta                 `bson:"meta" json:"meta"`
-	ImplicitRules      *string               `bson:"implicitRules" json:"implicitRules"`
-	Language           *string               `bson:"language" json:"language"`
-	Text               *Narrative            `bson:"text" json:"text"`
-	RawContained       []json.RawMessage     `bson:"contained" json:"contained"`
-	Contained          []IResource           `bson:"-" json:"-"`
-	Extension          []Extension           `bson:"extension" json:"extension"`
-	ModifierExtension  []Extension           `bson:"modifierExtension" json:"modifierExtension"`
+	Id                 *string               `bson:"id,omitempty" json:"id,omitempty"`
+	Meta               *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules      *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language           *string               `bson:"language,omitempty" json:"language,omitempty"`
+	Text               *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained       []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained          []IResource           `bson:"-,omitempty" json:"-,omitempty"`
+	Extension          []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension  []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Uid                string                `bson:"uid,omitempty" json:"uid,omitempty"`
-	Accession          *Identifier           `bson:"accession" json:"accession"`
-	Identifier         []Identifier          `bson:"identifier" json:"identifier"`
-	Availability       *InstanceAvailability `bson:"availability" json:"availability"`
-	ModalityList       []Coding              `bson:"modalityList" json:"modalityList"`
+	Accession          *Identifier           `bson:"accession,omitempty" json:"accession,omitempty"`
+	Identifier         []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Availability       *InstanceAvailability `bson:"availability,omitempty" json:"availability,omitempty"`
+	ModalityList       []Coding              `bson:"modalityList,omitempty" json:"modalityList,omitempty"`
 	Patient            Reference             `bson:"patient,omitempty" json:"patient,omitempty"`
-	Context            *Reference            `bson:"context" json:"context"`
-	Started            *string               `bson:"started" json:"started"`
-	BasedOn            []Reference           `bson:"basedOn" json:"basedOn"`
-	Referrer           *Reference            `bson:"referrer" json:"referrer"`
-	Interpreter        []Reference           `bson:"interpreter" json:"interpreter"`
-	Endpoint           []Reference           `bson:"endpoint" json:"endpoint"`
-	NumberOfSeries     *int                  `bson:"numberOfSeries" json:"numberOfSeries"`
-	NumberOfInstances  *int                  `bson:"numberOfInstances" json:"numberOfInstances"`
-	ProcedureReference []Reference           `bson:"procedureReference" json:"procedureReference"`
-	ProcedureCode      []CodeableConcept     `bson:"procedureCode" json:"procedureCode"`
-	Reason             *CodeableConcept      `bson:"reason" json:"reason"`
-	Description        *string               `bson:"description" json:"description"`
-	Series             []ImagingStudySeries  `bson:"series" json:"series"`
+	Context            *Reference            `bson:"context,omitempty" json:"context,omitempty"`
+	Started            *string               `bson:"started,omitempty" json:"started,omitempty"`
+	BasedOn            []Reference           `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	Referrer           *Reference            `bson:"referrer,omitempty" json:"referrer,omitempty"`
+	Interpreter        []Reference           `bson:"interpreter,omitempty" json:"interpreter,omitempty"`
+	Endpoint           []Reference           `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
+	NumberOfSeries     *int                  `bson:"numberOfSeries,omitempty" json:"numberOfSeries,omitempty"`
+	NumberOfInstances  *int                  `bson:"numberOfInstances,omitempty" json:"numberOfInstances,omitempty"`
+	ProcedureReference []Reference           `bson:"procedureReference,omitempty" json:"procedureReference,omitempty"`
+	ProcedureCode      []CodeableConcept     `bson:"procedureCode,omitempty" json:"procedureCode,omitempty"`
+	Reason             *CodeableConcept      `bson:"reason,omitempty" json:"reason,omitempty"`
+	Description        *string               `bson:"description,omitempty" json:"description,omitempty"`
+	Series             []ImagingStudySeries  `bson:"series,omitempty" json:"series,omitempty"`
 }
 type ImagingStudySeries struct {
-	Id                *string                      `bson:"id" json:"id"`
-	Extension         []Extension                  `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                  `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Uid               string                       `bson:"uid,omitempty" json:"uid,omitempty"`
-	Number            *int                         `bson:"number" json:"number"`
+	Number            *int                         `bson:"number,omitempty" json:"number,omitempty"`
 	Modality          Coding                       `bson:"modality,omitempty" json:"modality,omitempty"`
-	Description       *string                      `bson:"description" json:"description"`
-	NumberOfInstances *int                         `bson:"numberOfInstances" json:"numberOfInstances"`
-	Availability      *InstanceAvailability        `bson:"availability" json:"availability"`
-	Endpoint          []Reference                  `bson:"endpoint" json:"endpoint"`
-	BodySite          *Coding                      `bson:"bodySite" json:"bodySite"`
-	Laterality        *Coding                      `bson:"laterality" json:"laterality"`
-	Started           *string                      `bson:"started" json:"started"`
-	Performer         []Reference                  `bson:"performer" json:"performer"`
-	Instance          []ImagingStudySeriesInstance `bson:"instance" json:"instance"`
+	Description       *string                      `bson:"description,omitempty" json:"description,omitempty"`
+	NumberOfInstances *int                         `bson:"numberOfInstances,omitempty" json:"numberOfInstances,omitempty"`
+	Availability      *InstanceAvailability        `bson:"availability,omitempty" json:"availability,omitempty"`
+	Endpoint          []Reference                  `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
+	BodySite          *Coding                      `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
+	Laterality        *Coding                      `bson:"laterality,omitempty" json:"laterality,omitempty"`
+	Started           *string                      `bson:"started,omitempty" json:"started,omitempty"`
+	Performer         []Reference                  `bson:"performer,omitempty" json:"performer,omitempty"`
+	Instance          []ImagingStudySeriesInstance `bson:"instance,omitempty" json:"instance,omitempty"`
 }
 type ImagingStudySeriesInstance struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Uid               string      `bson:"uid,omitempty" json:"uid,omitempty"`
-	Number            *int        `bson:"number" json:"number"`
+	Number            *int        `bson:"number,omitempty" json:"number,omitempty"`
 	SopClass          string      `bson:"sopClass,omitempty" json:"sopClass,omitempty"`
-	Title             *string     `bson:"title" json:"title"`
+	Title             *string     `bson:"title,omitempty" json:"title,omitempty"`
 }
 
 // OtherImagingStudy is a helper type to use the default implementations of Marshall and Unmarshal

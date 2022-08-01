@@ -4,71 +4,71 @@ import "encoding/json"
 
 // Immunization is documented here http://hl7.org/fhir/StructureDefinition/Immunization
 type Immunization struct {
-	Id                  *string                           `bson:"id" json:"id"`
-	Meta                *Meta                             `bson:"meta" json:"meta"`
-	ImplicitRules       *string                           `bson:"implicitRules" json:"implicitRules"`
-	Language            *string                           `bson:"language" json:"language"`
-	Text                *Narrative                        `bson:"text" json:"text"`
-	RawContained        []json.RawMessage                 `bson:"contained" json:"contained"`
-	Contained           []IResource                       `bson:"-" json:"-"`
-	Extension           []Extension                       `bson:"extension" json:"extension"`
-	ModifierExtension   []Extension                       `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier          []Identifier                      `bson:"identifier" json:"identifier"`
+	Id                  *string                           `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                *Meta                             `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules       *string                           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language            *string                           `bson:"language,omitempty" json:"language,omitempty"`
+	Text                *Narrative                        `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained        []json.RawMessage                 `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained           []IResource                       `bson:"-,omitempty" json:"-,omitempty"`
+	Extension           []Extension                       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []Extension                       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier          []Identifier                      `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status              string                            `bson:"status,omitempty" json:"status,omitempty"`
 	NotGiven            bool                              `bson:"notGiven,omitempty" json:"notGiven,omitempty"`
 	VaccineCode         CodeableConcept                   `bson:"vaccineCode,omitempty" json:"vaccineCode,omitempty"`
 	Patient             Reference                         `bson:"patient,omitempty" json:"patient,omitempty"`
-	Encounter           *Reference                        `bson:"encounter" json:"encounter"`
-	Date                *string                           `bson:"date" json:"date"`
+	Encounter           *Reference                        `bson:"encounter,omitempty" json:"encounter,omitempty"`
+	Date                *string                           `bson:"date,omitempty" json:"date,omitempty"`
 	PrimarySource       bool                              `bson:"primarySource,omitempty" json:"primarySource,omitempty"`
-	ReportOrigin        *CodeableConcept                  `bson:"reportOrigin" json:"reportOrigin"`
-	Location            *Reference                        `bson:"location" json:"location"`
-	Manufacturer        *Reference                        `bson:"manufacturer" json:"manufacturer"`
-	LotNumber           *string                           `bson:"lotNumber" json:"lotNumber"`
-	ExpirationDate      *string                           `bson:"expirationDate" json:"expirationDate"`
-	Site                *CodeableConcept                  `bson:"site" json:"site"`
-	Route               *CodeableConcept                  `bson:"route" json:"route"`
-	DoseQuantity        *Quantity                         `bson:"doseQuantity" json:"doseQuantity"`
-	Practitioner        []ImmunizationPractitioner        `bson:"practitioner" json:"practitioner"`
-	Note                []Annotation                      `bson:"note" json:"note"`
-	Explanation         *ImmunizationExplanation          `bson:"explanation" json:"explanation"`
-	Reaction            []ImmunizationReaction            `bson:"reaction" json:"reaction"`
-	VaccinationProtocol []ImmunizationVaccinationProtocol `bson:"vaccinationProtocol" json:"vaccinationProtocol"`
+	ReportOrigin        *CodeableConcept                  `bson:"reportOrigin,omitempty" json:"reportOrigin,omitempty"`
+	Location            *Reference                        `bson:"location,omitempty" json:"location,omitempty"`
+	Manufacturer        *Reference                        `bson:"manufacturer,omitempty" json:"manufacturer,omitempty"`
+	LotNumber           *string                           `bson:"lotNumber,omitempty" json:"lotNumber,omitempty"`
+	ExpirationDate      *string                           `bson:"expirationDate,omitempty" json:"expirationDate,omitempty"`
+	Site                *CodeableConcept                  `bson:"site,omitempty" json:"site,omitempty"`
+	Route               *CodeableConcept                  `bson:"route,omitempty" json:"route,omitempty"`
+	DoseQuantity        *Quantity                         `bson:"doseQuantity,omitempty" json:"doseQuantity,omitempty"`
+	Practitioner        []ImmunizationPractitioner        `bson:"practitioner,omitempty" json:"practitioner,omitempty"`
+	Note                []Annotation                      `bson:"note,omitempty" json:"note,omitempty"`
+	Explanation         *ImmunizationExplanation          `bson:"explanation,omitempty" json:"explanation,omitempty"`
+	Reaction            []ImmunizationReaction            `bson:"reaction,omitempty" json:"reaction,omitempty"`
+	VaccinationProtocol []ImmunizationVaccinationProtocol `bson:"vaccinationProtocol,omitempty" json:"vaccinationProtocol,omitempty"`
 }
 type ImmunizationPractitioner struct {
-	Id                *string          `bson:"id" json:"id"`
-	Extension         []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
-	Role              *CodeableConcept `bson:"role" json:"role"`
+	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Role              *CodeableConcept `bson:"role,omitempty" json:"role,omitempty"`
 	Actor             Reference        `bson:"actor,omitempty" json:"actor,omitempty"`
 }
 type ImmunizationExplanation struct {
-	Id                *string           `bson:"id" json:"id"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Reason            []CodeableConcept `bson:"reason" json:"reason"`
-	ReasonNotGiven    []CodeableConcept `bson:"reasonNotGiven" json:"reasonNotGiven"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Reason            []CodeableConcept `bson:"reason,omitempty" json:"reason,omitempty"`
+	ReasonNotGiven    []CodeableConcept `bson:"reasonNotGiven,omitempty" json:"reasonNotGiven,omitempty"`
 }
 type ImmunizationReaction struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
-	Date              *string     `bson:"date" json:"date"`
-	Detail            *Reference  `bson:"detail" json:"detail"`
-	Reported          *bool       `bson:"reported" json:"reported"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Date              *string     `bson:"date,omitempty" json:"date,omitempty"`
+	Detail            *Reference  `bson:"detail,omitempty" json:"detail,omitempty"`
+	Reported          *bool       `bson:"reported,omitempty" json:"reported,omitempty"`
 }
 type ImmunizationVaccinationProtocol struct {
-	Id                *string           `bson:"id" json:"id"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	DoseSequence      *int              `bson:"doseSequence" json:"doseSequence"`
-	Description       *string           `bson:"description" json:"description"`
-	Authority         *Reference        `bson:"authority" json:"authority"`
-	Series            *string           `bson:"series" json:"series"`
-	SeriesDoses       *int              `bson:"seriesDoses" json:"seriesDoses"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	DoseSequence      *int              `bson:"doseSequence,omitempty" json:"doseSequence,omitempty"`
+	Description       *string           `bson:"description,omitempty" json:"description,omitempty"`
+	Authority         *Reference        `bson:"authority,omitempty" json:"authority,omitempty"`
+	Series            *string           `bson:"series,omitempty" json:"series,omitempty"`
+	SeriesDoses       *int              `bson:"seriesDoses,omitempty" json:"seriesDoses,omitempty"`
 	TargetDisease     []CodeableConcept `bson:"targetDisease,omitempty" json:"targetDisease,omitempty"`
 	DoseStatus        CodeableConcept   `bson:"doseStatus,omitempty" json:"doseStatus,omitempty"`
-	DoseStatusReason  *CodeableConcept  `bson:"doseStatusReason" json:"doseStatusReason"`
+	DoseStatusReason  *CodeableConcept  `bson:"doseStatusReason,omitempty" json:"doseStatusReason,omitempty"`
 }
 
 // OtherImmunization is a helper type to use the default implementations of Marshall and Unmarshal

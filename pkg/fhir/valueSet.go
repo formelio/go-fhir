@@ -4,93 +4,93 @@ import "encoding/json"
 
 // ValueSet is documented here http://hl7.org/fhir/StructureDefinition/ValueSet
 type ValueSet struct {
-	Id                *string            `bson:"id" json:"id"`
-	Meta              *Meta              `bson:"meta" json:"meta"`
-	ImplicitRules     *string            `bson:"implicitRules" json:"implicitRules"`
-	Language          *string            `bson:"language" json:"language"`
-	Text              *Narrative         `bson:"text" json:"text"`
-	RawContained      []json.RawMessage  `bson:"contained" json:"contained"`
-	Contained         []IResource        `bson:"-" json:"-"`
-	Extension         []Extension        `bson:"extension" json:"extension"`
-	ModifierExtension []Extension        `bson:"modifierExtension" json:"modifierExtension"`
-	Url               *string            `bson:"url" json:"url"`
-	Identifier        []Identifier       `bson:"identifier" json:"identifier"`
-	Version           *string            `bson:"version" json:"version"`
-	Name              *string            `bson:"name" json:"name"`
-	Title             *string            `bson:"title" json:"title"`
+	Id                *string            `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta              `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string            `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string            `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative         `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage  `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource        `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension        `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension        `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Url               *string            `bson:"url,omitempty" json:"url,omitempty"`
+	Identifier        []Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Version           *string            `bson:"version,omitempty" json:"version,omitempty"`
+	Name              *string            `bson:"name,omitempty" json:"name,omitempty"`
+	Title             *string            `bson:"title,omitempty" json:"title,omitempty"`
 	Status            PublicationStatus  `bson:"status,omitempty" json:"status,omitempty"`
-	Experimental      *bool              `bson:"experimental" json:"experimental"`
-	Date              *string            `bson:"date" json:"date"`
-	Publisher         *string            `bson:"publisher" json:"publisher"`
-	Contact           []ContactDetail    `bson:"contact" json:"contact"`
-	Description       *string            `bson:"description" json:"description"`
-	UseContext        []UsageContext     `bson:"useContext" json:"useContext"`
-	Jurisdiction      []CodeableConcept  `bson:"jurisdiction" json:"jurisdiction"`
-	Immutable         *bool              `bson:"immutable" json:"immutable"`
-	Purpose           *string            `bson:"purpose" json:"purpose"`
-	Copyright         *string            `bson:"copyright" json:"copyright"`
-	Extensible        *bool              `bson:"extensible" json:"extensible"`
-	Compose           *ValueSetCompose   `bson:"compose" json:"compose"`
-	Expansion         *ValueSetExpansion `bson:"expansion" json:"expansion"`
+	Experimental      *bool              `bson:"experimental,omitempty" json:"experimental,omitempty"`
+	Date              *string            `bson:"date,omitempty" json:"date,omitempty"`
+	Publisher         *string            `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Contact           []ContactDetail    `bson:"contact,omitempty" json:"contact,omitempty"`
+	Description       *string            `bson:"description,omitempty" json:"description,omitempty"`
+	UseContext        []UsageContext     `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []CodeableConcept  `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Immutable         *bool              `bson:"immutable,omitempty" json:"immutable,omitempty"`
+	Purpose           *string            `bson:"purpose,omitempty" json:"purpose,omitempty"`
+	Copyright         *string            `bson:"copyright,omitempty" json:"copyright,omitempty"`
+	Extensible        *bool              `bson:"extensible,omitempty" json:"extensible,omitempty"`
+	Compose           *ValueSetCompose   `bson:"compose,omitempty" json:"compose,omitempty"`
+	Expansion         *ValueSetExpansion `bson:"expansion,omitempty" json:"expansion,omitempty"`
 }
 type ValueSetCompose struct {
-	Id                *string                  `bson:"id" json:"id"`
-	Extension         []Extension              `bson:"extension" json:"extension"`
-	ModifierExtension []Extension              `bson:"modifierExtension" json:"modifierExtension"`
-	LockedDate        *string                  `bson:"lockedDate" json:"lockedDate"`
-	Inactive          *bool                    `bson:"inactive" json:"inactive"`
+	Id                *string                  `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension              `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	LockedDate        *string                  `bson:"lockedDate,omitempty" json:"lockedDate,omitempty"`
+	Inactive          *bool                    `bson:"inactive,omitempty" json:"inactive,omitempty"`
 	Include           []ValueSetComposeInclude `bson:"include,omitempty" json:"include,omitempty"`
-	Exclude           []ValueSetComposeInclude `bson:"exclude" json:"exclude"`
+	Exclude           []ValueSetComposeInclude `bson:"exclude,omitempty" json:"exclude,omitempty"`
 }
 type ValueSetComposeInclude struct {
-	Id                *string                         `bson:"id" json:"id"`
-	Extension         []Extension                     `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                     `bson:"modifierExtension" json:"modifierExtension"`
-	System            *string                         `bson:"system" json:"system"`
-	Version           *string                         `bson:"version" json:"version"`
-	Concept           []ValueSetComposeIncludeConcept `bson:"concept" json:"concept"`
-	Filter            []ValueSetComposeIncludeFilter  `bson:"filter" json:"filter"`
-	ValueSet          []string                        `bson:"valueSet" json:"valueSet"`
+	Id                *string                         `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	System            *string                         `bson:"system,omitempty" json:"system,omitempty"`
+	Version           *string                         `bson:"version,omitempty" json:"version,omitempty"`
+	Concept           []ValueSetComposeIncludeConcept `bson:"concept,omitempty" json:"concept,omitempty"`
+	Filter            []ValueSetComposeIncludeFilter  `bson:"filter,omitempty" json:"filter,omitempty"`
+	ValueSet          []string                        `bson:"valueSet,omitempty" json:"valueSet,omitempty"`
 }
 type ValueSetComposeIncludeConcept struct {
-	Id                *string                                    `bson:"id" json:"id"`
-	Extension         []Extension                                `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                                `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                                    `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Code              string                                     `bson:"code,omitempty" json:"code,omitempty"`
-	Display           *string                                    `bson:"display" json:"display"`
-	Designation       []ValueSetComposeIncludeConceptDesignation `bson:"designation" json:"designation"`
+	Display           *string                                    `bson:"display,omitempty" json:"display,omitempty"`
+	Designation       []ValueSetComposeIncludeConceptDesignation `bson:"designation,omitempty" json:"designation,omitempty"`
 }
 type ValueSetComposeIncludeConceptDesignation struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
-	Language          *string     `bson:"language" json:"language"`
-	Use               *Coding     `bson:"use" json:"use"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Language          *string     `bson:"language,omitempty" json:"language,omitempty"`
+	Use               *Coding     `bson:"use,omitempty" json:"use,omitempty"`
 	Value             string      `bson:"value,omitempty" json:"value,omitempty"`
 }
 type ValueSetComposeIncludeFilter struct {
-	Id                *string        `bson:"id" json:"id"`
-	Extension         []Extension    `bson:"extension" json:"extension"`
-	ModifierExtension []Extension    `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string        `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension    `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension    `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Property          string         `bson:"property,omitempty" json:"property,omitempty"`
 	Op                FilterOperator `bson:"op,omitempty" json:"op,omitempty"`
 	Value             string         `bson:"value,omitempty" json:"value,omitempty"`
 }
 type ValueSetExpansion struct {
-	Id                *string                      `bson:"id" json:"id"`
-	Extension         []Extension                  `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                  `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identifier        string                       `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Timestamp         string                       `bson:"timestamp,omitempty" json:"timestamp,omitempty"`
-	Total             *int                         `bson:"total" json:"total"`
-	Offset            *int                         `bson:"offset" json:"offset"`
-	Parameter         []ValueSetExpansionParameter `bson:"parameter" json:"parameter"`
-	Contains          []ValueSetExpansionContains  `bson:"contains" json:"contains"`
+	Total             *int                         `bson:"total,omitempty" json:"total,omitempty"`
+	Offset            *int                         `bson:"offset,omitempty" json:"offset,omitempty"`
+	Parameter         []ValueSetExpansionParameter `bson:"parameter,omitempty" json:"parameter,omitempty"`
+	Contains          []ValueSetExpansionContains  `bson:"contains,omitempty" json:"contains,omitempty"`
 }
 type ValueSetExpansionParameter struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Name              string      `bson:"name,omitempty" json:"name,omitempty"`
 	ValueString       *string     `bson:"valueString,omitempty" json:"valueString,omitempty"`
 	ValueBoolean      *bool       `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
@@ -100,17 +100,17 @@ type ValueSetExpansionParameter struct {
 	ValueCode         *string     `bson:"valueCode,omitempty" json:"valueCode,omitempty"`
 }
 type ValueSetExpansionContains struct {
-	Id                *string                                    `bson:"id" json:"id"`
-	Extension         []Extension                                `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                                `bson:"modifierExtension" json:"modifierExtension"`
-	System            *string                                    `bson:"system" json:"system"`
-	Abstract          *bool                                      `bson:"abstract" json:"abstract"`
-	Inactive          *bool                                      `bson:"inactive" json:"inactive"`
-	Version           *string                                    `bson:"version" json:"version"`
-	Code              *string                                    `bson:"code" json:"code"`
-	Display           *string                                    `bson:"display" json:"display"`
-	Designation       []ValueSetComposeIncludeConceptDesignation `bson:"designation" json:"designation"`
-	Contains          []ValueSetExpansionContains                `bson:"contains" json:"contains"`
+	Id                *string                                    `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	System            *string                                    `bson:"system,omitempty" json:"system,omitempty"`
+	Abstract          *bool                                      `bson:"abstract,omitempty" json:"abstract,omitempty"`
+	Inactive          *bool                                      `bson:"inactive,omitempty" json:"inactive,omitempty"`
+	Version           *string                                    `bson:"version,omitempty" json:"version,omitempty"`
+	Code              *string                                    `bson:"code,omitempty" json:"code,omitempty"`
+	Display           *string                                    `bson:"display,omitempty" json:"display,omitempty"`
+	Designation       []ValueSetComposeIncludeConceptDesignation `bson:"designation,omitempty" json:"designation,omitempty"`
+	Contains          []ValueSetExpansionContains                `bson:"contains,omitempty" json:"contains,omitempty"`
 }
 
 // OtherValueSet is a helper type to use the default implementations of Marshall and Unmarshal

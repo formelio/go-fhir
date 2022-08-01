@@ -116,17 +116,11 @@ func generateResourceUnmarshal(file *jen.File, resourceType string, hasContained
 	})
 }
 
-/* generates either of the following two, depending if it is required or not
-`bson:"<jsonTag>"           json:"<jsonTag>"`
+/* generates the json tags for the field
 `bson:"<jsonTag>,omitempty" json:"<jsonTag>,omitempty"`
 */
-func generateJsonTags(statement *jen.Statement, jsonTag string, required bool) {
-	// If the field is not required, we add add `omitempty` to the field tags
-	if !required {
-		statement.Tag(map[string]string{"json": jsonTag + ",omitempty", "bson": jsonTag + ",omitempty"})
-	} else {
-		statement.Tag(map[string]string{"json": jsonTag, "bson": jsonTag})
-	}
+func generateTags(statement *jen.Statement, jsonTag string) {
+	statement.Tag(map[string]string{"json": jsonTag + ",omitempty", "bson": jsonTag + ",omitempty"})
 }
 
 // generates either a slice operator or a pointer operator

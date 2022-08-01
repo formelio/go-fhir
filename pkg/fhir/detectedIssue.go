@@ -4,34 +4,34 @@ import "encoding/json"
 
 // DetectedIssue is documented here http://hl7.org/fhir/StructureDefinition/DetectedIssue
 type DetectedIssue struct {
-	Id                *string                   `bson:"id" json:"id"`
-	Meta              *Meta                     `bson:"meta" json:"meta"`
-	ImplicitRules     *string                   `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                   `bson:"language" json:"language"`
-	Text              *Narrative                `bson:"text" json:"text"`
-	RawContained      []json.RawMessage         `bson:"contained" json:"contained"`
-	Contained         []IResource               `bson:"-" json:"-"`
-	Extension         []Extension               `bson:"extension" json:"extension"`
-	ModifierExtension []Extension               `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier               `bson:"identifier" json:"identifier"`
+	Id                *string                   `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                     `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                   `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                   `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage         `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource               `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier               `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status            ObservationStatus         `bson:"status,omitempty" json:"status,omitempty"`
-	Category          *CodeableConcept          `bson:"category" json:"category"`
-	Severity          *DetectedIssueSeverity    `bson:"severity" json:"severity"`
-	Patient           *Reference                `bson:"patient" json:"patient"`
-	Date              *string                   `bson:"date" json:"date"`
-	Author            *Reference                `bson:"author" json:"author"`
-	Implicated        []Reference               `bson:"implicated" json:"implicated"`
-	Detail            *string                   `bson:"detail" json:"detail"`
-	Reference         *string                   `bson:"reference" json:"reference"`
-	Mitigation        []DetectedIssueMitigation `bson:"mitigation" json:"mitigation"`
+	Category          *CodeableConcept          `bson:"category,omitempty" json:"category,omitempty"`
+	Severity          *DetectedIssueSeverity    `bson:"severity,omitempty" json:"severity,omitempty"`
+	Patient           *Reference                `bson:"patient,omitempty" json:"patient,omitempty"`
+	Date              *string                   `bson:"date,omitempty" json:"date,omitempty"`
+	Author            *Reference                `bson:"author,omitempty" json:"author,omitempty"`
+	Implicated        []Reference               `bson:"implicated,omitempty" json:"implicated,omitempty"`
+	Detail            *string                   `bson:"detail,omitempty" json:"detail,omitempty"`
+	Reference         *string                   `bson:"reference,omitempty" json:"reference,omitempty"`
+	Mitigation        []DetectedIssueMitigation `bson:"mitigation,omitempty" json:"mitigation,omitempty"`
 }
 type DetectedIssueMitigation struct {
-	Id                *string         `bson:"id" json:"id"`
-	Extension         []Extension     `bson:"extension" json:"extension"`
-	ModifierExtension []Extension     `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Action            CodeableConcept `bson:"action,omitempty" json:"action,omitempty"`
-	Date              *string         `bson:"date" json:"date"`
-	Author            *Reference      `bson:"author" json:"author"`
+	Date              *string         `bson:"date,omitempty" json:"date,omitempty"`
+	Author            *Reference      `bson:"author,omitempty" json:"author,omitempty"`
 }
 
 // OtherDetectedIssue is a helper type to use the default implementations of Marshall and Unmarshal

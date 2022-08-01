@@ -4,46 +4,46 @@ import "encoding/json"
 
 // RiskAssessment is documented here http://hl7.org/fhir/StructureDefinition/RiskAssessment
 type RiskAssessment struct {
-	Id                    *string                    `bson:"id" json:"id"`
-	Meta                  *Meta                      `bson:"meta" json:"meta"`
-	ImplicitRules         *string                    `bson:"implicitRules" json:"implicitRules"`
-	Language              *string                    `bson:"language" json:"language"`
-	Text                  *Narrative                 `bson:"text" json:"text"`
-	RawContained          []json.RawMessage          `bson:"contained" json:"contained"`
-	Contained             []IResource                `bson:"-" json:"-"`
-	Extension             []Extension                `bson:"extension" json:"extension"`
-	ModifierExtension     []Extension                `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier            *Identifier                `bson:"identifier" json:"identifier"`
-	BasedOn               *Reference                 `bson:"basedOn" json:"basedOn"`
-	Parent                *Reference                 `bson:"parent" json:"parent"`
+	Id                    *string                    `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                  *Meta                      `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules         *string                    `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language              *string                    `bson:"language,omitempty" json:"language,omitempty"`
+	Text                  *Narrative                 `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained          []json.RawMessage          `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained             []IResource                `bson:"-,omitempty" json:"-,omitempty"`
+	Extension             []Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier            *Identifier                `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	BasedOn               *Reference                 `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	Parent                *Reference                 `bson:"parent,omitempty" json:"parent,omitempty"`
 	Status                ObservationStatus          `bson:"status,omitempty" json:"status,omitempty"`
-	Method                *CodeableConcept           `bson:"method" json:"method"`
-	Code                  *CodeableConcept           `bson:"code" json:"code"`
-	Subject               *Reference                 `bson:"subject" json:"subject"`
-	Context               *Reference                 `bson:"context" json:"context"`
+	Method                *CodeableConcept           `bson:"method,omitempty" json:"method,omitempty"`
+	Code                  *CodeableConcept           `bson:"code,omitempty" json:"code,omitempty"`
+	Subject               *Reference                 `bson:"subject,omitempty" json:"subject,omitempty"`
+	Context               *Reference                 `bson:"context,omitempty" json:"context,omitempty"`
 	OccurrenceDateTime    *string                    `bson:"occurrenceDateTime,omitempty" json:"occurrenceDateTime,omitempty"`
 	OccurrencePeriod      *Period                    `bson:"occurrencePeriod,omitempty" json:"occurrencePeriod,omitempty"`
-	Condition             *Reference                 `bson:"condition" json:"condition"`
-	Performer             *Reference                 `bson:"performer" json:"performer"`
+	Condition             *Reference                 `bson:"condition,omitempty" json:"condition,omitempty"`
+	Performer             *Reference                 `bson:"performer,omitempty" json:"performer,omitempty"`
 	ReasonCodeableConcept *CodeableConcept           `bson:"reasonCodeableConcept,omitempty" json:"reasonCodeableConcept,omitempty"`
 	ReasonReference       *Reference                 `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	Basis                 []Reference                `bson:"basis" json:"basis"`
-	Prediction            []RiskAssessmentPrediction `bson:"prediction" json:"prediction"`
-	Mitigation            *string                    `bson:"mitigation" json:"mitigation"`
-	Comment               *string                    `bson:"comment" json:"comment"`
+	Basis                 []Reference                `bson:"basis,omitempty" json:"basis,omitempty"`
+	Prediction            []RiskAssessmentPrediction `bson:"prediction,omitempty" json:"prediction,omitempty"`
+	Mitigation            *string                    `bson:"mitigation,omitempty" json:"mitigation,omitempty"`
+	Comment               *string                    `bson:"comment,omitempty" json:"comment,omitempty"`
 }
 type RiskAssessmentPrediction struct {
-	Id                 *string          `bson:"id" json:"id"`
-	Extension          []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension  []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Id                 *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension          []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension  []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Outcome            CodeableConcept  `bson:"outcome,omitempty" json:"outcome,omitempty"`
 	ProbabilityDecimal *float64         `bson:"probabilityDecimal,omitempty" json:"probabilityDecimal,omitempty"`
 	ProbabilityRange   *Range           `bson:"probabilityRange,omitempty" json:"probabilityRange,omitempty"`
-	QualitativeRisk    *CodeableConcept `bson:"qualitativeRisk" json:"qualitativeRisk"`
-	RelativeRisk       *float64         `bson:"relativeRisk" json:"relativeRisk"`
+	QualitativeRisk    *CodeableConcept `bson:"qualitativeRisk,omitempty" json:"qualitativeRisk,omitempty"`
+	RelativeRisk       *float64         `bson:"relativeRisk,omitempty" json:"relativeRisk,omitempty"`
 	WhenPeriod         *Period          `bson:"whenPeriod,omitempty" json:"whenPeriod,omitempty"`
 	WhenRange          *Range           `bson:"whenRange,omitempty" json:"whenRange,omitempty"`
-	Rationale          *string          `bson:"rationale" json:"rationale"`
+	Rationale          *string          `bson:"rationale,omitempty" json:"rationale,omitempty"`
 }
 
 // OtherRiskAssessment is a helper type to use the default implementations of Marshall and Unmarshal

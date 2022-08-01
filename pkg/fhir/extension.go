@@ -2,8 +2,8 @@ package fhir
 
 // Extension is documented here http://hl7.org/fhir/StructureDefinition/Extension
 type Extension struct {
-	Id                   *string          `bson:"id" json:"id"`
-	Extension            []Extension      `bson:"extension" json:"extension"`
+	Id                   *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension            []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
 	Url                  string           `bson:"url,omitempty" json:"url,omitempty"`
 	ValueBase64Binary    *string          `bson:"valueBase64Binary,omitempty" json:"valueBase64Binary,omitempty"`
 	ValueBoolean         *bool            `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`

@@ -4,23 +4,23 @@ import "encoding/json"
 
 // AppointmentResponse is documented here http://hl7.org/fhir/StructureDefinition/AppointmentResponse
 type AppointmentResponse struct {
-	Id                *string             `bson:"id" json:"id"`
-	Meta              *Meta               `bson:"meta" json:"meta"`
-	ImplicitRules     *string             `bson:"implicitRules" json:"implicitRules"`
-	Language          *string             `bson:"language" json:"language"`
-	Text              *Narrative          `bson:"text" json:"text"`
-	RawContained      []json.RawMessage   `bson:"contained" json:"contained"`
-	Contained         []IResource         `bson:"-" json:"-"`
-	Extension         []Extension         `bson:"extension" json:"extension"`
-	ModifierExtension []Extension         `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier        `bson:"identifier" json:"identifier"`
+	Id                *string             `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta               `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string             `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string             `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage   `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource         `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier        `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Appointment       Reference           `bson:"appointment,omitempty" json:"appointment,omitempty"`
-	Start             *string             `bson:"start" json:"start"`
-	End               *string             `bson:"end" json:"end"`
-	ParticipantType   []CodeableConcept   `bson:"participantType" json:"participantType"`
-	Actor             *Reference          `bson:"actor" json:"actor"`
+	Start             *string             `bson:"start,omitempty" json:"start,omitempty"`
+	End               *string             `bson:"end,omitempty" json:"end,omitempty"`
+	ParticipantType   []CodeableConcept   `bson:"participantType,omitempty" json:"participantType,omitempty"`
+	Actor             *Reference          `bson:"actor,omitempty" json:"actor,omitempty"`
 	ParticipantStatus ParticipationStatus `bson:"participantStatus,omitempty" json:"participantStatus,omitempty"`
-	Comment           *string             `bson:"comment" json:"comment"`
+	Comment           *string             `bson:"comment,omitempty" json:"comment,omitempty"`
 }
 
 // OtherAppointmentResponse is a helper type to use the default implementations of Marshall and Unmarshal

@@ -4,89 +4,89 @@ import "encoding/json"
 
 // Measure is documented here http://hl7.org/fhir/StructureDefinition/Measure
 type Measure struct {
-	Id                              *string                   `bson:"id" json:"id"`
-	Meta                            *Meta                     `bson:"meta" json:"meta"`
-	ImplicitRules                   *string                   `bson:"implicitRules" json:"implicitRules"`
-	Language                        *string                   `bson:"language" json:"language"`
-	Text                            *Narrative                `bson:"text" json:"text"`
-	RawContained                    []json.RawMessage         `bson:"contained" json:"contained"`
-	Contained                       []IResource               `bson:"-" json:"-"`
-	Extension                       []Extension               `bson:"extension" json:"extension"`
-	ModifierExtension               []Extension               `bson:"modifierExtension" json:"modifierExtension"`
-	Url                             *string                   `bson:"url" json:"url"`
-	Identifier                      []Identifier              `bson:"identifier" json:"identifier"`
-	Version                         *string                   `bson:"version" json:"version"`
-	Name                            *string                   `bson:"name" json:"name"`
-	Title                           *string                   `bson:"title" json:"title"`
+	Id                              *string                   `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                            *Meta                     `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules                   *string                   `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language                        *string                   `bson:"language,omitempty" json:"language,omitempty"`
+	Text                            *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained                    []json.RawMessage         `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained                       []IResource               `bson:"-,omitempty" json:"-,omitempty"`
+	Extension                       []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension               []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Url                             *string                   `bson:"url,omitempty" json:"url,omitempty"`
+	Identifier                      []Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Version                         *string                   `bson:"version,omitempty" json:"version,omitempty"`
+	Name                            *string                   `bson:"name,omitempty" json:"name,omitempty"`
+	Title                           *string                   `bson:"title,omitempty" json:"title,omitempty"`
 	Status                          PublicationStatus         `bson:"status,omitempty" json:"status,omitempty"`
-	Experimental                    *bool                     `bson:"experimental" json:"experimental"`
-	Date                            *string                   `bson:"date" json:"date"`
-	Publisher                       *string                   `bson:"publisher" json:"publisher"`
-	Description                     *string                   `bson:"description" json:"description"`
-	Purpose                         *string                   `bson:"purpose" json:"purpose"`
-	Usage                           *string                   `bson:"usage" json:"usage"`
-	ApprovalDate                    *string                   `bson:"approvalDate" json:"approvalDate"`
-	LastReviewDate                  *string                   `bson:"lastReviewDate" json:"lastReviewDate"`
-	EffectivePeriod                 *Period                   `bson:"effectivePeriod" json:"effectivePeriod"`
-	UseContext                      []UsageContext            `bson:"useContext" json:"useContext"`
-	Jurisdiction                    []CodeableConcept         `bson:"jurisdiction" json:"jurisdiction"`
-	Topic                           []CodeableConcept         `bson:"topic" json:"topic"`
-	Contributor                     []Contributor             `bson:"contributor" json:"contributor"`
-	Contact                         []ContactDetail           `bson:"contact" json:"contact"`
-	Copyright                       *string                   `bson:"copyright" json:"copyright"`
-	RelatedArtifact                 []RelatedArtifact         `bson:"relatedArtifact" json:"relatedArtifact"`
-	Library                         []Reference               `bson:"library" json:"library"`
-	Disclaimer                      *string                   `bson:"disclaimer" json:"disclaimer"`
-	Scoring                         *CodeableConcept          `bson:"scoring" json:"scoring"`
-	CompositeScoring                *CodeableConcept          `bson:"compositeScoring" json:"compositeScoring"`
-	Type                            []CodeableConcept         `bson:"type" json:"type"`
-	RiskAdjustment                  *string                   `bson:"riskAdjustment" json:"riskAdjustment"`
-	RateAggregation                 *string                   `bson:"rateAggregation" json:"rateAggregation"`
-	Rationale                       *string                   `bson:"rationale" json:"rationale"`
-	ClinicalRecommendationStatement *string                   `bson:"clinicalRecommendationStatement" json:"clinicalRecommendationStatement"`
-	ImprovementNotation             *string                   `bson:"improvementNotation" json:"improvementNotation"`
-	Definition                      []string                  `bson:"definition" json:"definition"`
-	Guidance                        *string                   `bson:"guidance" json:"guidance"`
-	Set                             *string                   `bson:"set" json:"set"`
-	Group                           []MeasureGroup            `bson:"group" json:"group"`
-	SupplementalData                []MeasureSupplementalData `bson:"supplementalData" json:"supplementalData"`
+	Experimental                    *bool                     `bson:"experimental,omitempty" json:"experimental,omitempty"`
+	Date                            *string                   `bson:"date,omitempty" json:"date,omitempty"`
+	Publisher                       *string                   `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Description                     *string                   `bson:"description,omitempty" json:"description,omitempty"`
+	Purpose                         *string                   `bson:"purpose,omitempty" json:"purpose,omitempty"`
+	Usage                           *string                   `bson:"usage,omitempty" json:"usage,omitempty"`
+	ApprovalDate                    *string                   `bson:"approvalDate,omitempty" json:"approvalDate,omitempty"`
+	LastReviewDate                  *string                   `bson:"lastReviewDate,omitempty" json:"lastReviewDate,omitempty"`
+	EffectivePeriod                 *Period                   `bson:"effectivePeriod,omitempty" json:"effectivePeriod,omitempty"`
+	UseContext                      []UsageContext            `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction                    []CodeableConcept         `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Topic                           []CodeableConcept         `bson:"topic,omitempty" json:"topic,omitempty"`
+	Contributor                     []Contributor             `bson:"contributor,omitempty" json:"contributor,omitempty"`
+	Contact                         []ContactDetail           `bson:"contact,omitempty" json:"contact,omitempty"`
+	Copyright                       *string                   `bson:"copyright,omitempty" json:"copyright,omitempty"`
+	RelatedArtifact                 []RelatedArtifact         `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
+	Library                         []Reference               `bson:"library,omitempty" json:"library,omitempty"`
+	Disclaimer                      *string                   `bson:"disclaimer,omitempty" json:"disclaimer,omitempty"`
+	Scoring                         *CodeableConcept          `bson:"scoring,omitempty" json:"scoring,omitempty"`
+	CompositeScoring                *CodeableConcept          `bson:"compositeScoring,omitempty" json:"compositeScoring,omitempty"`
+	Type                            []CodeableConcept         `bson:"type,omitempty" json:"type,omitempty"`
+	RiskAdjustment                  *string                   `bson:"riskAdjustment,omitempty" json:"riskAdjustment,omitempty"`
+	RateAggregation                 *string                   `bson:"rateAggregation,omitempty" json:"rateAggregation,omitempty"`
+	Rationale                       *string                   `bson:"rationale,omitempty" json:"rationale,omitempty"`
+	ClinicalRecommendationStatement *string                   `bson:"clinicalRecommendationStatement,omitempty" json:"clinicalRecommendationStatement,omitempty"`
+	ImprovementNotation             *string                   `bson:"improvementNotation,omitempty" json:"improvementNotation,omitempty"`
+	Definition                      []string                  `bson:"definition,omitempty" json:"definition,omitempty"`
+	Guidance                        *string                   `bson:"guidance,omitempty" json:"guidance,omitempty"`
+	Set                             *string                   `bson:"set,omitempty" json:"set,omitempty"`
+	Group                           []MeasureGroup            `bson:"group,omitempty" json:"group,omitempty"`
+	SupplementalData                []MeasureSupplementalData `bson:"supplementalData,omitempty" json:"supplementalData,omitempty"`
 }
 type MeasureGroup struct {
-	Id                *string                  `bson:"id" json:"id"`
-	Extension         []Extension              `bson:"extension" json:"extension"`
-	ModifierExtension []Extension              `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                  `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension              `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identifier        Identifier               `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Name              *string                  `bson:"name" json:"name"`
-	Description       *string                  `bson:"description" json:"description"`
-	Population        []MeasureGroupPopulation `bson:"population" json:"population"`
-	Stratifier        []MeasureGroupStratifier `bson:"stratifier" json:"stratifier"`
+	Name              *string                  `bson:"name,omitempty" json:"name,omitempty"`
+	Description       *string                  `bson:"description,omitempty" json:"description,omitempty"`
+	Population        []MeasureGroupPopulation `bson:"population,omitempty" json:"population,omitempty"`
+	Stratifier        []MeasureGroupStratifier `bson:"stratifier,omitempty" json:"stratifier,omitempty"`
 }
 type MeasureGroupPopulation struct {
-	Id                *string          `bson:"id" json:"id"`
-	Extension         []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier      `bson:"identifier" json:"identifier"`
-	Code              *CodeableConcept `bson:"code" json:"code"`
-	Name              *string          `bson:"name" json:"name"`
-	Description       *string          `bson:"description" json:"description"`
+	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Code              *CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
+	Name              *string          `bson:"name,omitempty" json:"name,omitempty"`
+	Description       *string          `bson:"description,omitempty" json:"description,omitempty"`
 	Criteria          string           `bson:"criteria,omitempty" json:"criteria,omitempty"`
 }
 type MeasureGroupStratifier struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier `bson:"identifier" json:"identifier"`
-	Criteria          *string     `bson:"criteria" json:"criteria"`
-	Path              *string     `bson:"path" json:"path"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Criteria          *string     `bson:"criteria,omitempty" json:"criteria,omitempty"`
+	Path              *string     `bson:"path,omitempty" json:"path,omitempty"`
 }
 type MeasureSupplementalData struct {
-	Id                *string           `bson:"id" json:"id"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier       `bson:"identifier" json:"identifier"`
-	Usage             []CodeableConcept `bson:"usage" json:"usage"`
-	Criteria          *string           `bson:"criteria" json:"criteria"`
-	Path              *string           `bson:"path" json:"path"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Usage             []CodeableConcept `bson:"usage,omitempty" json:"usage,omitempty"`
+	Criteria          *string           `bson:"criteria,omitempty" json:"criteria,omitempty"`
+	Path              *string           `bson:"path,omitempty" json:"path,omitempty"`
 }
 
 // OtherMeasure is a helper type to use the default implementations of Marshall and Unmarshal

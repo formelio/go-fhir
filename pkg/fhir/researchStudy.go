@@ -4,43 +4,43 @@ import "encoding/json"
 
 // ResearchStudy is documented here http://hl7.org/fhir/StructureDefinition/ResearchStudy
 type ResearchStudy struct {
-	Id                    *string             `bson:"id" json:"id"`
-	Meta                  *Meta               `bson:"meta" json:"meta"`
-	ImplicitRules         *string             `bson:"implicitRules" json:"implicitRules"`
-	Language              *string             `bson:"language" json:"language"`
-	Text                  *Narrative          `bson:"text" json:"text"`
-	RawContained          []json.RawMessage   `bson:"contained" json:"contained"`
-	Contained             []IResource         `bson:"-" json:"-"`
-	Extension             []Extension         `bson:"extension" json:"extension"`
-	ModifierExtension     []Extension         `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier            []Identifier        `bson:"identifier" json:"identifier"`
-	Title                 *string             `bson:"title" json:"title"`
-	Protocol              []Reference         `bson:"protocol" json:"protocol"`
-	PartOf                []Reference         `bson:"partOf" json:"partOf"`
+	Id                    *string             `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                  *Meta               `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules         *string             `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language              *string             `bson:"language,omitempty" json:"language,omitempty"`
+	Text                  *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained          []json.RawMessage   `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained             []IResource         `bson:"-,omitempty" json:"-,omitempty"`
+	Extension             []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier            []Identifier        `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Title                 *string             `bson:"title,omitempty" json:"title,omitempty"`
+	Protocol              []Reference         `bson:"protocol,omitempty" json:"protocol,omitempty"`
+	PartOf                []Reference         `bson:"partOf,omitempty" json:"partOf,omitempty"`
 	Status                ResearchStudyStatus `bson:"status,omitempty" json:"status,omitempty"`
-	Category              []CodeableConcept   `bson:"category" json:"category"`
-	Focus                 []CodeableConcept   `bson:"focus" json:"focus"`
-	Contact               []ContactDetail     `bson:"contact" json:"contact"`
-	RelatedArtifact       []RelatedArtifact   `bson:"relatedArtifact" json:"relatedArtifact"`
-	Keyword               []CodeableConcept   `bson:"keyword" json:"keyword"`
-	Jurisdiction          []CodeableConcept   `bson:"jurisdiction" json:"jurisdiction"`
-	Description           *string             `bson:"description" json:"description"`
-	Enrollment            []Reference         `bson:"enrollment" json:"enrollment"`
-	Period                *Period             `bson:"period" json:"period"`
-	Sponsor               *Reference          `bson:"sponsor" json:"sponsor"`
-	PrincipalInvestigator *Reference          `bson:"principalInvestigator" json:"principalInvestigator"`
-	Site                  []Reference         `bson:"site" json:"site"`
-	ReasonStopped         *CodeableConcept    `bson:"reasonStopped" json:"reasonStopped"`
-	Note                  []Annotation        `bson:"note" json:"note"`
-	Arm                   []ResearchStudyArm  `bson:"arm" json:"arm"`
+	Category              []CodeableConcept   `bson:"category,omitempty" json:"category,omitempty"`
+	Focus                 []CodeableConcept   `bson:"focus,omitempty" json:"focus,omitempty"`
+	Contact               []ContactDetail     `bson:"contact,omitempty" json:"contact,omitempty"`
+	RelatedArtifact       []RelatedArtifact   `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
+	Keyword               []CodeableConcept   `bson:"keyword,omitempty" json:"keyword,omitempty"`
+	Jurisdiction          []CodeableConcept   `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Description           *string             `bson:"description,omitempty" json:"description,omitempty"`
+	Enrollment            []Reference         `bson:"enrollment,omitempty" json:"enrollment,omitempty"`
+	Period                *Period             `bson:"period,omitempty" json:"period,omitempty"`
+	Sponsor               *Reference          `bson:"sponsor,omitempty" json:"sponsor,omitempty"`
+	PrincipalInvestigator *Reference          `bson:"principalInvestigator,omitempty" json:"principalInvestigator,omitempty"`
+	Site                  []Reference         `bson:"site,omitempty" json:"site,omitempty"`
+	ReasonStopped         *CodeableConcept    `bson:"reasonStopped,omitempty" json:"reasonStopped,omitempty"`
+	Note                  []Annotation        `bson:"note,omitempty" json:"note,omitempty"`
+	Arm                   []ResearchStudyArm  `bson:"arm,omitempty" json:"arm,omitempty"`
 }
 type ResearchStudyArm struct {
-	Id                *string          `bson:"id" json:"id"`
-	Extension         []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Name              string           `bson:"name,omitempty" json:"name,omitempty"`
-	Code              *CodeableConcept `bson:"code" json:"code"`
-	Description       *string          `bson:"description" json:"description"`
+	Code              *CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
+	Description       *string          `bson:"description,omitempty" json:"description,omitempty"`
 }
 
 // OtherResearchStudy is a helper type to use the default implementations of Marshall and Unmarshal

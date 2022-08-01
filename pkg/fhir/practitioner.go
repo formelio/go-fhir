@@ -4,34 +4,34 @@ import "encoding/json"
 
 // Practitioner is documented here http://hl7.org/fhir/StructureDefinition/Practitioner
 type Practitioner struct {
-	Id                *string                     `bson:"id" json:"id"`
-	Meta              *Meta                       `bson:"meta" json:"meta"`
-	ImplicitRules     *string                     `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                     `bson:"language" json:"language"`
-	Text              *Narrative                  `bson:"text" json:"text"`
-	RawContained      []json.RawMessage           `bson:"contained" json:"contained"`
-	Contained         []IResource                 `bson:"-" json:"-"`
-	Extension         []Extension                 `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                 `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier                `bson:"identifier" json:"identifier"`
-	Active            *bool                       `bson:"active" json:"active"`
-	Name              []HumanName                 `bson:"name" json:"name"`
-	Telecom           []ContactPoint              `bson:"telecom" json:"telecom"`
-	Address           []Address                   `bson:"address" json:"address"`
-	Gender            *AdministrativeGender       `bson:"gender" json:"gender"`
-	BirthDate         *string                     `bson:"birthDate" json:"birthDate"`
-	Photo             []Attachment                `bson:"photo" json:"photo"`
-	Qualification     []PractitionerQualification `bson:"qualification" json:"qualification"`
-	Communication     []CodeableConcept           `bson:"communication" json:"communication"`
+	Id                *string                     `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                       `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                     `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                     `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative                  `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage           `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource                 `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier                `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Active            *bool                       `bson:"active,omitempty" json:"active,omitempty"`
+	Name              []HumanName                 `bson:"name,omitempty" json:"name,omitempty"`
+	Telecom           []ContactPoint              `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Address           []Address                   `bson:"address,omitempty" json:"address,omitempty"`
+	Gender            *AdministrativeGender       `bson:"gender,omitempty" json:"gender,omitempty"`
+	BirthDate         *string                     `bson:"birthDate,omitempty" json:"birthDate,omitempty"`
+	Photo             []Attachment                `bson:"photo,omitempty" json:"photo,omitempty"`
+	Qualification     []PractitionerQualification `bson:"qualification,omitempty" json:"qualification,omitempty"`
+	Communication     []CodeableConcept           `bson:"communication,omitempty" json:"communication,omitempty"`
 }
 type PractitionerQualification struct {
-	Id                *string         `bson:"id" json:"id"`
-	Extension         []Extension     `bson:"extension" json:"extension"`
-	ModifierExtension []Extension     `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier    `bson:"identifier" json:"identifier"`
+	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier    `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Code              CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
-	Period            *Period         `bson:"period" json:"period"`
-	Issuer            *Reference      `bson:"issuer" json:"issuer"`
+	Period            *Period         `bson:"period,omitempty" json:"period,omitempty"`
+	Issuer            *Reference      `bson:"issuer,omitempty" json:"issuer,omitempty"`
 }
 
 // OtherPractitioner is a helper type to use the default implementations of Marshall and Unmarshal

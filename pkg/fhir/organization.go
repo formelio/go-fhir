@@ -4,34 +4,34 @@ import "encoding/json"
 
 // Organization is documented here http://hl7.org/fhir/StructureDefinition/Organization
 type Organization struct {
-	Id                *string               `bson:"id" json:"id"`
-	Meta              *Meta                 `bson:"meta" json:"meta"`
-	ImplicitRules     *string               `bson:"implicitRules" json:"implicitRules"`
-	Language          *string               `bson:"language" json:"language"`
-	Text              *Narrative            `bson:"text" json:"text"`
-	RawContained      []json.RawMessage     `bson:"contained" json:"contained"`
-	Contained         []IResource           `bson:"-" json:"-"`
-	Extension         []Extension           `bson:"extension" json:"extension"`
-	ModifierExtension []Extension           `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier          `bson:"identifier" json:"identifier"`
-	Active            *bool                 `bson:"active" json:"active"`
-	Type              []CodeableConcept     `bson:"type" json:"type"`
-	Name              *string               `bson:"name" json:"name"`
-	Alias             []string              `bson:"alias" json:"alias"`
-	Telecom           []ContactPoint        `bson:"telecom" json:"telecom"`
-	Address           []Address             `bson:"address" json:"address"`
-	PartOf            *Reference            `bson:"partOf" json:"partOf"`
-	Contact           []OrganizationContact `bson:"contact" json:"contact"`
-	Endpoint          []Reference           `bson:"endpoint" json:"endpoint"`
+	Id                *string               `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string               `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource           `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Active            *bool                 `bson:"active,omitempty" json:"active,omitempty"`
+	Type              []CodeableConcept     `bson:"type,omitempty" json:"type,omitempty"`
+	Name              *string               `bson:"name,omitempty" json:"name,omitempty"`
+	Alias             []string              `bson:"alias,omitempty" json:"alias,omitempty"`
+	Telecom           []ContactPoint        `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Address           []Address             `bson:"address,omitempty" json:"address,omitempty"`
+	PartOf            *Reference            `bson:"partOf,omitempty" json:"partOf,omitempty"`
+	Contact           []OrganizationContact `bson:"contact,omitempty" json:"contact,omitempty"`
+	Endpoint          []Reference           `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
 }
 type OrganizationContact struct {
-	Id                *string          `bson:"id" json:"id"`
-	Extension         []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
-	Purpose           *CodeableConcept `bson:"purpose" json:"purpose"`
-	Name              *HumanName       `bson:"name" json:"name"`
-	Telecom           []ContactPoint   `bson:"telecom" json:"telecom"`
-	Address           *Address         `bson:"address" json:"address"`
+	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Purpose           *CodeableConcept `bson:"purpose,omitempty" json:"purpose,omitempty"`
+	Name              *HumanName       `bson:"name,omitempty" json:"name,omitempty"`
+	Telecom           []ContactPoint   `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Address           *Address         `bson:"address,omitempty" json:"address,omitempty"`
 }
 
 // OtherOrganization is a helper type to use the default implementations of Marshall and Unmarshal

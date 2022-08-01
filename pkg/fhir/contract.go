@@ -4,126 +4,126 @@ import "encoding/json"
 
 // Contract is documented here http://hl7.org/fhir/StructureDefinition/Contract
 type Contract struct {
-	Id                *string              `bson:"id" json:"id"`
-	Meta              *Meta                `bson:"meta" json:"meta"`
-	ImplicitRules     *string              `bson:"implicitRules" json:"implicitRules"`
-	Language          *string              `bson:"language" json:"language"`
-	Text              *Narrative           `bson:"text" json:"text"`
-	RawContained      []json.RawMessage    `bson:"contained" json:"contained"`
-	Contained         []IResource          `bson:"-" json:"-"`
-	Extension         []Extension          `bson:"extension" json:"extension"`
-	ModifierExtension []Extension          `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier          `bson:"identifier" json:"identifier"`
-	Status            *string              `bson:"status" json:"status"`
-	Issued            *string              `bson:"issued" json:"issued"`
-	Applies           *Period              `bson:"applies" json:"applies"`
-	Subject           []Reference          `bson:"subject" json:"subject"`
-	Topic             []Reference          `bson:"topic" json:"topic"`
-	Authority         []Reference          `bson:"authority" json:"authority"`
-	Domain            []Reference          `bson:"domain" json:"domain"`
-	Type              *CodeableConcept     `bson:"type" json:"type"`
-	SubType           []CodeableConcept    `bson:"subType" json:"subType"`
-	Action            []CodeableConcept    `bson:"action" json:"action"`
-	ActionReason      []CodeableConcept    `bson:"actionReason" json:"actionReason"`
-	DecisionType      *CodeableConcept     `bson:"decisionType" json:"decisionType"`
-	ContentDerivative *CodeableConcept     `bson:"contentDerivative" json:"contentDerivative"`
-	SecurityLabel     []Coding             `bson:"securityLabel" json:"securityLabel"`
-	Agent             []ContractAgent      `bson:"agent" json:"agent"`
-	Signer            []ContractSigner     `bson:"signer" json:"signer"`
-	ValuedItem        []ContractValuedItem `bson:"valuedItem" json:"valuedItem"`
-	Term              []ContractTerm       `bson:"term" json:"term"`
+	Id                *string              `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string              `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string              `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative           `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage    `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource          `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension          `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Status            *string              `bson:"status,omitempty" json:"status,omitempty"`
+	Issued            *string              `bson:"issued,omitempty" json:"issued,omitempty"`
+	Applies           *Period              `bson:"applies,omitempty" json:"applies,omitempty"`
+	Subject           []Reference          `bson:"subject,omitempty" json:"subject,omitempty"`
+	Topic             []Reference          `bson:"topic,omitempty" json:"topic,omitempty"`
+	Authority         []Reference          `bson:"authority,omitempty" json:"authority,omitempty"`
+	Domain            []Reference          `bson:"domain,omitempty" json:"domain,omitempty"`
+	Type              *CodeableConcept     `bson:"type,omitempty" json:"type,omitempty"`
+	SubType           []CodeableConcept    `bson:"subType,omitempty" json:"subType,omitempty"`
+	Action            []CodeableConcept    `bson:"action,omitempty" json:"action,omitempty"`
+	ActionReason      []CodeableConcept    `bson:"actionReason,omitempty" json:"actionReason,omitempty"`
+	DecisionType      *CodeableConcept     `bson:"decisionType,omitempty" json:"decisionType,omitempty"`
+	ContentDerivative *CodeableConcept     `bson:"contentDerivative,omitempty" json:"contentDerivative,omitempty"`
+	SecurityLabel     []Coding             `bson:"securityLabel,omitempty" json:"securityLabel,omitempty"`
+	Agent             []ContractAgent      `bson:"agent,omitempty" json:"agent,omitempty"`
+	Signer            []ContractSigner     `bson:"signer,omitempty" json:"signer,omitempty"`
+	ValuedItem        []ContractValuedItem `bson:"valuedItem,omitempty" json:"valuedItem,omitempty"`
+	Term              []ContractTerm       `bson:"term,omitempty" json:"term,omitempty"`
 	BindingAttachment *Attachment          `bson:"bindingAttachment,omitempty" json:"bindingAttachment,omitempty"`
 	BindingReference  *Reference           `bson:"bindingReference,omitempty" json:"bindingReference,omitempty"`
-	Friendly          []ContractFriendly   `bson:"friendly" json:"friendly"`
-	Legal             []ContractLegal      `bson:"legal" json:"legal"`
-	Rule              []ContractRule       `bson:"rule" json:"rule"`
+	Friendly          []ContractFriendly   `bson:"friendly,omitempty" json:"friendly,omitempty"`
+	Legal             []ContractLegal      `bson:"legal,omitempty" json:"legal,omitempty"`
+	Rule              []ContractRule       `bson:"rule,omitempty" json:"rule,omitempty"`
 }
 type ContractAgent struct {
-	Id                *string           `bson:"id" json:"id"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Actor             Reference         `bson:"actor,omitempty" json:"actor,omitempty"`
-	Role              []CodeableConcept `bson:"role" json:"role"`
+	Role              []CodeableConcept `bson:"role,omitempty" json:"role,omitempty"`
 }
 type ContractSigner struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Type              Coding      `bson:"type,omitempty" json:"type,omitempty"`
 	Party             Reference   `bson:"party,omitempty" json:"party,omitempty"`
 	Signature         []Signature `bson:"signature,omitempty" json:"signature,omitempty"`
 }
 type ContractValuedItem struct {
-	Id                    *string          `bson:"id" json:"id"`
-	Extension             []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension     []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Id                    *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension             []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	EntityCodeableConcept *CodeableConcept `bson:"entityCodeableConcept,omitempty" json:"entityCodeableConcept,omitempty"`
 	EntityReference       *Reference       `bson:"entityReference,omitempty" json:"entityReference,omitempty"`
-	Identifier            *Identifier      `bson:"identifier" json:"identifier"`
-	EffectiveTime         *string          `bson:"effectiveTime" json:"effectiveTime"`
-	Quantity              *Quantity        `bson:"quantity" json:"quantity"`
-	UnitPrice             *Money           `bson:"unitPrice" json:"unitPrice"`
-	Factor                *float64         `bson:"factor" json:"factor"`
-	Points                *float64         `bson:"points" json:"points"`
-	Net                   *Money           `bson:"net" json:"net"`
+	Identifier            *Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	EffectiveTime         *string          `bson:"effectiveTime,omitempty" json:"effectiveTime,omitempty"`
+	Quantity              *Quantity        `bson:"quantity,omitempty" json:"quantity,omitempty"`
+	UnitPrice             *Money           `bson:"unitPrice,omitempty" json:"unitPrice,omitempty"`
+	Factor                *float64         `bson:"factor,omitempty" json:"factor,omitempty"`
+	Points                *float64         `bson:"points,omitempty" json:"points,omitempty"`
+	Net                   *Money           `bson:"net,omitempty" json:"net,omitempty"`
 }
 type ContractTerm struct {
-	Id                *string                  `bson:"id" json:"id"`
-	Extension         []Extension              `bson:"extension" json:"extension"`
-	ModifierExtension []Extension              `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier              `bson:"identifier" json:"identifier"`
-	Issued            *string                  `bson:"issued" json:"issued"`
-	Applies           *Period                  `bson:"applies" json:"applies"`
-	Type              *CodeableConcept         `bson:"type" json:"type"`
-	SubType           *CodeableConcept         `bson:"subType" json:"subType"`
-	Topic             []Reference              `bson:"topic" json:"topic"`
-	Action            []CodeableConcept        `bson:"action" json:"action"`
-	ActionReason      []CodeableConcept        `bson:"actionReason" json:"actionReason"`
-	SecurityLabel     []Coding                 `bson:"securityLabel" json:"securityLabel"`
-	Agent             []ContractTermAgent      `bson:"agent" json:"agent"`
-	Text              *string                  `bson:"text" json:"text"`
-	ValuedItem        []ContractTermValuedItem `bson:"valuedItem" json:"valuedItem"`
-	Group             []ContractTerm           `bson:"group" json:"group"`
+	Id                *string                  `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension              `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Issued            *string                  `bson:"issued,omitempty" json:"issued,omitempty"`
+	Applies           *Period                  `bson:"applies,omitempty" json:"applies,omitempty"`
+	Type              *CodeableConcept         `bson:"type,omitempty" json:"type,omitempty"`
+	SubType           *CodeableConcept         `bson:"subType,omitempty" json:"subType,omitempty"`
+	Topic             []Reference              `bson:"topic,omitempty" json:"topic,omitempty"`
+	Action            []CodeableConcept        `bson:"action,omitempty" json:"action,omitempty"`
+	ActionReason      []CodeableConcept        `bson:"actionReason,omitempty" json:"actionReason,omitempty"`
+	SecurityLabel     []Coding                 `bson:"securityLabel,omitempty" json:"securityLabel,omitempty"`
+	Agent             []ContractTermAgent      `bson:"agent,omitempty" json:"agent,omitempty"`
+	Text              *string                  `bson:"text,omitempty" json:"text,omitempty"`
+	ValuedItem        []ContractTermValuedItem `bson:"valuedItem,omitempty" json:"valuedItem,omitempty"`
+	Group             []ContractTerm           `bson:"group,omitempty" json:"group,omitempty"`
 }
 type ContractTermAgent struct {
-	Id                *string           `bson:"id" json:"id"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Actor             Reference         `bson:"actor,omitempty" json:"actor,omitempty"`
-	Role              []CodeableConcept `bson:"role" json:"role"`
+	Role              []CodeableConcept `bson:"role,omitempty" json:"role,omitempty"`
 }
 type ContractTermValuedItem struct {
-	Id                    *string          `bson:"id" json:"id"`
-	Extension             []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension     []Extension      `bson:"modifierExtension" json:"modifierExtension"`
+	Id                    *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension             []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	EntityCodeableConcept *CodeableConcept `bson:"entityCodeableConcept,omitempty" json:"entityCodeableConcept,omitempty"`
 	EntityReference       *Reference       `bson:"entityReference,omitempty" json:"entityReference,omitempty"`
-	Identifier            *Identifier      `bson:"identifier" json:"identifier"`
-	EffectiveTime         *string          `bson:"effectiveTime" json:"effectiveTime"`
-	Quantity              *Quantity        `bson:"quantity" json:"quantity"`
-	UnitPrice             *Money           `bson:"unitPrice" json:"unitPrice"`
-	Factor                *float64         `bson:"factor" json:"factor"`
-	Points                *float64         `bson:"points" json:"points"`
-	Net                   *Money           `bson:"net" json:"net"`
+	Identifier            *Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	EffectiveTime         *string          `bson:"effectiveTime,omitempty" json:"effectiveTime,omitempty"`
+	Quantity              *Quantity        `bson:"quantity,omitempty" json:"quantity,omitempty"`
+	UnitPrice             *Money           `bson:"unitPrice,omitempty" json:"unitPrice,omitempty"`
+	Factor                *float64         `bson:"factor,omitempty" json:"factor,omitempty"`
+	Points                *float64         `bson:"points,omitempty" json:"points,omitempty"`
+	Net                   *Money           `bson:"net,omitempty" json:"net,omitempty"`
 }
 type ContractFriendly struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	ContentAttachment *Attachment `bson:"contentAttachment,omitempty" json:"contentAttachment,omitempty"`
 	ContentReference  *Reference  `bson:"contentReference,omitempty" json:"contentReference,omitempty"`
 }
 type ContractLegal struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	ContentAttachment *Attachment `bson:"contentAttachment,omitempty" json:"contentAttachment,omitempty"`
 	ContentReference  *Reference  `bson:"contentReference,omitempty" json:"contentReference,omitempty"`
 }
 type ContractRule struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	ContentAttachment *Attachment `bson:"contentAttachment,omitempty" json:"contentAttachment,omitempty"`
 	ContentReference  *Reference  `bson:"contentReference,omitempty" json:"contentReference,omitempty"`
 }

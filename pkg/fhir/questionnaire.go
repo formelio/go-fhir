@@ -4,54 +4,54 @@ import "encoding/json"
 
 // Questionnaire is documented here http://hl7.org/fhir/StructureDefinition/Questionnaire
 type Questionnaire struct {
-	Id                *string             `bson:"id" json:"id"`
-	Meta              *Meta               `bson:"meta" json:"meta"`
-	ImplicitRules     *string             `bson:"implicitRules" json:"implicitRules"`
-	Language          *string             `bson:"language" json:"language"`
-	Text              *Narrative          `bson:"text" json:"text"`
-	RawContained      []json.RawMessage   `bson:"contained" json:"contained"`
-	Contained         []IResource         `bson:"-" json:"-"`
-	Extension         []Extension         `bson:"extension" json:"extension"`
-	ModifierExtension []Extension         `bson:"modifierExtension" json:"modifierExtension"`
-	Url               *string             `bson:"url" json:"url"`
-	Identifier        []Identifier        `bson:"identifier" json:"identifier"`
-	Version           *string             `bson:"version" json:"version"`
-	Name              *string             `bson:"name" json:"name"`
-	Title             *string             `bson:"title" json:"title"`
+	Id                *string             `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta               `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string             `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string             `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage   `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource         `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Url               *string             `bson:"url,omitempty" json:"url,omitempty"`
+	Identifier        []Identifier        `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Version           *string             `bson:"version,omitempty" json:"version,omitempty"`
+	Name              *string             `bson:"name,omitempty" json:"name,omitempty"`
+	Title             *string             `bson:"title,omitempty" json:"title,omitempty"`
 	Status            PublicationStatus   `bson:"status,omitempty" json:"status,omitempty"`
-	Experimental      *bool               `bson:"experimental" json:"experimental"`
-	Date              *string             `bson:"date" json:"date"`
-	Publisher         *string             `bson:"publisher" json:"publisher"`
-	Description       *string             `bson:"description" json:"description"`
-	Purpose           *string             `bson:"purpose" json:"purpose"`
-	ApprovalDate      *string             `bson:"approvalDate" json:"approvalDate"`
-	LastReviewDate    *string             `bson:"lastReviewDate" json:"lastReviewDate"`
-	EffectivePeriod   *Period             `bson:"effectivePeriod" json:"effectivePeriod"`
-	UseContext        []UsageContext      `bson:"useContext" json:"useContext"`
-	Jurisdiction      []CodeableConcept   `bson:"jurisdiction" json:"jurisdiction"`
-	Contact           []ContactDetail     `bson:"contact" json:"contact"`
-	Copyright         *string             `bson:"copyright" json:"copyright"`
-	Code              []Coding            `bson:"code" json:"code"`
-	SubjectType       []ResourceType      `bson:"subjectType" json:"subjectType"`
-	Item              []QuestionnaireItem `bson:"item" json:"item"`
+	Experimental      *bool               `bson:"experimental,omitempty" json:"experimental,omitempty"`
+	Date              *string             `bson:"date,omitempty" json:"date,omitempty"`
+	Publisher         *string             `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Description       *string             `bson:"description,omitempty" json:"description,omitempty"`
+	Purpose           *string             `bson:"purpose,omitempty" json:"purpose,omitempty"`
+	ApprovalDate      *string             `bson:"approvalDate,omitempty" json:"approvalDate,omitempty"`
+	LastReviewDate    *string             `bson:"lastReviewDate,omitempty" json:"lastReviewDate,omitempty"`
+	EffectivePeriod   *Period             `bson:"effectivePeriod,omitempty" json:"effectivePeriod,omitempty"`
+	UseContext        []UsageContext      `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []CodeableConcept   `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Contact           []ContactDetail     `bson:"contact,omitempty" json:"contact,omitempty"`
+	Copyright         *string             `bson:"copyright,omitempty" json:"copyright,omitempty"`
+	Code              []Coding            `bson:"code,omitempty" json:"code,omitempty"`
+	SubjectType       []ResourceType      `bson:"subjectType,omitempty" json:"subjectType,omitempty"`
+	Item              []QuestionnaireItem `bson:"item,omitempty" json:"item,omitempty"`
 }
 type QuestionnaireItem struct {
-	Id                *string                       `bson:"id" json:"id"`
-	Extension         []Extension                   `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                   `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                       `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                   `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                   `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	LinkId            string                        `bson:"linkId,omitempty" json:"linkId,omitempty"`
-	Definition        *string                       `bson:"definition" json:"definition"`
-	Code              []Coding                      `bson:"code" json:"code"`
-	Prefix            *string                       `bson:"prefix" json:"prefix"`
-	Text              *string                       `bson:"text" json:"text"`
+	Definition        *string                       `bson:"definition,omitempty" json:"definition,omitempty"`
+	Code              []Coding                      `bson:"code,omitempty" json:"code,omitempty"`
+	Prefix            *string                       `bson:"prefix,omitempty" json:"prefix,omitempty"`
+	Text              *string                       `bson:"text,omitempty" json:"text,omitempty"`
 	Type              QuestionnaireItemType         `bson:"type,omitempty" json:"type,omitempty"`
-	EnableWhen        []QuestionnaireItemEnableWhen `bson:"enableWhen" json:"enableWhen"`
-	Required          *bool                         `bson:"required" json:"required"`
-	Repeats           *bool                         `bson:"repeats" json:"repeats"`
-	ReadOnly          *bool                         `bson:"readOnly" json:"readOnly"`
-	MaxLength         *int                          `bson:"maxLength" json:"maxLength"`
-	Options           *Reference                    `bson:"options" json:"options"`
-	Option            []QuestionnaireItemOption     `bson:"option" json:"option"`
+	EnableWhen        []QuestionnaireItemEnableWhen `bson:"enableWhen,omitempty" json:"enableWhen,omitempty"`
+	Required          *bool                         `bson:"required,omitempty" json:"required,omitempty"`
+	Repeats           *bool                         `bson:"repeats,omitempty" json:"repeats,omitempty"`
+	ReadOnly          *bool                         `bson:"readOnly,omitempty" json:"readOnly,omitempty"`
+	MaxLength         *int                          `bson:"maxLength,omitempty" json:"maxLength,omitempty"`
+	Options           *Reference                    `bson:"options,omitempty" json:"options,omitempty"`
+	Option            []QuestionnaireItemOption     `bson:"option,omitempty" json:"option,omitempty"`
 	InitialBoolean    *bool                         `bson:"initialBoolean,omitempty" json:"initialBoolean,omitempty"`
 	InitialDecimal    *float64                      `bson:"initialDecimal,omitempty" json:"initialDecimal,omitempty"`
 	InitialInteger    *int                          `bson:"initialInteger,omitempty" json:"initialInteger,omitempty"`
@@ -64,14 +64,14 @@ type QuestionnaireItem struct {
 	InitialCoding     *Coding                       `bson:"initialCoding,omitempty" json:"initialCoding,omitempty"`
 	InitialQuantity   *Quantity                     `bson:"initialQuantity,omitempty" json:"initialQuantity,omitempty"`
 	InitialReference  *Reference                    `bson:"initialReference,omitempty" json:"initialReference,omitempty"`
-	Item              []QuestionnaireItem           `bson:"item" json:"item"`
+	Item              []QuestionnaireItem           `bson:"item,omitempty" json:"item,omitempty"`
 }
 type QuestionnaireItemEnableWhen struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Question          string      `bson:"question,omitempty" json:"question,omitempty"`
-	HasAnswer         *bool       `bson:"hasAnswer" json:"hasAnswer"`
+	HasAnswer         *bool       `bson:"hasAnswer,omitempty" json:"hasAnswer,omitempty"`
 	AnswerBoolean     *bool       `bson:"answerBoolean,omitempty" json:"answerBoolean,omitempty"`
 	AnswerDecimal     *float64    `bson:"answerDecimal,omitempty" json:"answerDecimal,omitempty"`
 	AnswerInteger     *int        `bson:"answerInteger,omitempty" json:"answerInteger,omitempty"`
@@ -86,9 +86,9 @@ type QuestionnaireItemEnableWhen struct {
 	AnswerReference   *Reference  `bson:"answerReference,omitempty" json:"answerReference,omitempty"`
 }
 type QuestionnaireItemOption struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	ValueInteger      *int        `bson:"valueInteger,omitempty" json:"valueInteger,omitempty"`
 	ValueDate         *string     `bson:"valueDate,omitempty" json:"valueDate,omitempty"`
 	ValueTime         *string     `bson:"valueTime,omitempty" json:"valueTime,omitempty"`

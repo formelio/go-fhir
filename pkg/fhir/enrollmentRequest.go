@@ -4,23 +4,23 @@ import "encoding/json"
 
 // EnrollmentRequest is documented here http://hl7.org/fhir/StructureDefinition/EnrollmentRequest
 type EnrollmentRequest struct {
-	Id                *string           `bson:"id" json:"id"`
-	Meta              *Meta             `bson:"meta" json:"meta"`
-	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
-	Language          *string           `bson:"language" json:"language"`
-	Text              *Narrative        `bson:"text" json:"text"`
-	RawContained      []json.RawMessage `bson:"contained" json:"contained"`
-	Contained         []IResource       `bson:"-" json:"-"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
-	Status            *string           `bson:"status" json:"status"`
-	Created           *string           `bson:"created" json:"created"`
-	Insurer           *Reference        `bson:"insurer" json:"insurer"`
-	Provider          *Reference        `bson:"provider" json:"provider"`
-	Organization      *Reference        `bson:"organization" json:"organization"`
-	Subject           *Reference        `bson:"subject" json:"subject"`
-	Coverage          *Reference        `bson:"coverage" json:"coverage"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Status            *string           `bson:"status,omitempty" json:"status,omitempty"`
+	Created           *string           `bson:"created,omitempty" json:"created,omitempty"`
+	Insurer           *Reference        `bson:"insurer,omitempty" json:"insurer,omitempty"`
+	Provider          *Reference        `bson:"provider,omitempty" json:"provider,omitempty"`
+	Organization      *Reference        `bson:"organization,omitempty" json:"organization,omitempty"`
+	Subject           *Reference        `bson:"subject,omitempty" json:"subject,omitempty"`
+	Coverage          *Reference        `bson:"coverage,omitempty" json:"coverage,omitempty"`
 }
 
 // OtherEnrollmentRequest is a helper type to use the default implementations of Marshall and Unmarshal

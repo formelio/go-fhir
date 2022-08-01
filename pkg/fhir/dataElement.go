@@ -4,40 +4,40 @@ import "encoding/json"
 
 // DataElement is documented here http://hl7.org/fhir/StructureDefinition/DataElement
 type DataElement struct {
-	Id                *string                `bson:"id" json:"id"`
-	Meta              *Meta                  `bson:"meta" json:"meta"`
-	ImplicitRules     *string                `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                `bson:"language" json:"language"`
-	Text              *Narrative             `bson:"text" json:"text"`
-	RawContained      []json.RawMessage      `bson:"contained" json:"contained"`
-	Contained         []IResource            `bson:"-" json:"-"`
-	Extension         []Extension            `bson:"extension" json:"extension"`
-	ModifierExtension []Extension            `bson:"modifierExtension" json:"modifierExtension"`
-	Url               *string                `bson:"url" json:"url"`
-	Identifier        []Identifier           `bson:"identifier" json:"identifier"`
-	Version           *string                `bson:"version" json:"version"`
+	Id                *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                  `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource            `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Url               *string                `bson:"url,omitempty" json:"url,omitempty"`
+	Identifier        []Identifier           `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Version           *string                `bson:"version,omitempty" json:"version,omitempty"`
 	Status            PublicationStatus      `bson:"status,omitempty" json:"status,omitempty"`
-	Experimental      *bool                  `bson:"experimental" json:"experimental"`
-	Date              *string                `bson:"date" json:"date"`
-	Publisher         *string                `bson:"publisher" json:"publisher"`
-	Name              *string                `bson:"name" json:"name"`
-	Title             *string                `bson:"title" json:"title"`
-	Contact           []ContactDetail        `bson:"contact" json:"contact"`
-	UseContext        []UsageContext         `bson:"useContext" json:"useContext"`
-	Jurisdiction      []CodeableConcept      `bson:"jurisdiction" json:"jurisdiction"`
-	Copyright         *string                `bson:"copyright" json:"copyright"`
-	Stringency        *DataElementStringency `bson:"stringency" json:"stringency"`
-	Mapping           []DataElementMapping   `bson:"mapping" json:"mapping"`
+	Experimental      *bool                  `bson:"experimental,omitempty" json:"experimental,omitempty"`
+	Date              *string                `bson:"date,omitempty" json:"date,omitempty"`
+	Publisher         *string                `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Name              *string                `bson:"name,omitempty" json:"name,omitempty"`
+	Title             *string                `bson:"title,omitempty" json:"title,omitempty"`
+	Contact           []ContactDetail        `bson:"contact,omitempty" json:"contact,omitempty"`
+	UseContext        []UsageContext         `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []CodeableConcept      `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Copyright         *string                `bson:"copyright,omitempty" json:"copyright,omitempty"`
+	Stringency        *DataElementStringency `bson:"stringency,omitempty" json:"stringency,omitempty"`
+	Mapping           []DataElementMapping   `bson:"mapping,omitempty" json:"mapping,omitempty"`
 	Element           []ElementDefinition    `bson:"element,omitempty" json:"element,omitempty"`
 }
 type DataElementMapping struct {
-	Id                *string     `bson:"id" json:"id"`
-	Extension         []Extension `bson:"extension" json:"extension"`
-	ModifierExtension []Extension `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identity          string      `bson:"identity,omitempty" json:"identity,omitempty"`
-	Uri               *string     `bson:"uri" json:"uri"`
-	Name              *string     `bson:"name" json:"name"`
-	Comment           *string     `bson:"comment" json:"comment"`
+	Uri               *string     `bson:"uri,omitempty" json:"uri,omitempty"`
+	Name              *string     `bson:"name,omitempty" json:"name,omitempty"`
+	Comment           *string     `bson:"comment,omitempty" json:"comment,omitempty"`
 }
 
 // OtherDataElement is a helper type to use the default implementations of Marshall and Unmarshal

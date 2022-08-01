@@ -83,7 +83,7 @@ func generateFields(
 		statement.Id(typeIdentifier)
 
 		// If the field is not required, we add add `omitempty` to the field tags
-		generateJsonTags(statement, pathSplit[level], *element.Min == 0)
+		generateTags(statement, pathSplit[level])
 	}
 	return 0, resourceFields, nil
 }
@@ -215,19 +215,19 @@ func generateResourceField(fields *jen.Group, element fhir.ElementDefinition, ty
 	rawStatement := fields.Id("Raw" + typeIdentifier)
 	generateOperators(rawStatement, isList, true)
 	rawStatement.Qual("encoding/json", "RawMessage")
-	generateJsonTags(rawStatement, jsonTag, true)
+	generateTags(rawStatement, jsonTag)
 
 	iResourceStatement := fields.Id(typeIdentifier)
 	generateOperators(iResourceStatement, isList, true)
 	iResourceStatement.Id("IResource")
-	generateJsonTags(iResourceStatement, "-", true)
+	generateTags(iResourceStatement, "-")
 }
 
 func addPolymorphicStatement(fields *jen.Group, fieldName, jsonFieldName, typeIdentifier string, required, list bool) {
 	statement := fields.Id(fieldName)
 	generateOperators(statement, list, required)
 	statement.Id(typeIdentifier)
-	generateJsonTags(statement, jsonFieldName, required)
+	generateTags(statement, jsonFieldName)
 }
 
 // Checks whether the value set is required, return it's URL if it is

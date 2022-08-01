@@ -4,33 +4,33 @@ import "encoding/json"
 
 // DeviceComponent is documented here http://hl7.org/fhir/StructureDefinition/DeviceComponent
 type DeviceComponent struct {
-	Id                      *string                                  `bson:"id" json:"id"`
-	Meta                    *Meta                                    `bson:"meta" json:"meta"`
-	ImplicitRules           *string                                  `bson:"implicitRules" json:"implicitRules"`
-	Language                *string                                  `bson:"language" json:"language"`
-	Text                    *Narrative                               `bson:"text" json:"text"`
-	RawContained            []json.RawMessage                        `bson:"contained" json:"contained"`
-	Contained               []IResource                              `bson:"-" json:"-"`
-	Extension               []Extension                              `bson:"extension" json:"extension"`
-	ModifierExtension       []Extension                              `bson:"modifierExtension" json:"modifierExtension"`
+	Id                      *string                                  `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                    *Meta                                    `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules           *string                                  `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language                *string                                  `bson:"language,omitempty" json:"language,omitempty"`
+	Text                    *Narrative                               `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained            []json.RawMessage                        `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained               []IResource                              `bson:"-,omitempty" json:"-,omitempty"`
+	Extension               []Extension                              `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension       []Extension                              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identifier              Identifier                               `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Type                    CodeableConcept                          `bson:"type,omitempty" json:"type,omitempty"`
-	LastSystemChange        *string                                  `bson:"lastSystemChange" json:"lastSystemChange"`
-	Source                  *Reference                               `bson:"source" json:"source"`
-	Parent                  *Reference                               `bson:"parent" json:"parent"`
-	OperationalStatus       []CodeableConcept                        `bson:"operationalStatus" json:"operationalStatus"`
-	ParameterGroup          *CodeableConcept                         `bson:"parameterGroup" json:"parameterGroup"`
-	MeasurementPrinciple    *MeasmntPrinciple                        `bson:"measurementPrinciple" json:"measurementPrinciple"`
-	ProductionSpecification []DeviceComponentProductionSpecification `bson:"productionSpecification" json:"productionSpecification"`
-	LanguageCode            *CodeableConcept                         `bson:"languageCode" json:"languageCode"`
+	LastSystemChange        *string                                  `bson:"lastSystemChange,omitempty" json:"lastSystemChange,omitempty"`
+	Source                  *Reference                               `bson:"source,omitempty" json:"source,omitempty"`
+	Parent                  *Reference                               `bson:"parent,omitempty" json:"parent,omitempty"`
+	OperationalStatus       []CodeableConcept                        `bson:"operationalStatus,omitempty" json:"operationalStatus,omitempty"`
+	ParameterGroup          *CodeableConcept                         `bson:"parameterGroup,omitempty" json:"parameterGroup,omitempty"`
+	MeasurementPrinciple    *MeasmntPrinciple                        `bson:"measurementPrinciple,omitempty" json:"measurementPrinciple,omitempty"`
+	ProductionSpecification []DeviceComponentProductionSpecification `bson:"productionSpecification,omitempty" json:"productionSpecification,omitempty"`
+	LanguageCode            *CodeableConcept                         `bson:"languageCode,omitempty" json:"languageCode,omitempty"`
 }
 type DeviceComponentProductionSpecification struct {
-	Id                *string          `bson:"id" json:"id"`
-	Extension         []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
-	SpecType          *CodeableConcept `bson:"specType" json:"specType"`
-	ComponentId       *Identifier      `bson:"componentId" json:"componentId"`
-	ProductionSpec    *string          `bson:"productionSpec" json:"productionSpec"`
+	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	SpecType          *CodeableConcept `bson:"specType,omitempty" json:"specType,omitempty"`
+	ComponentId       *Identifier      `bson:"componentId,omitempty" json:"componentId,omitempty"`
+	ProductionSpec    *string          `bson:"productionSpec,omitempty" json:"productionSpec,omitempty"`
 }
 
 // OtherDeviceComponent is a helper type to use the default implementations of Marshall and Unmarshal

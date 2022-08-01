@@ -4,39 +4,39 @@ import "encoding/json"
 
 // NamingSystem is documented here http://hl7.org/fhir/StructureDefinition/NamingSystem
 type NamingSystem struct {
-	Id                *string                `bson:"id" json:"id"`
-	Meta              *Meta                  `bson:"meta" json:"meta"`
-	ImplicitRules     *string                `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                `bson:"language" json:"language"`
-	Text              *Narrative             `bson:"text" json:"text"`
-	RawContained      []json.RawMessage      `bson:"contained" json:"contained"`
-	Contained         []IResource            `bson:"-" json:"-"`
-	Extension         []Extension            `bson:"extension" json:"extension"`
-	ModifierExtension []Extension            `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                  `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource            `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Name              string                 `bson:"name,omitempty" json:"name,omitempty"`
 	Status            PublicationStatus      `bson:"status,omitempty" json:"status,omitempty"`
 	Kind              NamingSystemType       `bson:"kind,omitempty" json:"kind,omitempty"`
 	Date              string                 `bson:"date,omitempty" json:"date,omitempty"`
-	Publisher         *string                `bson:"publisher" json:"publisher"`
-	Contact           []ContactDetail        `bson:"contact" json:"contact"`
-	Responsible       *string                `bson:"responsible" json:"responsible"`
-	Type              *CodeableConcept       `bson:"type" json:"type"`
-	Description       *string                `bson:"description" json:"description"`
-	UseContext        []UsageContext         `bson:"useContext" json:"useContext"`
-	Jurisdiction      []CodeableConcept      `bson:"jurisdiction" json:"jurisdiction"`
-	Usage             *string                `bson:"usage" json:"usage"`
+	Publisher         *string                `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Contact           []ContactDetail        `bson:"contact,omitempty" json:"contact,omitempty"`
+	Responsible       *string                `bson:"responsible,omitempty" json:"responsible,omitempty"`
+	Type              *CodeableConcept       `bson:"type,omitempty" json:"type,omitempty"`
+	Description       *string                `bson:"description,omitempty" json:"description,omitempty"`
+	UseContext        []UsageContext         `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []CodeableConcept      `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Usage             *string                `bson:"usage,omitempty" json:"usage,omitempty"`
 	UniqueId          []NamingSystemUniqueId `bson:"uniqueId,omitempty" json:"uniqueId,omitempty"`
-	ReplacedBy        *Reference             `bson:"replacedBy" json:"replacedBy"`
+	ReplacedBy        *Reference             `bson:"replacedBy,omitempty" json:"replacedBy,omitempty"`
 }
 type NamingSystemUniqueId struct {
-	Id                *string                    `bson:"id" json:"id"`
-	Extension         []Extension                `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                    `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Type              NamingSystemIdentifierType `bson:"type,omitempty" json:"type,omitempty"`
 	Value             string                     `bson:"value,omitempty" json:"value,omitempty"`
-	Preferred         *bool                      `bson:"preferred" json:"preferred"`
-	Comment           *string                    `bson:"comment" json:"comment"`
-	Period            *Period                    `bson:"period" json:"period"`
+	Preferred         *bool                      `bson:"preferred,omitempty" json:"preferred,omitempty"`
+	Comment           *string                    `bson:"comment,omitempty" json:"comment,omitempty"`
+	Period            *Period                    `bson:"period,omitempty" json:"period,omitempty"`
 }
 
 // OtherNamingSystem is a helper type to use the default implementations of Marshall and Unmarshal

@@ -4,16 +4,16 @@ import "encoding/json"
 
 // Parameters is documented here http://hl7.org/fhir/StructureDefinition/Parameters
 type Parameters struct {
-	Id            *string               `bson:"id" json:"id"`
-	Meta          *Meta                 `bson:"meta" json:"meta"`
-	ImplicitRules *string               `bson:"implicitRules" json:"implicitRules"`
-	Language      *string               `bson:"language" json:"language"`
-	Parameter     []ParametersParameter `bson:"parameter" json:"parameter"`
+	Id            *string               `bson:"id,omitempty" json:"id,omitempty"`
+	Meta          *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language      *string               `bson:"language,omitempty" json:"language,omitempty"`
+	Parameter     []ParametersParameter `bson:"parameter,omitempty" json:"parameter,omitempty"`
 }
 type ParametersParameter struct {
-	Id                   *string               `bson:"id" json:"id"`
-	Extension            []Extension           `bson:"extension" json:"extension"`
-	ModifierExtension    []Extension           `bson:"modifierExtension" json:"modifierExtension"`
+	Id                   *string               `bson:"id,omitempty" json:"id,omitempty"`
+	Extension            []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension    []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Name                 string                `bson:"name,omitempty" json:"name,omitempty"`
 	ValueBase64Binary    *string               `bson:"valueBase64Binary,omitempty" json:"valueBase64Binary,omitempty"`
 	ValueBoolean         *bool                 `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
@@ -53,9 +53,9 @@ type ParametersParameter struct {
 	ValueSignature       *Signature            `bson:"valueSignature,omitempty" json:"valueSignature,omitempty"`
 	ValueTiming          *Timing               `bson:"valueTiming,omitempty" json:"valueTiming,omitempty"`
 	ValueMeta            *Meta                 `bson:"valueMeta,omitempty" json:"valueMeta,omitempty"`
-	RawResource          json.RawMessage       `bson:"resource" json:"resource"`
-	Resource             IResource             `bson:"-" json:"-"`
-	Part                 []ParametersParameter `bson:"part" json:"part"`
+	RawResource          json.RawMessage       `bson:"resource,omitempty" json:"resource,omitempty"`
+	Resource             IResource             `bson:"-,omitempty" json:"-,omitempty"`
+	Part                 []ParametersParameter `bson:"part,omitempty" json:"part,omitempty"`
 }
 
 // OtherParametersParameter is a helper type to use the default implementations of Marshall and Unmarshal

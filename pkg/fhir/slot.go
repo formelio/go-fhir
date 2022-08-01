@@ -4,26 +4,26 @@ import "encoding/json"
 
 // Slot is documented here http://hl7.org/fhir/StructureDefinition/Slot
 type Slot struct {
-	Id                *string           `bson:"id" json:"id"`
-	Meta              *Meta             `bson:"meta" json:"meta"`
-	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
-	Language          *string           `bson:"language" json:"language"`
-	Text              *Narrative        `bson:"text" json:"text"`
-	RawContained      []json.RawMessage `bson:"contained" json:"contained"`
-	Contained         []IResource       `bson:"-" json:"-"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
-	ServiceCategory   *CodeableConcept  `bson:"serviceCategory" json:"serviceCategory"`
-	ServiceType       []CodeableConcept `bson:"serviceType" json:"serviceType"`
-	Specialty         []CodeableConcept `bson:"specialty" json:"specialty"`
-	AppointmentType   *CodeableConcept  `bson:"appointmentType" json:"appointmentType"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	ServiceCategory   *CodeableConcept  `bson:"serviceCategory,omitempty" json:"serviceCategory,omitempty"`
+	ServiceType       []CodeableConcept `bson:"serviceType,omitempty" json:"serviceType,omitempty"`
+	Specialty         []CodeableConcept `bson:"specialty,omitempty" json:"specialty,omitempty"`
+	AppointmentType   *CodeableConcept  `bson:"appointmentType,omitempty" json:"appointmentType,omitempty"`
 	Schedule          Reference         `bson:"schedule,omitempty" json:"schedule,omitempty"`
 	Status            SlotStatus        `bson:"status,omitempty" json:"status,omitempty"`
 	Start             string            `bson:"start,omitempty" json:"start,omitempty"`
 	End               string            `bson:"end,omitempty" json:"end,omitempty"`
-	Overbooked        *bool             `bson:"overbooked" json:"overbooked"`
-	Comment           *string           `bson:"comment" json:"comment"`
+	Overbooked        *bool             `bson:"overbooked,omitempty" json:"overbooked,omitempty"`
+	Comment           *string           `bson:"comment,omitempty" json:"comment,omitempty"`
 }
 
 // OtherSlot is a helper type to use the default implementations of Marshall and Unmarshal

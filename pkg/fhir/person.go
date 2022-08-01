@@ -4,32 +4,32 @@ import "encoding/json"
 
 // Person is documented here http://hl7.org/fhir/StructureDefinition/Person
 type Person struct {
-	Id                   *string               `bson:"id" json:"id"`
-	Meta                 *Meta                 `bson:"meta" json:"meta"`
-	ImplicitRules        *string               `bson:"implicitRules" json:"implicitRules"`
-	Language             *string               `bson:"language" json:"language"`
-	Text                 *Narrative            `bson:"text" json:"text"`
-	RawContained         []json.RawMessage     `bson:"contained" json:"contained"`
-	Contained            []IResource           `bson:"-" json:"-"`
-	Extension            []Extension           `bson:"extension" json:"extension"`
-	ModifierExtension    []Extension           `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier           []Identifier          `bson:"identifier" json:"identifier"`
-	Name                 []HumanName           `bson:"name" json:"name"`
-	Telecom              []ContactPoint        `bson:"telecom" json:"telecom"`
-	Gender               *AdministrativeGender `bson:"gender" json:"gender"`
-	BirthDate            *string               `bson:"birthDate" json:"birthDate"`
-	Address              []Address             `bson:"address" json:"address"`
-	Photo                *Attachment           `bson:"photo" json:"photo"`
-	ManagingOrganization *Reference            `bson:"managingOrganization" json:"managingOrganization"`
-	Active               *bool                 `bson:"active" json:"active"`
-	Link                 []PersonLink          `bson:"link" json:"link"`
+	Id                   *string               `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                 *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules        *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language             *string               `bson:"language,omitempty" json:"language,omitempty"`
+	Text                 *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained         []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained            []IResource           `bson:"-,omitempty" json:"-,omitempty"`
+	Extension            []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension    []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier           []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Name                 []HumanName           `bson:"name,omitempty" json:"name,omitempty"`
+	Telecom              []ContactPoint        `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Gender               *AdministrativeGender `bson:"gender,omitempty" json:"gender,omitempty"`
+	BirthDate            *string               `bson:"birthDate,omitempty" json:"birthDate,omitempty"`
+	Address              []Address             `bson:"address,omitempty" json:"address,omitempty"`
+	Photo                *Attachment           `bson:"photo,omitempty" json:"photo,omitempty"`
+	ManagingOrganization *Reference            `bson:"managingOrganization,omitempty" json:"managingOrganization,omitempty"`
+	Active               *bool                 `bson:"active,omitempty" json:"active,omitempty"`
+	Link                 []PersonLink          `bson:"link,omitempty" json:"link,omitempty"`
 }
 type PersonLink struct {
-	Id                *string                 `bson:"id" json:"id"`
-	Extension         []Extension             `bson:"extension" json:"extension"`
-	ModifierExtension []Extension             `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                 `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Target            Reference               `bson:"target,omitempty" json:"target,omitempty"`
-	Assurance         *IdentityAssuranceLevel `bson:"assurance" json:"assurance"`
+	Assurance         *IdentityAssuranceLevel `bson:"assurance,omitempty" json:"assurance,omitempty"`
 }
 
 // OtherPerson is a helper type to use the default implementations of Marshall and Unmarshal

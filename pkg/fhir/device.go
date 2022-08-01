@@ -4,44 +4,44 @@ import "encoding/json"
 
 // Device is documented here http://hl7.org/fhir/StructureDefinition/Device
 type Device struct {
-	Id                *string           `bson:"id" json:"id"`
-	Meta              *Meta             `bson:"meta" json:"meta"`
-	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
-	Language          *string           `bson:"language" json:"language"`
-	Text              *Narrative        `bson:"text" json:"text"`
-	RawContained      []json.RawMessage `bson:"contained" json:"contained"`
-	Contained         []IResource       `bson:"-" json:"-"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
-	Udi               *DeviceUdi        `bson:"udi" json:"udi"`
-	Status            *FHIRDeviceStatus `bson:"status" json:"status"`
-	Type              *CodeableConcept  `bson:"type" json:"type"`
-	LotNumber         *string           `bson:"lotNumber" json:"lotNumber"`
-	Manufacturer      *string           `bson:"manufacturer" json:"manufacturer"`
-	ManufactureDate   *string           `bson:"manufactureDate" json:"manufactureDate"`
-	ExpirationDate    *string           `bson:"expirationDate" json:"expirationDate"`
-	Model             *string           `bson:"model" json:"model"`
-	Version           *string           `bson:"version" json:"version"`
-	Patient           *Reference        `bson:"patient" json:"patient"`
-	Owner             *Reference        `bson:"owner" json:"owner"`
-	Contact           []ContactPoint    `bson:"contact" json:"contact"`
-	Location          *Reference        `bson:"location" json:"location"`
-	Url               *string           `bson:"url" json:"url"`
-	Note              []Annotation      `bson:"note" json:"note"`
-	Safety            []CodeableConcept `bson:"safety" json:"safety"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Udi               *DeviceUdi        `bson:"udi,omitempty" json:"udi,omitempty"`
+	Status            *FHIRDeviceStatus `bson:"status,omitempty" json:"status,omitempty"`
+	Type              *CodeableConcept  `bson:"type,omitempty" json:"type,omitempty"`
+	LotNumber         *string           `bson:"lotNumber,omitempty" json:"lotNumber,omitempty"`
+	Manufacturer      *string           `bson:"manufacturer,omitempty" json:"manufacturer,omitempty"`
+	ManufactureDate   *string           `bson:"manufactureDate,omitempty" json:"manufactureDate,omitempty"`
+	ExpirationDate    *string           `bson:"expirationDate,omitempty" json:"expirationDate,omitempty"`
+	Model             *string           `bson:"model,omitempty" json:"model,omitempty"`
+	Version           *string           `bson:"version,omitempty" json:"version,omitempty"`
+	Patient           *Reference        `bson:"patient,omitempty" json:"patient,omitempty"`
+	Owner             *Reference        `bson:"owner,omitempty" json:"owner,omitempty"`
+	Contact           []ContactPoint    `bson:"contact,omitempty" json:"contact,omitempty"`
+	Location          *Reference        `bson:"location,omitempty" json:"location,omitempty"`
+	Url               *string           `bson:"url,omitempty" json:"url,omitempty"`
+	Note              []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
+	Safety            []CodeableConcept `bson:"safety,omitempty" json:"safety,omitempty"`
 }
 type DeviceUdi struct {
-	Id                *string       `bson:"id" json:"id"`
-	Extension         []Extension   `bson:"extension" json:"extension"`
-	ModifierExtension []Extension   `bson:"modifierExtension" json:"modifierExtension"`
-	DeviceIdentifier  *string       `bson:"deviceIdentifier" json:"deviceIdentifier"`
-	Name              *string       `bson:"name" json:"name"`
-	Jurisdiction      *string       `bson:"jurisdiction" json:"jurisdiction"`
-	CarrierHRF        *string       `bson:"carrierHRF" json:"carrierHRF"`
-	CarrierAIDC       *string       `bson:"carrierAIDC" json:"carrierAIDC"`
-	Issuer            *string       `bson:"issuer" json:"issuer"`
-	EntryType         *UDIEntryType `bson:"entryType" json:"entryType"`
+	Id                *string       `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension   `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension   `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	DeviceIdentifier  *string       `bson:"deviceIdentifier,omitempty" json:"deviceIdentifier,omitempty"`
+	Name              *string       `bson:"name,omitempty" json:"name,omitempty"`
+	Jurisdiction      *string       `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	CarrierHRF        *string       `bson:"carrierHRF,omitempty" json:"carrierHRF,omitempty"`
+	CarrierAIDC       *string       `bson:"carrierAIDC,omitempty" json:"carrierAIDC,omitempty"`
+	Issuer            *string       `bson:"issuer,omitempty" json:"issuer,omitempty"`
+	EntryType         *UDIEntryType `bson:"entryType,omitempty" json:"entryType,omitempty"`
 }
 
 // OtherDevice is a helper type to use the default implementations of Marshall and Unmarshal

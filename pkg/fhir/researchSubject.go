@@ -4,23 +4,23 @@ import "encoding/json"
 
 // ResearchSubject is documented here http://hl7.org/fhir/StructureDefinition/ResearchSubject
 type ResearchSubject struct {
-	Id                *string               `bson:"id" json:"id"`
-	Meta              *Meta                 `bson:"meta" json:"meta"`
-	ImplicitRules     *string               `bson:"implicitRules" json:"implicitRules"`
-	Language          *string               `bson:"language" json:"language"`
-	Text              *Narrative            `bson:"text" json:"text"`
-	RawContained      []json.RawMessage     `bson:"contained" json:"contained"`
-	Contained         []IResource           `bson:"-" json:"-"`
-	Extension         []Extension           `bson:"extension" json:"extension"`
-	ModifierExtension []Extension           `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        *Identifier           `bson:"identifier" json:"identifier"`
+	Id                *string               `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string               `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource           `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier           `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status            ResearchSubjectStatus `bson:"status,omitempty" json:"status,omitempty"`
-	Period            *Period               `bson:"period" json:"period"`
+	Period            *Period               `bson:"period,omitempty" json:"period,omitempty"`
 	Study             Reference             `bson:"study,omitempty" json:"study,omitempty"`
 	Individual        Reference             `bson:"individual,omitempty" json:"individual,omitempty"`
-	AssignedArm       *string               `bson:"assignedArm" json:"assignedArm"`
-	ActualArm         *string               `bson:"actualArm" json:"actualArm"`
-	Consent           *Reference            `bson:"consent" json:"consent"`
+	AssignedArm       *string               `bson:"assignedArm,omitempty" json:"assignedArm,omitempty"`
+	ActualArm         *string               `bson:"actualArm,omitempty" json:"actualArm,omitempty"`
+	Consent           *Reference            `bson:"consent,omitempty" json:"consent,omitempty"`
 }
 
 // OtherResearchSubject is a helper type to use the default implementations of Marshall and Unmarshal

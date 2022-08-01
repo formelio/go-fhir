@@ -4,25 +4,25 @@ import "encoding/json"
 
 // PaymentNotice is documented here http://hl7.org/fhir/StructureDefinition/PaymentNotice
 type PaymentNotice struct {
-	Id                *string           `bson:"id" json:"id"`
-	Meta              *Meta             `bson:"meta" json:"meta"`
-	ImplicitRules     *string           `bson:"implicitRules" json:"implicitRules"`
-	Language          *string           `bson:"language" json:"language"`
-	Text              *Narrative        `bson:"text" json:"text"`
-	RawContained      []json.RawMessage `bson:"contained" json:"contained"`
-	Contained         []IResource       `bson:"-" json:"-"`
-	Extension         []Extension       `bson:"extension" json:"extension"`
-	ModifierExtension []Extension       `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier        []Identifier      `bson:"identifier" json:"identifier"`
-	Status            *string           `bson:"status" json:"status"`
-	Request           *Reference        `bson:"request" json:"request"`
-	Response          *Reference        `bson:"response" json:"response"`
-	StatusDate        *string           `bson:"statusDate" json:"statusDate"`
-	Created           *string           `bson:"created" json:"created"`
-	Target            *Reference        `bson:"target" json:"target"`
-	Provider          *Reference        `bson:"provider" json:"provider"`
-	Organization      *Reference        `bson:"organization" json:"organization"`
-	PaymentStatus     *CodeableConcept  `bson:"paymentStatus" json:"paymentStatus"`
+	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Status            *string           `bson:"status,omitempty" json:"status,omitempty"`
+	Request           *Reference        `bson:"request,omitempty" json:"request,omitempty"`
+	Response          *Reference        `bson:"response,omitempty" json:"response,omitempty"`
+	StatusDate        *string           `bson:"statusDate,omitempty" json:"statusDate,omitempty"`
+	Created           *string           `bson:"created,omitempty" json:"created,omitempty"`
+	Target            *Reference        `bson:"target,omitempty" json:"target,omitempty"`
+	Provider          *Reference        `bson:"provider,omitempty" json:"provider,omitempty"`
+	Organization      *Reference        `bson:"organization,omitempty" json:"organization,omitempty"`
+	PaymentStatus     *CodeableConcept  `bson:"paymentStatus,omitempty" json:"paymentStatus,omitempty"`
 }
 
 // OtherPaymentNotice is a helper type to use the default implementations of Marshall and Unmarshal

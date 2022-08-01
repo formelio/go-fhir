@@ -4,44 +4,44 @@ import "encoding/json"
 
 // VisionPrescription is documented here http://hl7.org/fhir/StructureDefinition/VisionPrescription
 type VisionPrescription struct {
-	Id                    *string                      `bson:"id" json:"id"`
-	Meta                  *Meta                        `bson:"meta" json:"meta"`
-	ImplicitRules         *string                      `bson:"implicitRules" json:"implicitRules"`
-	Language              *string                      `bson:"language" json:"language"`
-	Text                  *Narrative                   `bson:"text" json:"text"`
-	RawContained          []json.RawMessage            `bson:"contained" json:"contained"`
-	Contained             []IResource                  `bson:"-" json:"-"`
-	Extension             []Extension                  `bson:"extension" json:"extension"`
-	ModifierExtension     []Extension                  `bson:"modifierExtension" json:"modifierExtension"`
-	Identifier            []Identifier                 `bson:"identifier" json:"identifier"`
-	Status                *string                      `bson:"status" json:"status"`
-	Patient               *Reference                   `bson:"patient" json:"patient"`
-	Encounter             *Reference                   `bson:"encounter" json:"encounter"`
-	DateWritten           *string                      `bson:"dateWritten" json:"dateWritten"`
-	Prescriber            *Reference                   `bson:"prescriber" json:"prescriber"`
+	Id                    *string                      `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                  *Meta                        `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules         *string                      `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language              *string                      `bson:"language,omitempty" json:"language,omitempty"`
+	Text                  *Narrative                   `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained          []json.RawMessage            `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained             []IResource                  `bson:"-,omitempty" json:"-,omitempty"`
+	Extension             []Extension                  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []Extension                  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier            []Identifier                 `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Status                *string                      `bson:"status,omitempty" json:"status,omitempty"`
+	Patient               *Reference                   `bson:"patient,omitempty" json:"patient,omitempty"`
+	Encounter             *Reference                   `bson:"encounter,omitempty" json:"encounter,omitempty"`
+	DateWritten           *string                      `bson:"dateWritten,omitempty" json:"dateWritten,omitempty"`
+	Prescriber            *Reference                   `bson:"prescriber,omitempty" json:"prescriber,omitempty"`
 	ReasonCodeableConcept *CodeableConcept             `bson:"reasonCodeableConcept,omitempty" json:"reasonCodeableConcept,omitempty"`
 	ReasonReference       *Reference                   `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	Dispense              []VisionPrescriptionDispense `bson:"dispense" json:"dispense"`
+	Dispense              []VisionPrescriptionDispense `bson:"dispense,omitempty" json:"dispense,omitempty"`
 }
 type VisionPrescriptionDispense struct {
-	Id                *string          `bson:"id" json:"id"`
-	Extension         []Extension      `bson:"extension" json:"extension"`
-	ModifierExtension []Extension      `bson:"modifierExtension" json:"modifierExtension"`
-	Product           *CodeableConcept `bson:"product" json:"product"`
-	Eye               *VisionEyes      `bson:"eye" json:"eye"`
-	Sphere            *float64         `bson:"sphere" json:"sphere"`
-	Cylinder          *float64         `bson:"cylinder" json:"cylinder"`
-	Axis              *int             `bson:"axis" json:"axis"`
-	Prism             *float64         `bson:"prism" json:"prism"`
-	Base              *VisionBase      `bson:"base" json:"base"`
-	Add               *float64         `bson:"add" json:"add"`
-	Power             *float64         `bson:"power" json:"power"`
-	BackCurve         *float64         `bson:"backCurve" json:"backCurve"`
-	Diameter          *float64         `bson:"diameter" json:"diameter"`
-	Duration          *Quantity        `bson:"duration" json:"duration"`
-	Color             *string          `bson:"color" json:"color"`
-	Brand             *string          `bson:"brand" json:"brand"`
-	Note              []Annotation     `bson:"note" json:"note"`
+	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Product           *CodeableConcept `bson:"product,omitempty" json:"product,omitempty"`
+	Eye               *VisionEyes      `bson:"eye,omitempty" json:"eye,omitempty"`
+	Sphere            *float64         `bson:"sphere,omitempty" json:"sphere,omitempty"`
+	Cylinder          *float64         `bson:"cylinder,omitempty" json:"cylinder,omitempty"`
+	Axis              *int             `bson:"axis,omitempty" json:"axis,omitempty"`
+	Prism             *float64         `bson:"prism,omitempty" json:"prism,omitempty"`
+	Base              *VisionBase      `bson:"base,omitempty" json:"base,omitempty"`
+	Add               *float64         `bson:"add,omitempty" json:"add,omitempty"`
+	Power             *float64         `bson:"power,omitempty" json:"power,omitempty"`
+	BackCurve         *float64         `bson:"backCurve,omitempty" json:"backCurve,omitempty"`
+	Diameter          *float64         `bson:"diameter,omitempty" json:"diameter,omitempty"`
+	Duration          *Quantity        `bson:"duration,omitempty" json:"duration,omitempty"`
+	Color             *string          `bson:"color,omitempty" json:"color,omitempty"`
+	Brand             *string          `bson:"brand,omitempty" json:"brand,omitempty"`
+	Note              []Annotation     `bson:"note,omitempty" json:"note,omitempty"`
 }
 
 // OtherVisionPrescription is a helper type to use the default implementations of Marshall and Unmarshal

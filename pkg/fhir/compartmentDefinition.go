@@ -4,38 +4,38 @@ import "encoding/json"
 
 // CompartmentDefinition is documented here http://hl7.org/fhir/StructureDefinition/CompartmentDefinition
 type CompartmentDefinition struct {
-	Id                *string                         `bson:"id" json:"id"`
-	Meta              *Meta                           `bson:"meta" json:"meta"`
-	ImplicitRules     *string                         `bson:"implicitRules" json:"implicitRules"`
-	Language          *string                         `bson:"language" json:"language"`
-	Text              *Narrative                      `bson:"text" json:"text"`
-	RawContained      []json.RawMessage               `bson:"contained" json:"contained"`
-	Contained         []IResource                     `bson:"-" json:"-"`
-	Extension         []Extension                     `bson:"extension" json:"extension"`
-	ModifierExtension []Extension                     `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string                         `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                           `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                         `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                         `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative                      `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage               `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource                     `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []Extension                     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension                     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Url               string                          `bson:"url,omitempty" json:"url,omitempty"`
 	Name              string                          `bson:"name,omitempty" json:"name,omitempty"`
-	Title             *string                         `bson:"title" json:"title"`
+	Title             *string                         `bson:"title,omitempty" json:"title,omitempty"`
 	Status            PublicationStatus               `bson:"status,omitempty" json:"status,omitempty"`
-	Experimental      *bool                           `bson:"experimental" json:"experimental"`
-	Date              *string                         `bson:"date" json:"date"`
-	Publisher         *string                         `bson:"publisher" json:"publisher"`
-	Contact           []ContactDetail                 `bson:"contact" json:"contact"`
-	Description       *string                         `bson:"description" json:"description"`
-	Purpose           *string                         `bson:"purpose" json:"purpose"`
-	UseContext        []UsageContext                  `bson:"useContext" json:"useContext"`
-	Jurisdiction      []CodeableConcept               `bson:"jurisdiction" json:"jurisdiction"`
+	Experimental      *bool                           `bson:"experimental,omitempty" json:"experimental,omitempty"`
+	Date              *string                         `bson:"date,omitempty" json:"date,omitempty"`
+	Publisher         *string                         `bson:"publisher,omitempty" json:"publisher,omitempty"`
+	Contact           []ContactDetail                 `bson:"contact,omitempty" json:"contact,omitempty"`
+	Description       *string                         `bson:"description,omitempty" json:"description,omitempty"`
+	Purpose           *string                         `bson:"purpose,omitempty" json:"purpose,omitempty"`
+	UseContext        []UsageContext                  `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []CodeableConcept               `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
 	Code              CompartmentType                 `bson:"code,omitempty" json:"code,omitempty"`
 	Search            bool                            `bson:"search,omitempty" json:"search,omitempty"`
-	Resource          []CompartmentDefinitionResource `bson:"resource" json:"resource"`
+	Resource          []CompartmentDefinitionResource `bson:"resource,omitempty" json:"resource,omitempty"`
 }
 type CompartmentDefinitionResource struct {
-	Id                *string      `bson:"id" json:"id"`
-	Extension         []Extension  `bson:"extension" json:"extension"`
-	ModifierExtension []Extension  `bson:"modifierExtension" json:"modifierExtension"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []Extension  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Code              ResourceType `bson:"code,omitempty" json:"code,omitempty"`
-	Param             []string     `bson:"param" json:"param"`
-	Documentation     *string      `bson:"documentation" json:"documentation"`
+	Param             []string     `bson:"param,omitempty" json:"param,omitempty"`
+	Documentation     *string      `bson:"documentation,omitempty" json:"documentation,omitempty"`
 }
 
 // OtherCompartmentDefinition is a helper type to use the default implementations of Marshall and Unmarshal

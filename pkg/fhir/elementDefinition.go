@@ -2,24 +2,24 @@ package fhir
 
 // ElementDefinition is documented here http://hl7.org/fhir/StructureDefinition/ElementDefinition
 type ElementDefinition struct {
-	Id                          *string                       `bson:"id" json:"id"`
-	Extension                   []Extension                   `bson:"extension" json:"extension"`
+	Id                          *string                       `bson:"id,omitempty" json:"id,omitempty"`
+	Extension                   []Extension                   `bson:"extension,omitempty" json:"extension,omitempty"`
 	Path                        string                        `bson:"path,omitempty" json:"path,omitempty"`
-	Representation              []PropertyRepresentation      `bson:"representation" json:"representation"`
-	SliceName                   *string                       `bson:"sliceName" json:"sliceName"`
-	Label                       *string                       `bson:"label" json:"label"`
-	Code                        []Coding                      `bson:"code" json:"code"`
-	Slicing                     *ElementDefinitionSlicing     `bson:"slicing" json:"slicing"`
-	Short                       *string                       `bson:"short" json:"short"`
-	Definition                  *string                       `bson:"definition" json:"definition"`
-	Comment                     *string                       `bson:"comment" json:"comment"`
-	Requirements                *string                       `bson:"requirements" json:"requirements"`
-	Alias                       []string                      `bson:"alias" json:"alias"`
-	Min                         *int                          `bson:"min" json:"min"`
-	Max                         *string                       `bson:"max" json:"max"`
-	Base                        *ElementDefinitionBase        `bson:"base" json:"base"`
-	ContentReference            *string                       `bson:"contentReference" json:"contentReference"`
-	Type                        []ElementDefinitionType       `bson:"type" json:"type"`
+	Representation              []PropertyRepresentation      `bson:"representation,omitempty" json:"representation,omitempty"`
+	SliceName                   *string                       `bson:"sliceName,omitempty" json:"sliceName,omitempty"`
+	Label                       *string                       `bson:"label,omitempty" json:"label,omitempty"`
+	Code                        []Coding                      `bson:"code,omitempty" json:"code,omitempty"`
+	Slicing                     *ElementDefinitionSlicing     `bson:"slicing,omitempty" json:"slicing,omitempty"`
+	Short                       *string                       `bson:"short,omitempty" json:"short,omitempty"`
+	Definition                  *string                       `bson:"definition,omitempty" json:"definition,omitempty"`
+	Comment                     *string                       `bson:"comment,omitempty" json:"comment,omitempty"`
+	Requirements                *string                       `bson:"requirements,omitempty" json:"requirements,omitempty"`
+	Alias                       []string                      `bson:"alias,omitempty" json:"alias,omitempty"`
+	Min                         *int                          `bson:"min,omitempty" json:"min,omitempty"`
+	Max                         *string                       `bson:"max,omitempty" json:"max,omitempty"`
+	Base                        *ElementDefinitionBase        `bson:"base,omitempty" json:"base,omitempty"`
+	ContentReference            *string                       `bson:"contentReference,omitempty" json:"contentReference,omitempty"`
+	Type                        []ElementDefinitionType       `bson:"type,omitempty" json:"type,omitempty"`
 	DefaultValueBase64Binary    *string                       `bson:"defaultValueBase64Binary,omitempty" json:"defaultValueBase64Binary,omitempty"`
 	DefaultValueBoolean         *bool                         `bson:"defaultValueBoolean,omitempty" json:"defaultValueBoolean,omitempty"`
 	DefaultValueCode            *string                       `bson:"defaultValueCode,omitempty" json:"defaultValueCode,omitempty"`
@@ -58,8 +58,8 @@ type ElementDefinition struct {
 	DefaultValueSignature       *Signature                    `bson:"defaultValueSignature,omitempty" json:"defaultValueSignature,omitempty"`
 	DefaultValueTiming          *Timing                       `bson:"defaultValueTiming,omitempty" json:"defaultValueTiming,omitempty"`
 	DefaultValueMeta            *Meta                         `bson:"defaultValueMeta,omitempty" json:"defaultValueMeta,omitempty"`
-	MeaningWhenMissing          *string                       `bson:"meaningWhenMissing" json:"meaningWhenMissing"`
-	OrderMeaning                *string                       `bson:"orderMeaning" json:"orderMeaning"`
+	MeaningWhenMissing          *string                       `bson:"meaningWhenMissing,omitempty" json:"meaningWhenMissing,omitempty"`
+	OrderMeaning                *string                       `bson:"orderMeaning,omitempty" json:"orderMeaning,omitempty"`
 	FixedBase64Binary           *string                       `bson:"fixedBase64Binary,omitempty" json:"fixedBase64Binary,omitempty"`
 	FixedBoolean                *bool                         `bson:"fixedBoolean,omitempty" json:"fixedBoolean,omitempty"`
 	FixedCode                   *string                       `bson:"fixedCode,omitempty" json:"fixedCode,omitempty"`
@@ -136,7 +136,7 @@ type ElementDefinition struct {
 	PatternSignature            *Signature                    `bson:"patternSignature,omitempty" json:"patternSignature,omitempty"`
 	PatternTiming               *Timing                       `bson:"patternTiming,omitempty" json:"patternTiming,omitempty"`
 	PatternMeta                 *Meta                         `bson:"patternMeta,omitempty" json:"patternMeta,omitempty"`
-	Example                     []ElementDefinitionExample    `bson:"example" json:"example"`
+	Example                     []ElementDefinitionExample    `bson:"example,omitempty" json:"example,omitempty"`
 	MinValueDate                *string                       `bson:"minValueDate,omitempty" json:"minValueDate,omitempty"`
 	MinValueDateTime            *string                       `bson:"minValueDateTime,omitempty" json:"minValueDateTime,omitempty"`
 	MinValueInstant             *string                       `bson:"minValueInstant,omitempty" json:"minValueInstant,omitempty"`
@@ -155,48 +155,48 @@ type ElementDefinition struct {
 	MaxValuePositiveInt         *int                          `bson:"maxValuePositiveInt,omitempty" json:"maxValuePositiveInt,omitempty"`
 	MaxValueUnsignedInt         *int                          `bson:"maxValueUnsignedInt,omitempty" json:"maxValueUnsignedInt,omitempty"`
 	MaxValueQuantity            *Quantity                     `bson:"maxValueQuantity,omitempty" json:"maxValueQuantity,omitempty"`
-	MaxLength                   *int                          `bson:"maxLength" json:"maxLength"`
-	Condition                   []string                      `bson:"condition" json:"condition"`
-	Constraint                  []ElementDefinitionConstraint `bson:"constraint" json:"constraint"`
-	MustSupport                 *bool                         `bson:"mustSupport" json:"mustSupport"`
-	IsModifier                  *bool                         `bson:"isModifier" json:"isModifier"`
-	IsSummary                   *bool                         `bson:"isSummary" json:"isSummary"`
-	Binding                     *ElementDefinitionBinding     `bson:"binding" json:"binding"`
-	Mapping                     []ElementDefinitionMapping    `bson:"mapping" json:"mapping"`
+	MaxLength                   *int                          `bson:"maxLength,omitempty" json:"maxLength,omitempty"`
+	Condition                   []string                      `bson:"condition,omitempty" json:"condition,omitempty"`
+	Constraint                  []ElementDefinitionConstraint `bson:"constraint,omitempty" json:"constraint,omitempty"`
+	MustSupport                 *bool                         `bson:"mustSupport,omitempty" json:"mustSupport,omitempty"`
+	IsModifier                  *bool                         `bson:"isModifier,omitempty" json:"isModifier,omitempty"`
+	IsSummary                   *bool                         `bson:"isSummary,omitempty" json:"isSummary,omitempty"`
+	Binding                     *ElementDefinitionBinding     `bson:"binding,omitempty" json:"binding,omitempty"`
+	Mapping                     []ElementDefinitionMapping    `bson:"mapping,omitempty" json:"mapping,omitempty"`
 }
 type ElementDefinitionSlicing struct {
-	Id            *string                                 `bson:"id" json:"id"`
-	Extension     []Extension                             `bson:"extension" json:"extension"`
-	Discriminator []ElementDefinitionSlicingDiscriminator `bson:"discriminator" json:"discriminator"`
-	Description   *string                                 `bson:"description" json:"description"`
-	Ordered       *bool                                   `bson:"ordered" json:"ordered"`
+	Id            *string                                 `bson:"id,omitempty" json:"id,omitempty"`
+	Extension     []Extension                             `bson:"extension,omitempty" json:"extension,omitempty"`
+	Discriminator []ElementDefinitionSlicingDiscriminator `bson:"discriminator,omitempty" json:"discriminator,omitempty"`
+	Description   *string                                 `bson:"description,omitempty" json:"description,omitempty"`
+	Ordered       *bool                                   `bson:"ordered,omitempty" json:"ordered,omitempty"`
 	Rules         SlicingRules                            `bson:"rules,omitempty" json:"rules,omitempty"`
 }
 type ElementDefinitionSlicingDiscriminator struct {
-	Id        *string           `bson:"id" json:"id"`
-	Extension []Extension       `bson:"extension" json:"extension"`
+	Id        *string           `bson:"id,omitempty" json:"id,omitempty"`
+	Extension []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
 	Type      DiscriminatorType `bson:"type,omitempty" json:"type,omitempty"`
 	Path      string            `bson:"path,omitempty" json:"path,omitempty"`
 }
 type ElementDefinitionBase struct {
-	Id        *string     `bson:"id" json:"id"`
-	Extension []Extension `bson:"extension" json:"extension"`
+	Id        *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
 	Path      string      `bson:"path,omitempty" json:"path,omitempty"`
 	Min       int         `bson:"min,omitempty" json:"min,omitempty"`
 	Max       string      `bson:"max,omitempty" json:"max,omitempty"`
 }
 type ElementDefinitionType struct {
-	Id            *string                `bson:"id" json:"id"`
-	Extension     []Extension            `bson:"extension" json:"extension"`
+	Id            *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Extension     []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
 	Code          string                 `bson:"code,omitempty" json:"code,omitempty"`
-	Profile       *string                `bson:"profile" json:"profile"`
-	TargetProfile *string                `bson:"targetProfile" json:"targetProfile"`
-	Aggregation   []AggregationMode      `bson:"aggregation" json:"aggregation"`
-	Versioning    *ReferenceVersionRules `bson:"versioning" json:"versioning"`
+	Profile       *string                `bson:"profile,omitempty" json:"profile,omitempty"`
+	TargetProfile *string                `bson:"targetProfile,omitempty" json:"targetProfile,omitempty"`
+	Aggregation   []AggregationMode      `bson:"aggregation,omitempty" json:"aggregation,omitempty"`
+	Versioning    *ReferenceVersionRules `bson:"versioning,omitempty" json:"versioning,omitempty"`
 }
 type ElementDefinitionExample struct {
-	Id                   *string          `bson:"id" json:"id"`
-	Extension            []Extension      `bson:"extension" json:"extension"`
+	Id                   *string          `bson:"id,omitempty" json:"id,omitempty"`
+	Extension            []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
 	Label                string           `bson:"label,omitempty" json:"label,omitempty"`
 	ValueBase64Binary    *string          `bson:"valueBase64Binary,omitempty" json:"valueBase64Binary,omitempty"`
 	ValueBoolean         *bool            `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
@@ -238,29 +238,29 @@ type ElementDefinitionExample struct {
 	ValueMeta            *Meta            `bson:"valueMeta,omitempty" json:"valueMeta,omitempty"`
 }
 type ElementDefinitionConstraint struct {
-	Id           *string            `bson:"id" json:"id"`
-	Extension    []Extension        `bson:"extension" json:"extension"`
+	Id           *string            `bson:"id,omitempty" json:"id,omitempty"`
+	Extension    []Extension        `bson:"extension,omitempty" json:"extension,omitempty"`
 	Key          string             `bson:"key,omitempty" json:"key,omitempty"`
-	Requirements *string            `bson:"requirements" json:"requirements"`
+	Requirements *string            `bson:"requirements,omitempty" json:"requirements,omitempty"`
 	Severity     ConstraintSeverity `bson:"severity,omitempty" json:"severity,omitempty"`
 	Human        string             `bson:"human,omitempty" json:"human,omitempty"`
 	Expression   string             `bson:"expression,omitempty" json:"expression,omitempty"`
-	Xpath        *string            `bson:"xpath" json:"xpath"`
-	Source       *string            `bson:"source" json:"source"`
+	Xpath        *string            `bson:"xpath,omitempty" json:"xpath,omitempty"`
+	Source       *string            `bson:"source,omitempty" json:"source,omitempty"`
 }
 type ElementDefinitionBinding struct {
-	Id                *string         `bson:"id" json:"id"`
-	Extension         []Extension     `bson:"extension" json:"extension"`
+	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
 	Strength          BindingStrength `bson:"strength,omitempty" json:"strength,omitempty"`
-	Description       *string         `bson:"description" json:"description"`
+	Description       *string         `bson:"description,omitempty" json:"description,omitempty"`
 	ValueSetUri       *string         `bson:"valueSetUri,omitempty" json:"valueSetUri,omitempty"`
 	ValueSetReference *Reference      `bson:"valueSetReference,omitempty" json:"valueSetReference,omitempty"`
 }
 type ElementDefinitionMapping struct {
-	Id        *string     `bson:"id" json:"id"`
-	Extension []Extension `bson:"extension" json:"extension"`
+	Id        *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
 	Identity  string      `bson:"identity,omitempty" json:"identity,omitempty"`
-	Language  *string     `bson:"language" json:"language"`
+	Language  *string     `bson:"language,omitempty" json:"language,omitempty"`
 	Map       string      `bson:"map,omitempty" json:"map,omitempty"`
-	Comment   *string     `bson:"comment" json:"comment"`
+	Comment   *string     `bson:"comment,omitempty" json:"comment,omitempty"`
 }

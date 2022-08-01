@@ -2,8 +2,8 @@ package fhir
 
 // Ratio is documented here http://hl7.org/fhir/StructureDefinition/Ratio
 type Ratio struct {
-	Id          *string     `bson:"id" json:"id"`
-	Extension   []Extension `bson:"extension" json:"extension"`
-	Numerator   *Quantity   `bson:"numerator" json:"numerator"`
-	Denominator *Quantity   `bson:"denominator" json:"denominator"`
+	Id          *string     `bson:"id,omitempty" json:"id,omitempty"`
+	Extension   []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	Numerator   *Quantity   `bson:"numerator,omitempty" json:"numerator,omitempty"`
+	Denominator *Quantity   `bson:"denominator,omitempty" json:"denominator,omitempty"`
 }

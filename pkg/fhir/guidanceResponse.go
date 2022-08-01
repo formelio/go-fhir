@@ -4,30 +4,30 @@ import "encoding/json"
 
 // GuidanceResponse is documented here http://hl7.org/fhir/StructureDefinition/GuidanceResponse
 type GuidanceResponse struct {
-	Id                    *string                `bson:"id" json:"id"`
-	Meta                  *Meta                  `bson:"meta" json:"meta"`
-	ImplicitRules         *string                `bson:"implicitRules" json:"implicitRules"`
-	Language              *string                `bson:"language" json:"language"`
-	Text                  *Narrative             `bson:"text" json:"text"`
-	RawContained          []json.RawMessage      `bson:"contained" json:"contained"`
-	Contained             []IResource            `bson:"-" json:"-"`
-	Extension             []Extension            `bson:"extension" json:"extension"`
-	ModifierExtension     []Extension            `bson:"modifierExtension" json:"modifierExtension"`
-	RequestId             *string                `bson:"requestId" json:"requestId"`
-	Identifier            *Identifier            `bson:"identifier" json:"identifier"`
+	Id                    *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                  *Meta                  `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules         *string                `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language              *string                `bson:"language,omitempty" json:"language,omitempty"`
+	Text                  *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained          []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained             []IResource            `bson:"-,omitempty" json:"-,omitempty"`
+	Extension             []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	RequestId             *string                `bson:"requestId,omitempty" json:"requestId,omitempty"`
+	Identifier            *Identifier            `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Module                Reference              `bson:"module,omitempty" json:"module,omitempty"`
 	Status                GuidanceResponseStatus `bson:"status,omitempty" json:"status,omitempty"`
-	Subject               *Reference             `bson:"subject" json:"subject"`
-	Context               *Reference             `bson:"context" json:"context"`
-	OccurrenceDateTime    *string                `bson:"occurrenceDateTime" json:"occurrenceDateTime"`
-	Performer             *Reference             `bson:"performer" json:"performer"`
+	Subject               *Reference             `bson:"subject,omitempty" json:"subject,omitempty"`
+	Context               *Reference             `bson:"context,omitempty" json:"context,omitempty"`
+	OccurrenceDateTime    *string                `bson:"occurrenceDateTime,omitempty" json:"occurrenceDateTime,omitempty"`
+	Performer             *Reference             `bson:"performer,omitempty" json:"performer,omitempty"`
 	ReasonCodeableConcept *CodeableConcept       `bson:"reasonCodeableConcept,omitempty" json:"reasonCodeableConcept,omitempty"`
 	ReasonReference       *Reference             `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	Note                  []Annotation           `bson:"note" json:"note"`
-	EvaluationMessage     []Reference            `bson:"evaluationMessage" json:"evaluationMessage"`
-	OutputParameters      *Reference             `bson:"outputParameters" json:"outputParameters"`
-	Result                *Reference             `bson:"result" json:"result"`
-	DataRequirement       []DataRequirement      `bson:"dataRequirement" json:"dataRequirement"`
+	Note                  []Annotation           `bson:"note,omitempty" json:"note,omitempty"`
+	EvaluationMessage     []Reference            `bson:"evaluationMessage,omitempty" json:"evaluationMessage,omitempty"`
+	OutputParameters      *Reference             `bson:"outputParameters,omitempty" json:"outputParameters,omitempty"`
+	Result                *Reference             `bson:"result,omitempty" json:"result,omitempty"`
+	DataRequirement       []DataRequirement      `bson:"dataRequirement,omitempty" json:"dataRequirement,omitempty"`
 }
 
 // OtherGuidanceResponse is a helper type to use the default implementations of Marshall and Unmarshal
