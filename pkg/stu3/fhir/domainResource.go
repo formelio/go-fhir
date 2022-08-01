@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // DomainResource is documented here http://hl7.org/fhir/StructureDefinition/DomainResource
 type DomainResource struct {
@@ -11,8 +14,8 @@ type DomainResource struct {
 	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 }
 
 // OtherDomainResource is a helper type to use the default implementations of Marshall and Unmarshal
@@ -31,13 +34,17 @@ func (r DomainResource) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherDomainResource
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherDomainResource
 	}{
 		OtherDomainResource: OtherDomainResource(r),
 		ResourceType:        "DomainResource",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into DomainResource

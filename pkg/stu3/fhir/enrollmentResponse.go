@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // EnrollmentResponse is documented here http://hl7.org/fhir/StructureDefinition/EnrollmentResponse
 type EnrollmentResponse struct {
@@ -11,9 +14,9 @@ type EnrollmentResponse struct {
 	Text                *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained        []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained           []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension           []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier          []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension           []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier          []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status              *string           `bson:"status,omitempty" json:"status,omitempty"`
 	Request             *Reference        `bson:"request,omitempty" json:"request,omitempty"`
 	Outcome             *CodeableConcept  `bson:"outcome,omitempty" json:"outcome,omitempty"`
@@ -40,13 +43,17 @@ func (r EnrollmentResponse) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherEnrollmentResponse
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherEnrollmentResponse
 	}{
 		OtherEnrollmentResponse: OtherEnrollmentResponse(r),
 		ResourceType:            "EnrollmentResponse",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into EnrollmentResponse

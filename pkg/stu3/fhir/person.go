@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Person is documented here http://hl7.org/fhir/StructureDefinition/Person
 type Person struct {
@@ -11,23 +14,23 @@ type Person struct {
 	Text                 *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained         []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained            []IResource           `bson:"-,omitempty" json:"-,omitempty"`
-	Extension            []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension    []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier           []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Name                 []HumanName           `bson:"name,omitempty" json:"name,omitempty"`
-	Telecom              []ContactPoint        `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Extension            []*Extension          `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension    []*Extension          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier           []*Identifier         `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Name                 []*HumanName          `bson:"name,omitempty" json:"name,omitempty"`
+	Telecom              []*ContactPoint       `bson:"telecom,omitempty" json:"telecom,omitempty"`
 	Gender               *AdministrativeGender `bson:"gender,omitempty" json:"gender,omitempty"`
 	BirthDate            *string               `bson:"birthDate,omitempty" json:"birthDate,omitempty"`
-	Address              []Address             `bson:"address,omitempty" json:"address,omitempty"`
+	Address              []*Address            `bson:"address,omitempty" json:"address,omitempty"`
 	Photo                *Attachment           `bson:"photo,omitempty" json:"photo,omitempty"`
 	ManagingOrganization *Reference            `bson:"managingOrganization,omitempty" json:"managingOrganization,omitempty"`
 	Active               *bool                 `bson:"active,omitempty" json:"active,omitempty"`
-	Link                 []PersonLink          `bson:"link,omitempty" json:"link,omitempty"`
+	Link                 []*PersonLink         `bson:"link,omitempty" json:"link,omitempty"`
 }
 type PersonLink struct {
 	Id                *string                 `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Target            Reference               `bson:"target,omitempty" json:"target,omitempty"`
 	Assurance         *IdentityAssuranceLevel `bson:"assurance,omitempty" json:"assurance,omitempty"`
 }
@@ -48,13 +51,17 @@ func (r Person) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherPerson
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherPerson
 	}{
 		OtherPerson:  OtherPerson(r),
 		ResourceType: "Person",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Person

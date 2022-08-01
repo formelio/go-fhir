@@ -1,39 +1,42 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // AdverseEvent is documented here http://hl7.org/fhir/StructureDefinition/AdverseEvent
 type AdverseEvent struct {
-	Id                    *string                     `bson:"id,omitempty" json:"id,omitempty"`
-	Meta                  *Meta                       `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules         *string                     `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language              *string                     `bson:"language,omitempty" json:"language,omitempty"`
-	Text                  *Narrative                  `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained          []json.RawMessage           `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained             []IResource                 `bson:"-,omitempty" json:"-,omitempty"`
-	Extension             []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension     []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier            *Identifier                 `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Category              *AdverseEventCategory       `bson:"category,omitempty" json:"category,omitempty"`
-	Type                  *CodeableConcept            `bson:"type,omitempty" json:"type,omitempty"`
-	Subject               *Reference                  `bson:"subject,omitempty" json:"subject,omitempty"`
-	Date                  *string                     `bson:"date,omitempty" json:"date,omitempty"`
-	Reaction              []Reference                 `bson:"reaction,omitempty" json:"reaction,omitempty"`
-	Location              *Reference                  `bson:"location,omitempty" json:"location,omitempty"`
-	Seriousness           *CodeableConcept            `bson:"seriousness,omitempty" json:"seriousness,omitempty"`
-	Outcome               *CodeableConcept            `bson:"outcome,omitempty" json:"outcome,omitempty"`
-	Recorder              *Reference                  `bson:"recorder,omitempty" json:"recorder,omitempty"`
-	EventParticipant      *Reference                  `bson:"eventParticipant,omitempty" json:"eventParticipant,omitempty"`
-	Description           *string                     `bson:"description,omitempty" json:"description,omitempty"`
-	SuspectEntity         []AdverseEventSuspectEntity `bson:"suspectEntity,omitempty" json:"suspectEntity,omitempty"`
-	SubjectMedicalHistory []Reference                 `bson:"subjectMedicalHistory,omitempty" json:"subjectMedicalHistory,omitempty"`
-	ReferenceDocument     []Reference                 `bson:"referenceDocument,omitempty" json:"referenceDocument,omitempty"`
-	Study                 []Reference                 `bson:"study,omitempty" json:"study,omitempty"`
+	Id                    *string                      `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                  *Meta                        `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules         *string                      `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language              *string                      `bson:"language,omitempty" json:"language,omitempty"`
+	Text                  *Narrative                   `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained          []json.RawMessage            `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained             []IResource                  `bson:"-,omitempty" json:"-,omitempty"`
+	Extension             []*Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []*Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier            *Identifier                  `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Category              *AdverseEventCategory        `bson:"category,omitempty" json:"category,omitempty"`
+	Type                  *CodeableConcept             `bson:"type,omitempty" json:"type,omitempty"`
+	Subject               *Reference                   `bson:"subject,omitempty" json:"subject,omitempty"`
+	Date                  *string                      `bson:"date,omitempty" json:"date,omitempty"`
+	Reaction              []*Reference                 `bson:"reaction,omitempty" json:"reaction,omitempty"`
+	Location              *Reference                   `bson:"location,omitempty" json:"location,omitempty"`
+	Seriousness           *CodeableConcept             `bson:"seriousness,omitempty" json:"seriousness,omitempty"`
+	Outcome               *CodeableConcept             `bson:"outcome,omitempty" json:"outcome,omitempty"`
+	Recorder              *Reference                   `bson:"recorder,omitempty" json:"recorder,omitempty"`
+	EventParticipant      *Reference                   `bson:"eventParticipant,omitempty" json:"eventParticipant,omitempty"`
+	Description           *string                      `bson:"description,omitempty" json:"description,omitempty"`
+	SuspectEntity         []*AdverseEventSuspectEntity `bson:"suspectEntity,omitempty" json:"suspectEntity,omitempty"`
+	SubjectMedicalHistory []*Reference                 `bson:"subjectMedicalHistory,omitempty" json:"subjectMedicalHistory,omitempty"`
+	ReferenceDocument     []*Reference                 `bson:"referenceDocument,omitempty" json:"referenceDocument,omitempty"`
+	Study                 []*Reference                 `bson:"study,omitempty" json:"study,omitempty"`
 }
 type AdverseEventSuspectEntity struct {
 	Id                          *string                `bson:"id,omitempty" json:"id,omitempty"`
-	Extension                   []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension           []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension                   []*Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension           []*Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Instance                    Reference              `bson:"instance,omitempty" json:"instance,omitempty"`
 	Causality                   *AdverseEventCausality `bson:"causality,omitempty" json:"causality,omitempty"`
 	CausalityAssessment         *CodeableConcept       `bson:"causalityAssessment,omitempty" json:"causalityAssessment,omitempty"`
@@ -59,13 +62,17 @@ func (r AdverseEvent) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherAdverseEvent
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherAdverseEvent
 	}{
 		OtherAdverseEvent: OtherAdverseEvent(r),
 		ResourceType:      "AdverseEvent",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into AdverseEvent

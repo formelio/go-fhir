@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Sequence is documented here http://hl7.org/fhir/StructureDefinition/Sequence
 type Sequence struct {
@@ -11,9 +14,9 @@ type Sequence struct {
 	Text              *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource           `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension          `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier         `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Type              *string               `bson:"type,omitempty" json:"type,omitempty"`
 	CoordinateSystem  int                   `bson:"coordinateSystem,omitempty" json:"coordinateSystem,omitempty"`
 	Patient           *Reference            `bson:"patient,omitempty" json:"patient,omitempty"`
@@ -22,17 +25,17 @@ type Sequence struct {
 	Performer         *Reference            `bson:"performer,omitempty" json:"performer,omitempty"`
 	Quantity          *Quantity             `bson:"quantity,omitempty" json:"quantity,omitempty"`
 	ReferenceSeq      *SequenceReferenceSeq `bson:"referenceSeq,omitempty" json:"referenceSeq,omitempty"`
-	Variant           []SequenceVariant     `bson:"variant,omitempty" json:"variant,omitempty"`
+	Variant           []*SequenceVariant    `bson:"variant,omitempty" json:"variant,omitempty"`
 	ObservedSeq       *string               `bson:"observedSeq,omitempty" json:"observedSeq,omitempty"`
-	Quality           []SequenceQuality     `bson:"quality,omitempty" json:"quality,omitempty"`
+	Quality           []*SequenceQuality    `bson:"quality,omitempty" json:"quality,omitempty"`
 	ReadCoverage      *int                  `bson:"readCoverage,omitempty" json:"readCoverage,omitempty"`
-	Repository        []SequenceRepository  `bson:"repository,omitempty" json:"repository,omitempty"`
-	Pointer           []Reference           `bson:"pointer,omitempty" json:"pointer,omitempty"`
+	Repository        []*SequenceRepository `bson:"repository,omitempty" json:"repository,omitempty"`
+	Pointer           []*Reference          `bson:"pointer,omitempty" json:"pointer,omitempty"`
 }
 type SequenceReferenceSeq struct {
 	Id                  *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension           []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension           []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Chromosome          *CodeableConcept `bson:"chromosome,omitempty" json:"chromosome,omitempty"`
 	GenomeBuild         *string          `bson:"genomeBuild,omitempty" json:"genomeBuild,omitempty"`
 	ReferenceSeqId      *CodeableConcept `bson:"referenceSeqId,omitempty" json:"referenceSeqId,omitempty"`
@@ -43,20 +46,20 @@ type SequenceReferenceSeq struct {
 	WindowEnd           int              `bson:"windowEnd,omitempty" json:"windowEnd,omitempty"`
 }
 type SequenceVariant struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Start             *int        `bson:"start,omitempty" json:"start,omitempty"`
-	End               *int        `bson:"end,omitempty" json:"end,omitempty"`
-	ObservedAllele    *string     `bson:"observedAllele,omitempty" json:"observedAllele,omitempty"`
-	ReferenceAllele   *string     `bson:"referenceAllele,omitempty" json:"referenceAllele,omitempty"`
-	Cigar             *string     `bson:"cigar,omitempty" json:"cigar,omitempty"`
-	VariantPointer    *Reference  `bson:"variantPointer,omitempty" json:"variantPointer,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Start             *int         `bson:"start,omitempty" json:"start,omitempty"`
+	End               *int         `bson:"end,omitempty" json:"end,omitempty"`
+	ObservedAllele    *string      `bson:"observedAllele,omitempty" json:"observedAllele,omitempty"`
+	ReferenceAllele   *string      `bson:"referenceAllele,omitempty" json:"referenceAllele,omitempty"`
+	Cigar             *string      `bson:"cigar,omitempty" json:"cigar,omitempty"`
+	VariantPointer    *Reference   `bson:"variantPointer,omitempty" json:"variantPointer,omitempty"`
 }
 type SequenceQuality struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Type              string           `bson:"type,omitempty" json:"type,omitempty"`
 	StandardSequence  *CodeableConcept `bson:"standardSequence,omitempty" json:"standardSequence,omitempty"`
 	Start             *int             `bson:"start,omitempty" json:"start,omitempty"`
@@ -73,15 +76,15 @@ type SequenceQuality struct {
 	FScore            *float64         `bson:"fScore,omitempty" json:"fScore,omitempty"`
 }
 type SequenceRepository struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Type              string      `bson:"type,omitempty" json:"type,omitempty"`
-	Url               *string     `bson:"url,omitempty" json:"url,omitempty"`
-	Name              *string     `bson:"name,omitempty" json:"name,omitempty"`
-	DatasetId         *string     `bson:"datasetId,omitempty" json:"datasetId,omitempty"`
-	VariantsetId      *string     `bson:"variantsetId,omitempty" json:"variantsetId,omitempty"`
-	ReadsetId         *string     `bson:"readsetId,omitempty" json:"readsetId,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Type              string       `bson:"type,omitempty" json:"type,omitempty"`
+	Url               *string      `bson:"url,omitempty" json:"url,omitempty"`
+	Name              *string      `bson:"name,omitempty" json:"name,omitempty"`
+	DatasetId         *string      `bson:"datasetId,omitempty" json:"datasetId,omitempty"`
+	VariantsetId      *string      `bson:"variantsetId,omitempty" json:"variantsetId,omitempty"`
+	ReadsetId         *string      `bson:"readsetId,omitempty" json:"readsetId,omitempty"`
 }
 
 // OtherSequence is a helper type to use the default implementations of Marshall and Unmarshal
@@ -100,13 +103,17 @@ func (r Sequence) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherSequence
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherSequence
 	}{
 		OtherSequence: OtherSequence(r),
 		ResourceType:  "Sequence",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Sequence

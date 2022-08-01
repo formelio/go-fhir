@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Endpoint is documented here http://hl7.org/fhir/StructureDefinition/Endpoint
 type Endpoint struct {
@@ -11,19 +14,19 @@ type Endpoint struct {
 	Text                 *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained         []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained            []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension            []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension    []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier           []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension            []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension    []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier           []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status               EndpointStatus    `bson:"status,omitempty" json:"status,omitempty"`
 	ConnectionType       Coding            `bson:"connectionType,omitempty" json:"connectionType,omitempty"`
 	Name                 *string           `bson:"name,omitempty" json:"name,omitempty"`
 	ManagingOrganization *Reference        `bson:"managingOrganization,omitempty" json:"managingOrganization,omitempty"`
-	Contact              []ContactPoint    `bson:"contact,omitempty" json:"contact,omitempty"`
+	Contact              []*ContactPoint   `bson:"contact,omitempty" json:"contact,omitempty"`
 	Period               *Period           `bson:"period,omitempty" json:"period,omitempty"`
 	PayloadType          []CodeableConcept `bson:"payloadType,omitempty" json:"payloadType,omitempty"`
-	PayloadMimeType      []string          `bson:"payloadMimeType,omitempty" json:"payloadMimeType,omitempty"`
+	PayloadMimeType      []*string         `bson:"payloadMimeType,omitempty" json:"payloadMimeType,omitempty"`
 	Address              string            `bson:"address,omitempty" json:"address,omitempty"`
-	Header               []string          `bson:"header,omitempty" json:"header,omitempty"`
+	Header               []*string         `bson:"header,omitempty" json:"header,omitempty"`
 }
 
 // OtherEndpoint is a helper type to use the default implementations of Marshall and Unmarshal
@@ -42,13 +45,17 @@ func (r Endpoint) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherEndpoint
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherEndpoint
 	}{
 		OtherEndpoint: OtherEndpoint(r),
 		ResourceType:  "Endpoint",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Endpoint

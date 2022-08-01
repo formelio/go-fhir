@@ -1,25 +1,28 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // BodySite is documented here http://hl7.org/fhir/StructureDefinition/BodySite
 type BodySite struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Active            *bool             `bson:"active,omitempty" json:"active,omitempty"`
-	Code              *CodeableConcept  `bson:"code,omitempty" json:"code,omitempty"`
-	Qualifier         []CodeableConcept `bson:"qualifier,omitempty" json:"qualifier,omitempty"`
-	Description       *string           `bson:"description,omitempty" json:"description,omitempty"`
-	Image             []Attachment      `bson:"image,omitempty" json:"image,omitempty"`
-	Patient           Reference         `bson:"patient,omitempty" json:"patient,omitempty"`
+	Id                *string            `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta              `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string            `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string            `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative         `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage  `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource        `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []*Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Active            *bool              `bson:"active,omitempty" json:"active,omitempty"`
+	Code              *CodeableConcept   `bson:"code,omitempty" json:"code,omitempty"`
+	Qualifier         []*CodeableConcept `bson:"qualifier,omitempty" json:"qualifier,omitempty"`
+	Description       *string            `bson:"description,omitempty" json:"description,omitempty"`
+	Image             []*Attachment      `bson:"image,omitempty" json:"image,omitempty"`
+	Patient           Reference          `bson:"patient,omitempty" json:"patient,omitempty"`
 }
 
 // OtherBodySite is a helper type to use the default implementations of Marshall and Unmarshal
@@ -38,13 +41,17 @@ func (r BodySite) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherBodySite
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherBodySite
 	}{
 		OtherBodySite: OtherBodySite(r),
 		ResourceType:  "BodySite",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into BodySite

@@ -1,59 +1,62 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // CarePlan is documented here http://hl7.org/fhir/StructureDefinition/CarePlan
 type CarePlan struct {
-	Id                *string            `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta              `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string            `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string            `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative         `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained      []json.RawMessage  `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained         []IResource        `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension        `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension        `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Definition        []Reference        `bson:"definition,omitempty" json:"definition,omitempty"`
-	BasedOn           []Reference        `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	Replaces          []Reference        `bson:"replaces,omitempty" json:"replaces,omitempty"`
-	PartOf            []Reference        `bson:"partOf,omitempty" json:"partOf,omitempty"`
-	Status            CarePlanStatus     `bson:"status,omitempty" json:"status,omitempty"`
-	Intent            CarePlanIntent     `bson:"intent,omitempty" json:"intent,omitempty"`
-	Category          []CodeableConcept  `bson:"category,omitempty" json:"category,omitempty"`
-	Title             *string            `bson:"title,omitempty" json:"title,omitempty"`
-	Description       *string            `bson:"description,omitempty" json:"description,omitempty"`
-	Subject           Reference          `bson:"subject,omitempty" json:"subject,omitempty"`
-	Context           *Reference         `bson:"context,omitempty" json:"context,omitempty"`
-	Period            *Period            `bson:"period,omitempty" json:"period,omitempty"`
-	Author            []Reference        `bson:"author,omitempty" json:"author,omitempty"`
-	CareTeam          []Reference        `bson:"careTeam,omitempty" json:"careTeam,omitempty"`
-	Addresses         []Reference        `bson:"addresses,omitempty" json:"addresses,omitempty"`
-	SupportingInfo    []Reference        `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
-	Goal              []Reference        `bson:"goal,omitempty" json:"goal,omitempty"`
-	Activity          []CarePlanActivity `bson:"activity,omitempty" json:"activity,omitempty"`
-	Note              []Annotation       `bson:"note,omitempty" json:"note,omitempty"`
+	Id                *string             `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta               `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string             `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string             `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage   `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource         `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []*Extension        `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension        `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Definition        []*Reference        `bson:"definition,omitempty" json:"definition,omitempty"`
+	BasedOn           []*Reference        `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	Replaces          []*Reference        `bson:"replaces,omitempty" json:"replaces,omitempty"`
+	PartOf            []*Reference        `bson:"partOf,omitempty" json:"partOf,omitempty"`
+	Status            CarePlanStatus      `bson:"status,omitempty" json:"status,omitempty"`
+	Intent            CarePlanIntent      `bson:"intent,omitempty" json:"intent,omitempty"`
+	Category          []*CodeableConcept  `bson:"category,omitempty" json:"category,omitempty"`
+	Title             *string             `bson:"title,omitempty" json:"title,omitempty"`
+	Description       *string             `bson:"description,omitempty" json:"description,omitempty"`
+	Subject           Reference           `bson:"subject,omitempty" json:"subject,omitempty"`
+	Context           *Reference          `bson:"context,omitempty" json:"context,omitempty"`
+	Period            *Period             `bson:"period,omitempty" json:"period,omitempty"`
+	Author            []*Reference        `bson:"author,omitempty" json:"author,omitempty"`
+	CareTeam          []*Reference        `bson:"careTeam,omitempty" json:"careTeam,omitempty"`
+	Addresses         []*Reference        `bson:"addresses,omitempty" json:"addresses,omitempty"`
+	SupportingInfo    []*Reference        `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
+	Goal              []*Reference        `bson:"goal,omitempty" json:"goal,omitempty"`
+	Activity          []*CarePlanActivity `bson:"activity,omitempty" json:"activity,omitempty"`
+	Note              []*Annotation       `bson:"note,omitempty" json:"note,omitempty"`
 }
 type CarePlanActivity struct {
 	Id                     *string                 `bson:"id,omitempty" json:"id,omitempty"`
-	Extension              []Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension      []Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	OutcomeCodeableConcept []CodeableConcept       `bson:"outcomeCodeableConcept,omitempty" json:"outcomeCodeableConcept,omitempty"`
-	OutcomeReference       []Reference             `bson:"outcomeReference,omitempty" json:"outcomeReference,omitempty"`
-	Progress               []Annotation            `bson:"progress,omitempty" json:"progress,omitempty"`
+	Extension              []*Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension      []*Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	OutcomeCodeableConcept []*CodeableConcept      `bson:"outcomeCodeableConcept,omitempty" json:"outcomeCodeableConcept,omitempty"`
+	OutcomeReference       []*Reference            `bson:"outcomeReference,omitempty" json:"outcomeReference,omitempty"`
+	Progress               []*Annotation           `bson:"progress,omitempty" json:"progress,omitempty"`
 	Reference              *Reference              `bson:"reference,omitempty" json:"reference,omitempty"`
 	Detail                 *CarePlanActivityDetail `bson:"detail,omitempty" json:"detail,omitempty"`
 }
 type CarePlanActivityDetail struct {
 	Id                     *string                `bson:"id,omitempty" json:"id,omitempty"`
-	Extension              []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension      []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension              []*Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension      []*Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Category               *CodeableConcept       `bson:"category,omitempty" json:"category,omitempty"`
 	Definition             *Reference             `bson:"definition,omitempty" json:"definition,omitempty"`
 	Code                   *CodeableConcept       `bson:"code,omitempty" json:"code,omitempty"`
-	ReasonCode             []CodeableConcept      `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	ReasonReference        []Reference            `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	Goal                   []Reference            `bson:"goal,omitempty" json:"goal,omitempty"`
+	ReasonCode             []*CodeableConcept     `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
+	ReasonReference        []*Reference           `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
+	Goal                   []*Reference           `bson:"goal,omitempty" json:"goal,omitempty"`
 	Status                 CarePlanActivityStatus `bson:"status,omitempty" json:"status,omitempty"`
 	StatusReason           *string                `bson:"statusReason,omitempty" json:"statusReason,omitempty"`
 	Prohibited             *bool                  `bson:"prohibited,omitempty" json:"prohibited,omitempty"`
@@ -61,7 +64,7 @@ type CarePlanActivityDetail struct {
 	ScheduledPeriod        *Period                `bson:"scheduledPeriod,omitempty" json:"scheduledPeriod,omitempty"`
 	ScheduledString        *string                `bson:"scheduledString,omitempty" json:"scheduledString,omitempty"`
 	Location               *Reference             `bson:"location,omitempty" json:"location,omitempty"`
-	Performer              []Reference            `bson:"performer,omitempty" json:"performer,omitempty"`
+	Performer              []*Reference           `bson:"performer,omitempty" json:"performer,omitempty"`
 	ProductCodeableConcept *CodeableConcept       `bson:"productCodeableConcept,omitempty" json:"productCodeableConcept,omitempty"`
 	ProductReference       *Reference             `bson:"productReference,omitempty" json:"productReference,omitempty"`
 	DailyAmount            *Quantity              `bson:"dailyAmount,omitempty" json:"dailyAmount,omitempty"`
@@ -85,13 +88,17 @@ func (r CarePlan) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherCarePlan
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherCarePlan
 	}{
 		OtherCarePlan: OtherCarePlan(r),
 		ResourceType:  "CarePlan",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into CarePlan

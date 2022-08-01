@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Basic is documented here http://hl7.org/fhir/StructureDefinition/Basic
 type Basic struct {
@@ -11,9 +14,9 @@ type Basic struct {
 	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Code              CodeableConcept   `bson:"code,omitempty" json:"code,omitempty"`
 	Subject           *Reference        `bson:"subject,omitempty" json:"subject,omitempty"`
 	Created           *string           `bson:"created,omitempty" json:"created,omitempty"`
@@ -36,13 +39,17 @@ func (r Basic) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherBasic
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherBasic
 	}{
 		OtherBasic:   OtherBasic(r),
 		ResourceType: "Basic",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Basic

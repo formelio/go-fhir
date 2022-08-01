@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Condition is documented here http://hl7.org/fhir/StructureDefinition/Condition
 type Condition struct {
@@ -11,15 +14,15 @@ type Condition struct {
 	Text               *Narrative                   `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained       []json.RawMessage            `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained          []IResource                  `bson:"-,omitempty" json:"-,omitempty"`
-	Extension          []Extension                  `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension  []Extension                  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier         []Identifier                 `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension          []*Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension  []*Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier         []*Identifier                `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	ClinicalStatus     *string                      `bson:"clinicalStatus,omitempty" json:"clinicalStatus,omitempty"`
 	VerificationStatus *ConditionVerificationStatus `bson:"verificationStatus,omitempty" json:"verificationStatus,omitempty"`
-	Category           []CodeableConcept            `bson:"category,omitempty" json:"category,omitempty"`
+	Category           []*CodeableConcept           `bson:"category,omitempty" json:"category,omitempty"`
 	Severity           *CodeableConcept             `bson:"severity,omitempty" json:"severity,omitempty"`
 	Code               *CodeableConcept             `bson:"code,omitempty" json:"code,omitempty"`
-	BodySite           []CodeableConcept            `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
+	BodySite           []*CodeableConcept           `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
 	Subject            Reference                    `bson:"subject,omitempty" json:"subject,omitempty"`
 	Context            *Reference                   `bson:"context,omitempty" json:"context,omitempty"`
 	OnsetDateTime      *string                      `bson:"onsetDateTime,omitempty" json:"onsetDateTime,omitempty"`
@@ -36,22 +39,22 @@ type Condition struct {
 	AssertedDate       *string                      `bson:"assertedDate,omitempty" json:"assertedDate,omitempty"`
 	Asserter           *Reference                   `bson:"asserter,omitempty" json:"asserter,omitempty"`
 	Stage              *ConditionStage              `bson:"stage,omitempty" json:"stage,omitempty"`
-	Evidence           []ConditionEvidence          `bson:"evidence,omitempty" json:"evidence,omitempty"`
-	Note               []Annotation                 `bson:"note,omitempty" json:"note,omitempty"`
+	Evidence           []*ConditionEvidence         `bson:"evidence,omitempty" json:"evidence,omitempty"`
+	Note               []*Annotation                `bson:"note,omitempty" json:"note,omitempty"`
 }
 type ConditionStage struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Summary           *CodeableConcept `bson:"summary,omitempty" json:"summary,omitempty"`
-	Assessment        []Reference      `bson:"assessment,omitempty" json:"assessment,omitempty"`
+	Assessment        []*Reference     `bson:"assessment,omitempty" json:"assessment,omitempty"`
 }
 type ConditionEvidence struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Code              []CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
-	Detail            []Reference       `bson:"detail,omitempty" json:"detail,omitempty"`
+	Id                *string            `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Code              []*CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
+	Detail            []*Reference       `bson:"detail,omitempty" json:"detail,omitempty"`
 }
 
 // OtherCondition is a helper type to use the default implementations of Marshall and Unmarshal
@@ -70,13 +73,17 @@ func (r Condition) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherCondition
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherCondition
 	}{
 		OtherCondition: OtherCondition(r),
 		ResourceType:   "Condition",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Condition

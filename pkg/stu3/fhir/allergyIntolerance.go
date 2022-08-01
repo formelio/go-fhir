@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // AllergyIntolerance is documented here http://hl7.org/fhir/StructureDefinition/AllergyIntolerance
 type AllergyIntolerance struct {
@@ -11,13 +14,13 @@ type AllergyIntolerance struct {
 	Text               *Narrative                           `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained       []json.RawMessage                    `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained          []IResource                          `bson:"-,omitempty" json:"-,omitempty"`
-	Extension          []Extension                          `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension  []Extension                          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier         []Identifier                         `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension          []*Extension                         `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension  []*Extension                         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier         []*Identifier                        `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	ClinicalStatus     *AllergyIntoleranceClinicalStatus    `bson:"clinicalStatus,omitempty" json:"clinicalStatus,omitempty"`
 	VerificationStatus AllergyIntoleranceVerificationStatus `bson:"verificationStatus,omitempty" json:"verificationStatus,omitempty"`
 	Type               *AllergyIntoleranceType              `bson:"type,omitempty" json:"type,omitempty"`
-	Category           []AllergyIntoleranceCategory         `bson:"category,omitempty" json:"category,omitempty"`
+	Category           []*AllergyIntoleranceCategory        `bson:"category,omitempty" json:"category,omitempty"`
 	Criticality        *AllergyIntoleranceCriticality       `bson:"criticality,omitempty" json:"criticality,omitempty"`
 	Code               *CodeableConcept                     `bson:"code,omitempty" json:"code,omitempty"`
 	Patient            Reference                            `bson:"patient,omitempty" json:"patient,omitempty"`
@@ -30,20 +33,20 @@ type AllergyIntolerance struct {
 	Recorder           *Reference                           `bson:"recorder,omitempty" json:"recorder,omitempty"`
 	Asserter           *Reference                           `bson:"asserter,omitempty" json:"asserter,omitempty"`
 	LastOccurrence     *string                              `bson:"lastOccurrence,omitempty" json:"lastOccurrence,omitempty"`
-	Note               []Annotation                         `bson:"note,omitempty" json:"note,omitempty"`
-	Reaction           []AllergyIntoleranceReaction         `bson:"reaction,omitempty" json:"reaction,omitempty"`
+	Note               []*Annotation                        `bson:"note,omitempty" json:"note,omitempty"`
+	Reaction           []*AllergyIntoleranceReaction        `bson:"reaction,omitempty" json:"reaction,omitempty"`
 }
 type AllergyIntoleranceReaction struct {
 	Id                *string                     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Substance         *CodeableConcept            `bson:"substance,omitempty" json:"substance,omitempty"`
 	Manifestation     []CodeableConcept           `bson:"manifestation,omitempty" json:"manifestation,omitempty"`
 	Description       *string                     `bson:"description,omitempty" json:"description,omitempty"`
 	Onset             *string                     `bson:"onset,omitempty" json:"onset,omitempty"`
 	Severity          *AllergyIntoleranceSeverity `bson:"severity,omitempty" json:"severity,omitempty"`
 	ExposureRoute     *CodeableConcept            `bson:"exposureRoute,omitempty" json:"exposureRoute,omitempty"`
-	Note              []Annotation                `bson:"note,omitempty" json:"note,omitempty"`
+	Note              []*Annotation               `bson:"note,omitempty" json:"note,omitempty"`
 }
 
 // OtherAllergyIntolerance is a helper type to use the default implementations of Marshall and Unmarshal
@@ -62,13 +65,17 @@ func (r AllergyIntolerance) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherAllergyIntolerance
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherAllergyIntolerance
 	}{
 		OtherAllergyIntolerance: OtherAllergyIntolerance(r),
 		ResourceType:            "AllergyIntolerance",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into AllergyIntolerance

@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // EligibilityRequest is documented here http://hl7.org/fhir/StructureDefinition/EligibilityRequest
 type EligibilityRequest struct {
@@ -11,9 +14,9 @@ type EligibilityRequest struct {
 	Text                *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained        []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained           []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension           []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier          []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension           []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier          []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status              *string           `bson:"status,omitempty" json:"status,omitempty"`
 	Priority            *CodeableConcept  `bson:"priority,omitempty" json:"priority,omitempty"`
 	Patient             *Reference        `bson:"patient,omitempty" json:"patient,omitempty"`
@@ -47,13 +50,17 @@ func (r EligibilityRequest) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherEligibilityRequest
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherEligibilityRequest
 	}{
 		OtherEligibilityRequest: OtherEligibilityRequest(r),
 		ResourceType:            "EligibilityRequest",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into EligibilityRequest

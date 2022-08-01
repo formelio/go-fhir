@@ -3,7 +3,7 @@ package fhir
 // ParameterDefinition is documented here http://hl7.org/fhir/StructureDefinition/ParameterDefinition
 type ParameterDefinition struct {
 	Id            *string               `bson:"id,omitempty" json:"id,omitempty"`
-	Extension     []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	Extension     []*Extension          `bson:"extension,omitempty" json:"extension,omitempty"`
 	Name          *string               `bson:"name,omitempty" json:"name,omitempty"`
 	Use           OperationParameterUse `bson:"use,omitempty" json:"use,omitempty"`
 	Min           *int                  `bson:"min,omitempty" json:"min,omitempty"`

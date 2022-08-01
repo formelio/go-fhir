@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // CodeSystem is documented here http://hl7.org/fhir/StructureDefinition/CodeSystem
 type CodeSystem struct {
@@ -11,8 +14,8 @@ type CodeSystem struct {
 	Text              *Narrative                  `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage           `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource                 `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Url               *string                     `bson:"url,omitempty" json:"url,omitempty"`
 	Identifier        *Identifier                 `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Version           *string                     `bson:"version,omitempty" json:"version,omitempty"`
@@ -22,10 +25,10 @@ type CodeSystem struct {
 	Experimental      *bool                       `bson:"experimental,omitempty" json:"experimental,omitempty"`
 	Date              *string                     `bson:"date,omitempty" json:"date,omitempty"`
 	Publisher         *string                     `bson:"publisher,omitempty" json:"publisher,omitempty"`
-	Contact           []ContactDetail             `bson:"contact,omitempty" json:"contact,omitempty"`
+	Contact           []*ContactDetail            `bson:"contact,omitempty" json:"contact,omitempty"`
 	Description       *string                     `bson:"description,omitempty" json:"description,omitempty"`
-	UseContext        []UsageContext              `bson:"useContext,omitempty" json:"useContext,omitempty"`
-	Jurisdiction      []CodeableConcept           `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	UseContext        []*UsageContext             `bson:"useContext,omitempty" json:"useContext,omitempty"`
+	Jurisdiction      []*CodeableConcept          `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
 	Purpose           *string                     `bson:"purpose,omitempty" json:"purpose,omitempty"`
 	Copyright         *string                     `bson:"copyright,omitempty" json:"copyright,omitempty"`
 	CaseSensitive     *bool                       `bson:"caseSensitive,omitempty" json:"caseSensitive,omitempty"`
@@ -35,14 +38,14 @@ type CodeSystem struct {
 	VersionNeeded     *bool                       `bson:"versionNeeded,omitempty" json:"versionNeeded,omitempty"`
 	Content           CodeSystemContentMode       `bson:"content,omitempty" json:"content,omitempty"`
 	Count             *int                        `bson:"count,omitempty" json:"count,omitempty"`
-	Filter            []CodeSystemFilter          `bson:"filter,omitempty" json:"filter,omitempty"`
-	Property          []CodeSystemProperty        `bson:"property,omitempty" json:"property,omitempty"`
-	Concept           []CodeSystemConcept         `bson:"concept,omitempty" json:"concept,omitempty"`
+	Filter            []*CodeSystemFilter         `bson:"filter,omitempty" json:"filter,omitempty"`
+	Property          []*CodeSystemProperty       `bson:"property,omitempty" json:"property,omitempty"`
+	Concept           []*CodeSystemConcept        `bson:"concept,omitempty" json:"concept,omitempty"`
 }
 type CodeSystemFilter struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Code              string           `bson:"code,omitempty" json:"code,omitempty"`
 	Description       *string          `bson:"description,omitempty" json:"description,omitempty"`
 	Operator          []FilterOperator `bson:"operator,omitempty" json:"operator,omitempty"`
@@ -50,43 +53,43 @@ type CodeSystemFilter struct {
 }
 type CodeSystemProperty struct {
 	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension  `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Code              string       `bson:"code,omitempty" json:"code,omitempty"`
 	Uri               *string      `bson:"uri,omitempty" json:"uri,omitempty"`
 	Description       *string      `bson:"description,omitempty" json:"description,omitempty"`
 	Type              PropertyType `bson:"type,omitempty" json:"type,omitempty"`
 }
 type CodeSystemConcept struct {
-	Id                *string                        `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                    `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                    `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Code              string                         `bson:"code,omitempty" json:"code,omitempty"`
-	Display           *string                        `bson:"display,omitempty" json:"display,omitempty"`
-	Definition        *string                        `bson:"definition,omitempty" json:"definition,omitempty"`
-	Designation       []CodeSystemConceptDesignation `bson:"designation,omitempty" json:"designation,omitempty"`
-	Property          []CodeSystemConceptProperty    `bson:"property,omitempty" json:"property,omitempty"`
-	Concept           []CodeSystemConcept            `bson:"concept,omitempty" json:"concept,omitempty"`
+	Id                *string                         `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension                    `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                    `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Code              string                          `bson:"code,omitempty" json:"code,omitempty"`
+	Display           *string                         `bson:"display,omitempty" json:"display,omitempty"`
+	Definition        *string                         `bson:"definition,omitempty" json:"definition,omitempty"`
+	Designation       []*CodeSystemConceptDesignation `bson:"designation,omitempty" json:"designation,omitempty"`
+	Property          []*CodeSystemConceptProperty    `bson:"property,omitempty" json:"property,omitempty"`
+	Concept           []*CodeSystemConcept            `bson:"concept,omitempty" json:"concept,omitempty"`
 }
 type CodeSystemConceptDesignation struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Language          *string     `bson:"language,omitempty" json:"language,omitempty"`
-	Use               *Coding     `bson:"use,omitempty" json:"use,omitempty"`
-	Value             string      `bson:"value,omitempty" json:"value,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Language          *string      `bson:"language,omitempty" json:"language,omitempty"`
+	Use               *Coding      `bson:"use,omitempty" json:"use,omitempty"`
+	Value             string       `bson:"value,omitempty" json:"value,omitempty"`
 }
 type CodeSystemConceptProperty struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Code              string      `bson:"code,omitempty" json:"code,omitempty"`
-	ValueCode         *string     `bson:"valueCode,omitempty" json:"valueCode,omitempty"`
-	ValueCoding       *Coding     `bson:"valueCoding,omitempty" json:"valueCoding,omitempty"`
-	ValueString       *string     `bson:"valueString,omitempty" json:"valueString,omitempty"`
-	ValueInteger      *int        `bson:"valueInteger,omitempty" json:"valueInteger,omitempty"`
-	ValueBoolean      *bool       `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
-	ValueDateTime     *string     `bson:"valueDateTime,omitempty" json:"valueDateTime,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Code              string       `bson:"code,omitempty" json:"code,omitempty"`
+	ValueCode         *string      `bson:"valueCode,omitempty" json:"valueCode,omitempty"`
+	ValueCoding       *Coding      `bson:"valueCoding,omitempty" json:"valueCoding,omitempty"`
+	ValueString       *string      `bson:"valueString,omitempty" json:"valueString,omitempty"`
+	ValueInteger      *int         `bson:"valueInteger,omitempty" json:"valueInteger,omitempty"`
+	ValueBoolean      *bool        `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
+	ValueDateTime     *string      `bson:"valueDateTime,omitempty" json:"valueDateTime,omitempty"`
 }
 
 // OtherCodeSystem is a helper type to use the default implementations of Marshall and Unmarshal
@@ -105,13 +108,17 @@ func (r CodeSystem) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherCodeSystem
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherCodeSystem
 	}{
 		OtherCodeSystem: OtherCodeSystem(r),
 		ResourceType:    "CodeSystem",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into CodeSystem

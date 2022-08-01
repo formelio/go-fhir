@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Flag is documented here http://hl7.org/fhir/StructureDefinition/Flag
 type Flag struct {
@@ -11,9 +14,9 @@ type Flag struct {
 	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status            FlagStatus        `bson:"status,omitempty" json:"status,omitempty"`
 	Category          *CodeableConcept  `bson:"category,omitempty" json:"category,omitempty"`
 	Code              CodeableConcept   `bson:"code,omitempty" json:"code,omitempty"`
@@ -39,13 +42,17 @@ func (r Flag) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherFlag
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherFlag
 	}{
 		OtherFlag:    OtherFlag(r),
 		ResourceType: "Flag",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Flag

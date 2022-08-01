@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // SupplyDelivery is documented here http://hl7.org/fhir/StructureDefinition/SupplyDelivery
 type SupplyDelivery struct {
@@ -11,11 +14,11 @@ type SupplyDelivery struct {
 	Text               *Narrative                  `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained       []json.RawMessage           `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained          []IResource                 `bson:"-,omitempty" json:"-,omitempty"`
-	Extension          []Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension  []Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension          []*Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension  []*Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identifier         *Identifier                 `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	BasedOn            []Reference                 `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	PartOf             []Reference                 `bson:"partOf,omitempty" json:"partOf,omitempty"`
+	BasedOn            []*Reference                `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	PartOf             []*Reference                `bson:"partOf,omitempty" json:"partOf,omitempty"`
 	Status             *SupplyDeliveryStatus       `bson:"status,omitempty" json:"status,omitempty"`
 	Patient            *Reference                  `bson:"patient,omitempty" json:"patient,omitempty"`
 	Type               *CodeableConcept            `bson:"type,omitempty" json:"type,omitempty"`
@@ -25,12 +28,12 @@ type SupplyDelivery struct {
 	OccurrenceTiming   *Timing                     `bson:"occurrenceTiming,omitempty" json:"occurrenceTiming,omitempty"`
 	Supplier           *Reference                  `bson:"supplier,omitempty" json:"supplier,omitempty"`
 	Destination        *Reference                  `bson:"destination,omitempty" json:"destination,omitempty"`
-	Receiver           []Reference                 `bson:"receiver,omitempty" json:"receiver,omitempty"`
+	Receiver           []*Reference                `bson:"receiver,omitempty" json:"receiver,omitempty"`
 }
 type SupplyDeliverySuppliedItem struct {
 	Id                  *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension           []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension           []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Quantity            *Quantity        `bson:"quantity,omitempty" json:"quantity,omitempty"`
 	ItemCodeableConcept *CodeableConcept `bson:"itemCodeableConcept,omitempty" json:"itemCodeableConcept,omitempty"`
 	ItemReference       *Reference       `bson:"itemReference,omitempty" json:"itemReference,omitempty"`
@@ -52,13 +55,17 @@ func (r SupplyDelivery) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherSupplyDelivery
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherSupplyDelivery
 	}{
 		OtherSupplyDelivery: OtherSupplyDelivery(r),
 		ResourceType:        "SupplyDelivery",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into SupplyDelivery

@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // OperationOutcome is documented here http://hl7.org/fhir/StructureDefinition/OperationOutcome
 type OperationOutcome struct {
@@ -11,20 +14,20 @@ type OperationOutcome struct {
 	Text              *Narrative              `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage       `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource             `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Issue             []OperationOutcomeIssue `bson:"issue,omitempty" json:"issue,omitempty"`
 }
 type OperationOutcomeIssue struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Severity          IssueSeverity    `bson:"severity,omitempty" json:"severity,omitempty"`
 	Code              IssueType        `bson:"code,omitempty" json:"code,omitempty"`
 	Details           *CodeableConcept `bson:"details,omitempty" json:"details,omitempty"`
 	Diagnostics       *string          `bson:"diagnostics,omitempty" json:"diagnostics,omitempty"`
-	Location          []string         `bson:"location,omitempty" json:"location,omitempty"`
-	Expression        []string         `bson:"expression,omitempty" json:"expression,omitempty"`
+	Location          []*string        `bson:"location,omitempty" json:"location,omitempty"`
+	Expression        []*string        `bson:"expression,omitempty" json:"expression,omitempty"`
 }
 
 // OtherOperationOutcome is a helper type to use the default implementations of Marshall and Unmarshal
@@ -43,13 +46,17 @@ func (r OperationOutcome) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherOperationOutcome
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherOperationOutcome
 	}{
 		OtherOperationOutcome: OtherOperationOutcome(r),
 		ResourceType:          "OperationOutcome",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into OperationOutcome

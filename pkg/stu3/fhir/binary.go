@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Binary is documented here http://hl7.org/fhir/StructureDefinition/Binary
 type Binary struct {
@@ -19,13 +22,17 @@ type OtherBinary Binary
 // MarshalJSON marshals the given Binary as JSON into a byte slice
 func (r Binary) MarshalJSON() ([]byte, error) {
 	// If the field has contained resources, we need to marshal them individually and store them in .RawContained
-	return json.Marshal(struct {
-		OtherBinary
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherBinary
 	}{
 		OtherBinary:  OtherBinary(r),
 		ResourceType: "Binary",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Binary

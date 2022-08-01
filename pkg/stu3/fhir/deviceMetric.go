@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // DeviceMetric is documented here http://hl7.org/fhir/StructureDefinition/DeviceMetric
 type DeviceMetric struct {
@@ -11,8 +14,8 @@ type DeviceMetric struct {
 	Text              *Narrative                     `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage              `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource                    `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension                    `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                    `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension                   `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                   `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identifier        Identifier                     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Type              CodeableConcept                `bson:"type,omitempty" json:"type,omitempty"`
 	Unit              *CodeableConcept               `bson:"unit,omitempty" json:"unit,omitempty"`
@@ -22,12 +25,12 @@ type DeviceMetric struct {
 	Color             *DeviceMetricColor             `bson:"color,omitempty" json:"color,omitempty"`
 	Category          DeviceMetricCategory           `bson:"category,omitempty" json:"category,omitempty"`
 	MeasurementPeriod *Timing                        `bson:"measurementPeriod,omitempty" json:"measurementPeriod,omitempty"`
-	Calibration       []DeviceMetricCalibration      `bson:"calibration,omitempty" json:"calibration,omitempty"`
+	Calibration       []*DeviceMetricCalibration     `bson:"calibration,omitempty" json:"calibration,omitempty"`
 }
 type DeviceMetricCalibration struct {
 	Id                *string                       `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                   `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                   `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension                  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Type              *DeviceMetricCalibrationType  `bson:"type,omitempty" json:"type,omitempty"`
 	State             *DeviceMetricCalibrationState `bson:"state,omitempty" json:"state,omitempty"`
 	Time              *string                       `bson:"time,omitempty" json:"time,omitempty"`
@@ -49,13 +52,17 @@ func (r DeviceMetric) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherDeviceMetric
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherDeviceMetric
 	}{
 		OtherDeviceMetric: OtherDeviceMetric(r),
 		ResourceType:      "DeviceMetric",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into DeviceMetric

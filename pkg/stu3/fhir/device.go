@@ -1,40 +1,43 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Device is documented here http://hl7.org/fhir/StructureDefinition/Device
 type Device struct {
-	Id                *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Udi               *DeviceUdi        `bson:"udi,omitempty" json:"udi,omitempty"`
-	Status            *FHIRDeviceStatus `bson:"status,omitempty" json:"status,omitempty"`
-	Type              *CodeableConcept  `bson:"type,omitempty" json:"type,omitempty"`
-	LotNumber         *string           `bson:"lotNumber,omitempty" json:"lotNumber,omitempty"`
-	Manufacturer      *string           `bson:"manufacturer,omitempty" json:"manufacturer,omitempty"`
-	ManufactureDate   *string           `bson:"manufactureDate,omitempty" json:"manufactureDate,omitempty"`
-	ExpirationDate    *string           `bson:"expirationDate,omitempty" json:"expirationDate,omitempty"`
-	Model             *string           `bson:"model,omitempty" json:"model,omitempty"`
-	Version           *string           `bson:"version,omitempty" json:"version,omitempty"`
-	Patient           *Reference        `bson:"patient,omitempty" json:"patient,omitempty"`
-	Owner             *Reference        `bson:"owner,omitempty" json:"owner,omitempty"`
-	Contact           []ContactPoint    `bson:"contact,omitempty" json:"contact,omitempty"`
-	Location          *Reference        `bson:"location,omitempty" json:"location,omitempty"`
-	Url               *string           `bson:"url,omitempty" json:"url,omitempty"`
-	Note              []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
-	Safety            []CodeableConcept `bson:"safety,omitempty" json:"safety,omitempty"`
+	Id                *string            `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta              `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string            `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string            `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative         `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage  `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource        `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []*Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Udi               *DeviceUdi         `bson:"udi,omitempty" json:"udi,omitempty"`
+	Status            *FHIRDeviceStatus  `bson:"status,omitempty" json:"status,omitempty"`
+	Type              *CodeableConcept   `bson:"type,omitempty" json:"type,omitempty"`
+	LotNumber         *string            `bson:"lotNumber,omitempty" json:"lotNumber,omitempty"`
+	Manufacturer      *string            `bson:"manufacturer,omitempty" json:"manufacturer,omitempty"`
+	ManufactureDate   *string            `bson:"manufactureDate,omitempty" json:"manufactureDate,omitempty"`
+	ExpirationDate    *string            `bson:"expirationDate,omitempty" json:"expirationDate,omitempty"`
+	Model             *string            `bson:"model,omitempty" json:"model,omitempty"`
+	Version           *string            `bson:"version,omitempty" json:"version,omitempty"`
+	Patient           *Reference         `bson:"patient,omitempty" json:"patient,omitempty"`
+	Owner             *Reference         `bson:"owner,omitempty" json:"owner,omitempty"`
+	Contact           []*ContactPoint    `bson:"contact,omitempty" json:"contact,omitempty"`
+	Location          *Reference         `bson:"location,omitempty" json:"location,omitempty"`
+	Url               *string            `bson:"url,omitempty" json:"url,omitempty"`
+	Note              []*Annotation      `bson:"note,omitempty" json:"note,omitempty"`
+	Safety            []*CodeableConcept `bson:"safety,omitempty" json:"safety,omitempty"`
 }
 type DeviceUdi struct {
 	Id                *string       `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension   `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension   `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension  `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	DeviceIdentifier  *string       `bson:"deviceIdentifier,omitempty" json:"deviceIdentifier,omitempty"`
 	Name              *string       `bson:"name,omitempty" json:"name,omitempty"`
 	Jurisdiction      *string       `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
@@ -60,13 +63,17 @@ func (r Device) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherDevice
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherDevice
 	}{
 		OtherDevice:  OtherDevice(r),
 		ResourceType: "Device",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Device

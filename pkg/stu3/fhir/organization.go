@@ -1,36 +1,39 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Organization is documented here http://hl7.org/fhir/StructureDefinition/Organization
 type Organization struct {
-	Id                *string               `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string               `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained      []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained         []IResource           `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Active            *bool                 `bson:"active,omitempty" json:"active,omitempty"`
-	Type              []CodeableConcept     `bson:"type,omitempty" json:"type,omitempty"`
-	Name              *string               `bson:"name,omitempty" json:"name,omitempty"`
-	Alias             []string              `bson:"alias,omitempty" json:"alias,omitempty"`
-	Telecom           []ContactPoint        `bson:"telecom,omitempty" json:"telecom,omitempty"`
-	Address           []Address             `bson:"address,omitempty" json:"address,omitempty"`
-	PartOf            *Reference            `bson:"partOf,omitempty" json:"partOf,omitempty"`
-	Contact           []OrganizationContact `bson:"contact,omitempty" json:"contact,omitempty"`
-	Endpoint          []Reference           `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
+	Id                *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                  `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource            `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []*Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Active            *bool                  `bson:"active,omitempty" json:"active,omitempty"`
+	Type              []*CodeableConcept     `bson:"type,omitempty" json:"type,omitempty"`
+	Name              *string                `bson:"name,omitempty" json:"name,omitempty"`
+	Alias             []*string              `bson:"alias,omitempty" json:"alias,omitempty"`
+	Telecom           []*ContactPoint        `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Address           []*Address             `bson:"address,omitempty" json:"address,omitempty"`
+	PartOf            *Reference             `bson:"partOf,omitempty" json:"partOf,omitempty"`
+	Contact           []*OrganizationContact `bson:"contact,omitempty" json:"contact,omitempty"`
+	Endpoint          []*Reference           `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
 }
 type OrganizationContact struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Purpose           *CodeableConcept `bson:"purpose,omitempty" json:"purpose,omitempty"`
 	Name              *HumanName       `bson:"name,omitempty" json:"name,omitempty"`
-	Telecom           []ContactPoint   `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Telecom           []*ContactPoint  `bson:"telecom,omitempty" json:"telecom,omitempty"`
 	Address           *Address         `bson:"address,omitempty" json:"address,omitempty"`
 }
 
@@ -50,13 +53,17 @@ func (r Organization) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherOrganization
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherOrganization
 	}{
 		OtherOrganization: OtherOrganization(r),
 		ResourceType:      "Organization",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Organization

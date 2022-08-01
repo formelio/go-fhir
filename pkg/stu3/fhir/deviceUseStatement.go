@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // DeviceUseStatement is documented here http://hl7.org/fhir/StructureDefinition/DeviceUseStatement
 type DeviceUseStatement struct {
@@ -11,9 +14,9 @@ type DeviceUseStatement struct {
 	Text              *Narrative               `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage        `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource              `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension              `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier             `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier            `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status            DeviceUseStatementStatus `bson:"status,omitempty" json:"status,omitempty"`
 	Subject           Reference                `bson:"subject,omitempty" json:"subject,omitempty"`
 	WhenUsed          *Period                  `bson:"whenUsed,omitempty" json:"whenUsed,omitempty"`
@@ -23,9 +26,9 @@ type DeviceUseStatement struct {
 	RecordedOn        *string                  `bson:"recordedOn,omitempty" json:"recordedOn,omitempty"`
 	Source            *Reference               `bson:"source,omitempty" json:"source,omitempty"`
 	Device            Reference                `bson:"device,omitempty" json:"device,omitempty"`
-	Indication        []CodeableConcept        `bson:"indication,omitempty" json:"indication,omitempty"`
+	Indication        []*CodeableConcept       `bson:"indication,omitempty" json:"indication,omitempty"`
 	BodySite          *CodeableConcept         `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
-	Note              []Annotation             `bson:"note,omitempty" json:"note,omitempty"`
+	Note              []*Annotation            `bson:"note,omitempty" json:"note,omitempty"`
 }
 
 // OtherDeviceUseStatement is a helper type to use the default implementations of Marshall and Unmarshal
@@ -44,13 +47,17 @@ func (r DeviceUseStatement) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherDeviceUseStatement
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherDeviceUseStatement
 	}{
 		OtherDeviceUseStatement: OtherDeviceUseStatement(r),
 		ResourceType:            "DeviceUseStatement",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into DeviceUseStatement

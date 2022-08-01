@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Location is documented here http://hl7.org/fhir/StructureDefinition/Location
 type Location struct {
@@ -11,31 +14,31 @@ type Location struct {
 	Text                 *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained         []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained            []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension            []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension    []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier           []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension            []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension    []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier           []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status               *LocationStatus   `bson:"status,omitempty" json:"status,omitempty"`
 	OperationalStatus    *Coding           `bson:"operationalStatus,omitempty" json:"operationalStatus,omitempty"`
 	Name                 *string           `bson:"name,omitempty" json:"name,omitempty"`
-	Alias                []string          `bson:"alias,omitempty" json:"alias,omitempty"`
+	Alias                []*string         `bson:"alias,omitempty" json:"alias,omitempty"`
 	Description          *string           `bson:"description,omitempty" json:"description,omitempty"`
 	Mode                 *LocationMode     `bson:"mode,omitempty" json:"mode,omitempty"`
 	Type                 *CodeableConcept  `bson:"type,omitempty" json:"type,omitempty"`
-	Telecom              []ContactPoint    `bson:"telecom,omitempty" json:"telecom,omitempty"`
+	Telecom              []*ContactPoint   `bson:"telecom,omitempty" json:"telecom,omitempty"`
 	Address              *Address          `bson:"address,omitempty" json:"address,omitempty"`
 	PhysicalType         *CodeableConcept  `bson:"physicalType,omitempty" json:"physicalType,omitempty"`
 	Position             *LocationPosition `bson:"position,omitempty" json:"position,omitempty"`
 	ManagingOrganization *Reference        `bson:"managingOrganization,omitempty" json:"managingOrganization,omitempty"`
 	PartOf               *Reference        `bson:"partOf,omitempty" json:"partOf,omitempty"`
-	Endpoint             []Reference       `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
+	Endpoint             []*Reference      `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
 }
 type LocationPosition struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Longitude         float64     `bson:"longitude,omitempty" json:"longitude,omitempty"`
-	Latitude          float64     `bson:"latitude,omitempty" json:"latitude,omitempty"`
-	Altitude          *float64    `bson:"altitude,omitempty" json:"altitude,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Longitude         float64      `bson:"longitude,omitempty" json:"longitude,omitempty"`
+	Latitude          float64      `bson:"latitude,omitempty" json:"latitude,omitempty"`
+	Altitude          *float64     `bson:"altitude,omitempty" json:"altitude,omitempty"`
 }
 
 // OtherLocation is a helper type to use the default implementations of Marshall and Unmarshal
@@ -54,13 +57,17 @@ func (r Location) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherLocation
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherLocation
 	}{
 		OtherLocation: OtherLocation(r),
 		ResourceType:  "Location",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Location

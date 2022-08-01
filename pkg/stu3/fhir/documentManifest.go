@@ -1,44 +1,47 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // DocumentManifest is documented here http://hl7.org/fhir/StructureDefinition/DocumentManifest
 type DocumentManifest struct {
-	Id                *string                   `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                     `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string                   `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string                   `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained      []json.RawMessage         `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained         []IResource               `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	MasterIdentifier  *Identifier               `bson:"masterIdentifier,omitempty" json:"masterIdentifier,omitempty"`
-	Identifier        []Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status            DocumentReferenceStatus   `bson:"status,omitempty" json:"status,omitempty"`
-	Type              *CodeableConcept          `bson:"type,omitempty" json:"type,omitempty"`
-	Subject           *Reference                `bson:"subject,omitempty" json:"subject,omitempty"`
-	Created           *string                   `bson:"created,omitempty" json:"created,omitempty"`
-	Author            []Reference               `bson:"author,omitempty" json:"author,omitempty"`
-	Recipient         []Reference               `bson:"recipient,omitempty" json:"recipient,omitempty"`
-	Source            *string                   `bson:"source,omitempty" json:"source,omitempty"`
-	Description       *string                   `bson:"description,omitempty" json:"description,omitempty"`
-	Content           []DocumentManifestContent `bson:"content,omitempty" json:"content,omitempty"`
-	Related           []DocumentManifestRelated `bson:"related,omitempty" json:"related,omitempty"`
+	Id                *string                    `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                      `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                    `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                    `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative                 `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage          `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource                `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []*Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	MasterIdentifier  *Identifier                `bson:"masterIdentifier,omitempty" json:"masterIdentifier,omitempty"`
+	Identifier        []*Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Status            DocumentReferenceStatus    `bson:"status,omitempty" json:"status,omitempty"`
+	Type              *CodeableConcept           `bson:"type,omitempty" json:"type,omitempty"`
+	Subject           *Reference                 `bson:"subject,omitempty" json:"subject,omitempty"`
+	Created           *string                    `bson:"created,omitempty" json:"created,omitempty"`
+	Author            []*Reference               `bson:"author,omitempty" json:"author,omitempty"`
+	Recipient         []*Reference               `bson:"recipient,omitempty" json:"recipient,omitempty"`
+	Source            *string                    `bson:"source,omitempty" json:"source,omitempty"`
+	Description       *string                    `bson:"description,omitempty" json:"description,omitempty"`
+	Content           []DocumentManifestContent  `bson:"content,omitempty" json:"content,omitempty"`
+	Related           []*DocumentManifestRelated `bson:"related,omitempty" json:"related,omitempty"`
 }
 type DocumentManifestContent struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	PAttachment       *Attachment `bson:"pAttachment,omitempty" json:"pAttachment,omitempty"`
-	PReference        *Reference  `bson:"pReference,omitempty" json:"pReference,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	PAttachment       *Attachment  `bson:"pAttachment,omitempty" json:"pAttachment,omitempty"`
+	PReference        *Reference   `bson:"pReference,omitempty" json:"pReference,omitempty"`
 }
 type DocumentManifestRelated struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        *Identifier `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Ref               *Reference  `bson:"ref,omitempty" json:"ref,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        *Identifier  `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Ref               *Reference   `bson:"ref,omitempty" json:"ref,omitempty"`
 }
 
 // OtherDocumentManifest is a helper type to use the default implementations of Marshall and Unmarshal
@@ -57,13 +60,17 @@ func (r DocumentManifest) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherDocumentManifest
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherDocumentManifest
 	}{
 		OtherDocumentManifest: OtherDocumentManifest(r),
 		ResourceType:          "DocumentManifest",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into DocumentManifest

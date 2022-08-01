@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // ImagingManifest is documented here http://hl7.org/fhir/StructureDefinition/ImagingManifest
 type ImagingManifest struct {
@@ -11,8 +14,8 @@ type ImagingManifest struct {
 	Text              *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource            `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identifier        *Identifier            `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Patient           Reference              `bson:"patient,omitempty" json:"patient,omitempty"`
 	AuthoringTime     *string                `bson:"authoringTime,omitempty" json:"authoringTime,omitempty"`
@@ -22,27 +25,27 @@ type ImagingManifest struct {
 }
 type ImagingManifestStudy struct {
 	Id                *string                      `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                  `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                  `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension                 `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                 `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Uid               string                       `bson:"uid,omitempty" json:"uid,omitempty"`
 	ImagingStudy      *Reference                   `bson:"imagingStudy,omitempty" json:"imagingStudy,omitempty"`
-	Endpoint          []Reference                  `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
+	Endpoint          []*Reference                 `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
 	Series            []ImagingManifestStudySeries `bson:"series,omitempty" json:"series,omitempty"`
 }
 type ImagingManifestStudySeries struct {
 	Id                *string                              `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension                          `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                          `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension                         `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Uid               string                               `bson:"uid,omitempty" json:"uid,omitempty"`
-	Endpoint          []Reference                          `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
+	Endpoint          []*Reference                         `bson:"endpoint,omitempty" json:"endpoint,omitempty"`
 	Instance          []ImagingManifestStudySeriesInstance `bson:"instance,omitempty" json:"instance,omitempty"`
 }
 type ImagingManifestStudySeriesInstance struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	SopClass          string      `bson:"sopClass,omitempty" json:"sopClass,omitempty"`
-	Uid               string      `bson:"uid,omitempty" json:"uid,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	SopClass          string       `bson:"sopClass,omitempty" json:"sopClass,omitempty"`
+	Uid               string       `bson:"uid,omitempty" json:"uid,omitempty"`
 }
 
 // OtherImagingManifest is a helper type to use the default implementations of Marshall and Unmarshal
@@ -61,13 +64,17 @@ func (r ImagingManifest) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherImagingManifest
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherImagingManifest
 	}{
 		OtherImagingManifest: OtherImagingManifest(r),
 		ResourceType:         "ImagingManifest",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into ImagingManifest

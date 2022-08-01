@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // List is documented here http://hl7.org/fhir/StructureDefinition/List
 type List struct {
@@ -11,9 +14,9 @@ type List struct {
 	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status            ListStatus        `bson:"status,omitempty" json:"status,omitempty"`
 	Mode              ListMode          `bson:"mode,omitempty" json:"mode,omitempty"`
 	Title             *string           `bson:"title,omitempty" json:"title,omitempty"`
@@ -23,14 +26,14 @@ type List struct {
 	Date              *string           `bson:"date,omitempty" json:"date,omitempty"`
 	Source            *Reference        `bson:"source,omitempty" json:"source,omitempty"`
 	OrderedBy         *CodeableConcept  `bson:"orderedBy,omitempty" json:"orderedBy,omitempty"`
-	Note              []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
-	Entry             []ListEntry       `bson:"entry,omitempty" json:"entry,omitempty"`
+	Note              []*Annotation     `bson:"note,omitempty" json:"note,omitempty"`
+	Entry             []*ListEntry      `bson:"entry,omitempty" json:"entry,omitempty"`
 	EmptyReason       *CodeableConcept  `bson:"emptyReason,omitempty" json:"emptyReason,omitempty"`
 }
 type ListEntry struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Flag              *CodeableConcept `bson:"flag,omitempty" json:"flag,omitempty"`
 	Deleted           *bool            `bson:"deleted,omitempty" json:"deleted,omitempty"`
 	Date              *string          `bson:"date,omitempty" json:"date,omitempty"`
@@ -53,13 +56,17 @@ func (r List) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherList
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherList
 	}{
 		OtherList:    OtherList(r),
 		ResourceType: "List",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into List

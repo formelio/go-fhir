@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // PaymentNotice is documented here http://hl7.org/fhir/StructureDefinition/PaymentNotice
 type PaymentNotice struct {
@@ -11,9 +14,9 @@ type PaymentNotice struct {
 	Text              *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier     `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status            *string           `bson:"status,omitempty" json:"status,omitempty"`
 	Request           *Reference        `bson:"request,omitempty" json:"request,omitempty"`
 	Response          *Reference        `bson:"response,omitempty" json:"response,omitempty"`
@@ -41,13 +44,17 @@ func (r PaymentNotice) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherPaymentNotice
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherPaymentNotice
 	}{
 		OtherPaymentNotice: OtherPaymentNotice(r),
 		ResourceType:       "PaymentNotice",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into PaymentNotice

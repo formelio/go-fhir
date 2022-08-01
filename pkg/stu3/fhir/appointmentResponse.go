@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // AppointmentResponse is documented here http://hl7.org/fhir/StructureDefinition/AppointmentResponse
 type AppointmentResponse struct {
@@ -11,13 +14,13 @@ type AppointmentResponse struct {
 	Text              *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage   `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource         `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier        `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension        `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension        `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Appointment       Reference           `bson:"appointment,omitempty" json:"appointment,omitempty"`
 	Start             *string             `bson:"start,omitempty" json:"start,omitempty"`
 	End               *string             `bson:"end,omitempty" json:"end,omitempty"`
-	ParticipantType   []CodeableConcept   `bson:"participantType,omitempty" json:"participantType,omitempty"`
+	ParticipantType   []*CodeableConcept  `bson:"participantType,omitempty" json:"participantType,omitempty"`
 	Actor             *Reference          `bson:"actor,omitempty" json:"actor,omitempty"`
 	ParticipantStatus ParticipationStatus `bson:"participantStatus,omitempty" json:"participantStatus,omitempty"`
 	Comment           *string             `bson:"comment,omitempty" json:"comment,omitempty"`
@@ -39,13 +42,17 @@ func (r AppointmentResponse) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherAppointmentResponse
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherAppointmentResponse
 	}{
 		OtherAppointmentResponse: OtherAppointmentResponse(r),
 		ResourceType:             "AppointmentResponse",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into AppointmentResponse

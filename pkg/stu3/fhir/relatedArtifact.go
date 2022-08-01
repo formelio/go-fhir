@@ -3,7 +3,7 @@ package fhir
 // RelatedArtifact is documented here http://hl7.org/fhir/StructureDefinition/RelatedArtifact
 type RelatedArtifact struct {
 	Id        *string             `bson:"id,omitempty" json:"id,omitempty"`
-	Extension []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
+	Extension []*Extension        `bson:"extension,omitempty" json:"extension,omitempty"`
 	Type      RelatedArtifactType `bson:"type,omitempty" json:"type,omitempty"`
 	Display   *string             `bson:"display,omitempty" json:"display,omitempty"`
 	Citation  *string             `bson:"citation,omitempty" json:"citation,omitempty"`

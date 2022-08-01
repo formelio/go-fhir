@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // SupplyRequest is documented here http://hl7.org/fhir/StructureDefinition/SupplyRequest
 type SupplyRequest struct {
@@ -11,8 +14,8 @@ type SupplyRequest struct {
 	Text                  *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained          []json.RawMessage         `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained             []IResource               `bson:"-,omitempty" json:"-,omitempty"`
-	Extension             []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension     []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension             []*Extension              `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []*Extension              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Identifier            *Identifier               `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Status                *SupplyRequestStatus      `bson:"status,omitempty" json:"status,omitempty"`
 	Category              *CodeableConcept          `bson:"category,omitempty" json:"category,omitempty"`
@@ -23,7 +26,7 @@ type SupplyRequest struct {
 	OccurrenceTiming      *Timing                   `bson:"occurrenceTiming,omitempty" json:"occurrenceTiming,omitempty"`
 	AuthoredOn            *string                   `bson:"authoredOn,omitempty" json:"authoredOn,omitempty"`
 	Requester             *SupplyRequestRequester   `bson:"requester,omitempty" json:"requester,omitempty"`
-	Supplier              []Reference               `bson:"supplier,omitempty" json:"supplier,omitempty"`
+	Supplier              []*Reference              `bson:"supplier,omitempty" json:"supplier,omitempty"`
 	ReasonCodeableConcept *CodeableConcept          `bson:"reasonCodeableConcept,omitempty" json:"reasonCodeableConcept,omitempty"`
 	ReasonReference       *Reference                `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
 	DeliverFrom           *Reference                `bson:"deliverFrom,omitempty" json:"deliverFrom,omitempty"`
@@ -31,18 +34,18 @@ type SupplyRequest struct {
 }
 type SupplyRequestOrderedItem struct {
 	Id                  *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension           []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension           []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Quantity            Quantity         `bson:"quantity,omitempty" json:"quantity,omitempty"`
 	ItemCodeableConcept *CodeableConcept `bson:"itemCodeableConcept,omitempty" json:"itemCodeableConcept,omitempty"`
 	ItemReference       *Reference       `bson:"itemReference,omitempty" json:"itemReference,omitempty"`
 }
 type SupplyRequestRequester struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
-	OnBehalfOf        *Reference  `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Agent             Reference    `bson:"agent,omitempty" json:"agent,omitempty"`
+	OnBehalfOf        *Reference   `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
 }
 
 // OtherSupplyRequest is a helper type to use the default implementations of Marshall and Unmarshal
@@ -61,13 +64,17 @@ func (r SupplyRequest) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherSupplyRequest
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherSupplyRequest
 	}{
 		OtherSupplyRequest: OtherSupplyRequest(r),
 		ResourceType:       "SupplyRequest",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into SupplyRequest

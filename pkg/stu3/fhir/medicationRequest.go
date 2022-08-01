@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // MedicationRequest is documented here http://hl7.org/fhir/StructureDefinition/MedicationRequest
 type MedicationRequest struct {
@@ -11,11 +14,11 @@ type MedicationRequest struct {
 	Text                      *Narrative                        `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained              []json.RawMessage                 `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained                 []IResource                       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension                 []Extension                       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension         []Extension                       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier                []Identifier                      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Definition                []Reference                       `bson:"definition,omitempty" json:"definition,omitempty"`
-	BasedOn                   []Reference                       `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	Extension                 []*Extension                      `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension         []*Extension                      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier                []*Identifier                     `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Definition                []*Reference                      `bson:"definition,omitempty" json:"definition,omitempty"`
+	BasedOn                   []*Reference                      `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
 	GroupIdentifier           *Identifier                       `bson:"groupIdentifier,omitempty" json:"groupIdentifier,omitempty"`
 	Status                    *MedicationRequestStatus          `bson:"status,omitempty" json:"status,omitempty"`
 	Intent                    MedicationRequestIntent           `bson:"intent,omitempty" json:"intent,omitempty"`
@@ -25,41 +28,41 @@ type MedicationRequest struct {
 	MedicationReference       *Reference                        `bson:"medicationReference,omitempty" json:"medicationReference,omitempty"`
 	Subject                   Reference                         `bson:"subject,omitempty" json:"subject,omitempty"`
 	Context                   *Reference                        `bson:"context,omitempty" json:"context,omitempty"`
-	SupportingInformation     []Reference                       `bson:"supportingInformation,omitempty" json:"supportingInformation,omitempty"`
+	SupportingInformation     []*Reference                      `bson:"supportingInformation,omitempty" json:"supportingInformation,omitempty"`
 	AuthoredOn                *string                           `bson:"authoredOn,omitempty" json:"authoredOn,omitempty"`
 	Requester                 *MedicationRequestRequester       `bson:"requester,omitempty" json:"requester,omitempty"`
 	Recorder                  *Reference                        `bson:"recorder,omitempty" json:"recorder,omitempty"`
-	ReasonCode                []CodeableConcept                 `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	ReasonReference           []Reference                       `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	Note                      []Annotation                      `bson:"note,omitempty" json:"note,omitempty"`
-	DosageInstruction         []Dosage                          `bson:"dosageInstruction,omitempty" json:"dosageInstruction,omitempty"`
+	ReasonCode                []*CodeableConcept                `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
+	ReasonReference           []*Reference                      `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
+	Note                      []*Annotation                     `bson:"note,omitempty" json:"note,omitempty"`
+	DosageInstruction         []*Dosage                         `bson:"dosageInstruction,omitempty" json:"dosageInstruction,omitempty"`
 	DispenseRequest           *MedicationRequestDispenseRequest `bson:"dispenseRequest,omitempty" json:"dispenseRequest,omitempty"`
 	Substitution              *MedicationRequestSubstitution    `bson:"substitution,omitempty" json:"substitution,omitempty"`
 	PriorPrescription         *Reference                        `bson:"priorPrescription,omitempty" json:"priorPrescription,omitempty"`
-	DetectedIssue             []Reference                       `bson:"detectedIssue,omitempty" json:"detectedIssue,omitempty"`
-	EventHistory              []Reference                       `bson:"eventHistory,omitempty" json:"eventHistory,omitempty"`
+	DetectedIssue             []*Reference                      `bson:"detectedIssue,omitempty" json:"detectedIssue,omitempty"`
+	EventHistory              []*Reference                      `bson:"eventHistory,omitempty" json:"eventHistory,omitempty"`
 }
 type MedicationRequestRequester struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
-	OnBehalfOf        *Reference  `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Agent             Reference    `bson:"agent,omitempty" json:"agent,omitempty"`
+	OnBehalfOf        *Reference   `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
 }
 type MedicationRequestDispenseRequest struct {
-	Id                     *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension              []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension      []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	ValidityPeriod         *Period     `bson:"validityPeriod,omitempty" json:"validityPeriod,omitempty"`
-	NumberOfRepeatsAllowed *int        `bson:"numberOfRepeatsAllowed,omitempty" json:"numberOfRepeatsAllowed,omitempty"`
-	Quantity               *Quantity   `bson:"quantity,omitempty" json:"quantity,omitempty"`
-	ExpectedSupplyDuration *Duration   `bson:"expectedSupplyDuration,omitempty" json:"expectedSupplyDuration,omitempty"`
-	Performer              *Reference  `bson:"performer,omitempty" json:"performer,omitempty"`
+	Id                     *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension              []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension      []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	ValidityPeriod         *Period      `bson:"validityPeriod,omitempty" json:"validityPeriod,omitempty"`
+	NumberOfRepeatsAllowed *int         `bson:"numberOfRepeatsAllowed,omitempty" json:"numberOfRepeatsAllowed,omitempty"`
+	Quantity               *Quantity    `bson:"quantity,omitempty" json:"quantity,omitempty"`
+	ExpectedSupplyDuration *Duration    `bson:"expectedSupplyDuration,omitempty" json:"expectedSupplyDuration,omitempty"`
+	Performer              *Reference   `bson:"performer,omitempty" json:"performer,omitempty"`
 }
 type MedicationRequestSubstitution struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Allowed           bool             `bson:"allowed,omitempty" json:"allowed,omitempty"`
 	Reason            *CodeableConcept `bson:"reason,omitempty" json:"reason,omitempty"`
 }
@@ -80,13 +83,17 @@ func (r MedicationRequest) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherMedicationRequest
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherMedicationRequest
 	}{
 		OtherMedicationRequest: OtherMedicationRequest(r),
 		ResourceType:           "MedicationRequest",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into MedicationRequest

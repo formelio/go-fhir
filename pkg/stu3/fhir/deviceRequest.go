@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // DeviceRequest is documented here http://hl7.org/fhir/StructureDefinition/DeviceRequest
 type DeviceRequest struct {
@@ -11,12 +14,12 @@ type DeviceRequest struct {
 	Text                *Narrative              `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained        []json.RawMessage       `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained           []IResource             `bson:"-,omitempty" json:"-,omitempty"`
-	Extension           []Extension             `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension   []Extension             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier          []Identifier            `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Definition          []Reference             `bson:"definition,omitempty" json:"definition,omitempty"`
-	BasedOn             []Reference             `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	PriorRequest        []Reference             `bson:"priorRequest,omitempty" json:"priorRequest,omitempty"`
+	Extension           []*Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension   []*Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier          []*Identifier           `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Definition          []*Reference            `bson:"definition,omitempty" json:"definition,omitempty"`
+	BasedOn             []*Reference            `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	PriorRequest        []*Reference            `bson:"priorRequest,omitempty" json:"priorRequest,omitempty"`
 	GroupIdentifier     *Identifier             `bson:"groupIdentifier,omitempty" json:"groupIdentifier,omitempty"`
 	Status              *RequestStatus          `bson:"status,omitempty" json:"status,omitempty"`
 	Intent              CodeableConcept         `bson:"intent,omitempty" json:"intent,omitempty"`
@@ -32,18 +35,18 @@ type DeviceRequest struct {
 	Requester           *DeviceRequestRequester `bson:"requester,omitempty" json:"requester,omitempty"`
 	PerformerType       *CodeableConcept        `bson:"performerType,omitempty" json:"performerType,omitempty"`
 	Performer           *Reference              `bson:"performer,omitempty" json:"performer,omitempty"`
-	ReasonCode          []CodeableConcept       `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	ReasonReference     []Reference             `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	SupportingInfo      []Reference             `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
-	Note                []Annotation            `bson:"note,omitempty" json:"note,omitempty"`
-	RelevantHistory     []Reference             `bson:"relevantHistory,omitempty" json:"relevantHistory,omitempty"`
+	ReasonCode          []*CodeableConcept      `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
+	ReasonReference     []*Reference            `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
+	SupportingInfo      []*Reference            `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
+	Note                []*Annotation           `bson:"note,omitempty" json:"note,omitempty"`
+	RelevantHistory     []*Reference            `bson:"relevantHistory,omitempty" json:"relevantHistory,omitempty"`
 }
 type DeviceRequestRequester struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
-	OnBehalfOf        *Reference  `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Agent             Reference    `bson:"agent,omitempty" json:"agent,omitempty"`
+	OnBehalfOf        *Reference   `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
 }
 
 // OtherDeviceRequest is a helper type to use the default implementations of Marshall and Unmarshal
@@ -62,13 +65,17 @@ func (r DeviceRequest) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherDeviceRequest
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherDeviceRequest
 	}{
 		OtherDeviceRequest: OtherDeviceRequest(r),
 		ResourceType:       "DeviceRequest",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into DeviceRequest

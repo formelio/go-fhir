@@ -41,13 +41,17 @@ func (r <resourceType>) MarshalJSON() ([]byte, error) {
 		}
 	------------------
 
-	return json.Marshal(struct {
-		Other<resourceType>
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		Other<resourceType>
 	}{
 		Other<resourceType>: Other<resourceType>(r),
-		ResourceType:            "<resourceType>",
+		ResourceType: "<resourceType>",
 	})
+	return buffer.Bytes(), err
 }
 */
 func generateResourceMarshal(file *jen.File, resourceType string, hasContained bool) {
@@ -65,13 +69,17 @@ func generateResourceMarshal(file *jen.File, resourceType string, hasContained b
 			})
 		}
 
-		marshalBlock.Return().Qual("encoding/json", "Marshal").Call(jen.Struct(
-			jen.Id("Other"+resourceType),
+		marshalBlock.Id("buffer").Op(":=").Qual("bytes", "NewBuffer").Call(jen.Op("[]").Byte().Op("{}"))
+		marshalBlock.Id("jsonEncoder").Op(":=").Qual("encoding/json", "NewEncoder").Call(jen.Id("buffer"))
+		marshalBlock.Id("jsonEncoder").Dot("SetEscapeHTML").Call(jen.False())
+		marshalBlock.Id("err").Op(":=").Id("jsonEncoder").Dot("Encode").Call(jen.Struct(
 			jen.Id("ResourceType").String().Tag(map[string]string{"json": "resourceType"}),
+			jen.Id("Other"+resourceType),
 		).Values(jen.Dict{
-			jen.Id("Other" + resourceType): jen.Id("Other" + resourceType).Call(jen.Id("r")),
 			jen.Id("ResourceType"):         jen.Lit(resourceType),
+			jen.Id("Other" + resourceType): jen.Id("Other" + resourceType).Call(jen.Id("r")),
 		}))
+		marshalBlock.Return(jen.List(jen.Id("buffer").Dot("Bytes").Call(), jen.Id("err")))
 	})
 }
 
@@ -123,11 +131,12 @@ func generateTags(statement *jen.Statement, jsonTag string) {
 	statement.Tag(map[string]string{"json": jsonTag + ",omitempty", "bson": jsonTag + ",omitempty"})
 }
 
-// generates either a slice operator or a pointer operator
+// generates either a slice operator or a pointer operator or both
 func generateOperators(statement *jen.Statement, list, required bool) {
 	if list {
 		statement.Op("[]")
-	} else if !required {
+	}
+	if !required {
 		statement.Op("*")
 	}
 }

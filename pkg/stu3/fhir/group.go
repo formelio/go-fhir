@@ -1,32 +1,35 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Group is documented here http://hl7.org/fhir/StructureDefinition/Group
 type Group struct {
-	Id                *string               `bson:"id,omitempty" json:"id,omitempty"`
-	Meta              *Meta                 `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules     *string               `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language          *string               `bson:"language,omitempty" json:"language,omitempty"`
-	Text              *Narrative            `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained      []json.RawMessage     `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained         []IResource           `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Active            *bool                 `bson:"active,omitempty" json:"active,omitempty"`
-	Type              GroupType             `bson:"type,omitempty" json:"type,omitempty"`
-	Actual            bool                  `bson:"actual,omitempty" json:"actual,omitempty"`
-	Code              *CodeableConcept      `bson:"code,omitempty" json:"code,omitempty"`
-	Name              *string               `bson:"name,omitempty" json:"name,omitempty"`
-	Quantity          *int                  `bson:"quantity,omitempty" json:"quantity,omitempty"`
-	Characteristic    []GroupCharacteristic `bson:"characteristic,omitempty" json:"characteristic,omitempty"`
-	Member            []GroupMember         `bson:"member,omitempty" json:"member,omitempty"`
+	Id                *string                `bson:"id,omitempty" json:"id,omitempty"`
+	Meta              *Meta                  `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules     *string                `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language          *string                `bson:"language,omitempty" json:"language,omitempty"`
+	Text              *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained      []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained         []IResource            `bson:"-,omitempty" json:"-,omitempty"`
+	Extension         []*Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier          `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Active            *bool                  `bson:"active,omitempty" json:"active,omitempty"`
+	Type              GroupType              `bson:"type,omitempty" json:"type,omitempty"`
+	Actual            bool                   `bson:"actual,omitempty" json:"actual,omitempty"`
+	Code              *CodeableConcept       `bson:"code,omitempty" json:"code,omitempty"`
+	Name              *string                `bson:"name,omitempty" json:"name,omitempty"`
+	Quantity          *int                   `bson:"quantity,omitempty" json:"quantity,omitempty"`
+	Characteristic    []*GroupCharacteristic `bson:"characteristic,omitempty" json:"characteristic,omitempty"`
+	Member            []*GroupMember         `bson:"member,omitempty" json:"member,omitempty"`
 }
 type GroupCharacteristic struct {
 	Id                   *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension            []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension    []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension            []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension    []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Code                 CodeableConcept  `bson:"code,omitempty" json:"code,omitempty"`
 	ValueCodeableConcept *CodeableConcept `bson:"valueCodeableConcept,omitempty" json:"valueCodeableConcept,omitempty"`
 	ValueBoolean         *bool            `bson:"valueBoolean,omitempty" json:"valueBoolean,omitempty"`
@@ -36,12 +39,12 @@ type GroupCharacteristic struct {
 	Period               *Period          `bson:"period,omitempty" json:"period,omitempty"`
 }
 type GroupMember struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Entity            Reference   `bson:"entity,omitempty" json:"entity,omitempty"`
-	Period            *Period     `bson:"period,omitempty" json:"period,omitempty"`
-	Inactive          *bool       `bson:"inactive,omitempty" json:"inactive,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Entity            Reference    `bson:"entity,omitempty" json:"entity,omitempty"`
+	Period            *Period      `bson:"period,omitempty" json:"period,omitempty"`
+	Inactive          *bool        `bson:"inactive,omitempty" json:"inactive,omitempty"`
 }
 
 // OtherGroup is a helper type to use the default implementations of Marshall and Unmarshal
@@ -60,13 +63,17 @@ func (r Group) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherGroup
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherGroup
 	}{
 		OtherGroup:   OtherGroup(r),
 		ResourceType: "Group",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Group

@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // ImmunizationRecommendation is documented here http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
 type ImmunizationRecommendation struct {
@@ -11,41 +14,41 @@ type ImmunizationRecommendation struct {
 	Text              *Narrative                                 `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained      []json.RawMessage                          `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained         []IResource                                `bson:"-,omitempty" json:"-,omitempty"`
-	Extension         []Extension                                `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension                                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier        []Identifier                               `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension         []*Extension                               `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension                               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier        []*Identifier                              `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Patient           Reference                                  `bson:"patient,omitempty" json:"patient,omitempty"`
 	Recommendation    []ImmunizationRecommendationRecommendation `bson:"recommendation,omitempty" json:"recommendation,omitempty"`
 }
 type ImmunizationRecommendationRecommendation struct {
-	Id                           *string                                                 `bson:"id,omitempty" json:"id,omitempty"`
-	Extension                    []Extension                                             `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension            []Extension                                             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Date                         string                                                  `bson:"date,omitempty" json:"date,omitempty"`
-	VaccineCode                  *CodeableConcept                                        `bson:"vaccineCode,omitempty" json:"vaccineCode,omitempty"`
-	TargetDisease                *CodeableConcept                                        `bson:"targetDisease,omitempty" json:"targetDisease,omitempty"`
-	DoseNumber                   *int                                                    `bson:"doseNumber,omitempty" json:"doseNumber,omitempty"`
-	ForecastStatus               CodeableConcept                                         `bson:"forecastStatus,omitempty" json:"forecastStatus,omitempty"`
-	DateCriterion                []ImmunizationRecommendationRecommendationDateCriterion `bson:"dateCriterion,omitempty" json:"dateCriterion,omitempty"`
-	Protocol                     *ImmunizationRecommendationRecommendationProtocol       `bson:"protocol,omitempty" json:"protocol,omitempty"`
-	SupportingImmunization       []Reference                                             `bson:"supportingImmunization,omitempty" json:"supportingImmunization,omitempty"`
-	SupportingPatientInformation []Reference                                             `bson:"supportingPatientInformation,omitempty" json:"supportingPatientInformation,omitempty"`
+	Id                           *string                                                  `bson:"id,omitempty" json:"id,omitempty"`
+	Extension                    []*Extension                                             `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension            []*Extension                                             `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Date                         string                                                   `bson:"date,omitempty" json:"date,omitempty"`
+	VaccineCode                  *CodeableConcept                                         `bson:"vaccineCode,omitempty" json:"vaccineCode,omitempty"`
+	TargetDisease                *CodeableConcept                                         `bson:"targetDisease,omitempty" json:"targetDisease,omitempty"`
+	DoseNumber                   *int                                                     `bson:"doseNumber,omitempty" json:"doseNumber,omitempty"`
+	ForecastStatus               CodeableConcept                                          `bson:"forecastStatus,omitempty" json:"forecastStatus,omitempty"`
+	DateCriterion                []*ImmunizationRecommendationRecommendationDateCriterion `bson:"dateCriterion,omitempty" json:"dateCriterion,omitempty"`
+	Protocol                     *ImmunizationRecommendationRecommendationProtocol        `bson:"protocol,omitempty" json:"protocol,omitempty"`
+	SupportingImmunization       []*Reference                                             `bson:"supportingImmunization,omitempty" json:"supportingImmunization,omitempty"`
+	SupportingPatientInformation []*Reference                                             `bson:"supportingPatientInformation,omitempty" json:"supportingPatientInformation,omitempty"`
 }
 type ImmunizationRecommendationRecommendationDateCriterion struct {
 	Id                *string         `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension    `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension    `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Code              CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
 	Value             string          `bson:"value,omitempty" json:"value,omitempty"`
 }
 type ImmunizationRecommendationRecommendationProtocol struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	DoseSequence      *int        `bson:"doseSequence,omitempty" json:"doseSequence,omitempty"`
-	Description       *string     `bson:"description,omitempty" json:"description,omitempty"`
-	Authority         *Reference  `bson:"authority,omitempty" json:"authority,omitempty"`
-	Series            *string     `bson:"series,omitempty" json:"series,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	DoseSequence      *int         `bson:"doseSequence,omitempty" json:"doseSequence,omitempty"`
+	Description       *string      `bson:"description,omitempty" json:"description,omitempty"`
+	Authority         *Reference   `bson:"authority,omitempty" json:"authority,omitempty"`
+	Series            *string      `bson:"series,omitempty" json:"series,omitempty"`
 }
 
 // OtherImmunizationRecommendation is a helper type to use the default implementations of Marshall and Unmarshal
@@ -64,13 +67,17 @@ func (r ImmunizationRecommendation) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherImmunizationRecommendation
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherImmunizationRecommendation
 	}{
 		OtherImmunizationRecommendation: OtherImmunizationRecommendation(r),
 		ResourceType:                    "ImmunizationRecommendation",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into ImmunizationRecommendation

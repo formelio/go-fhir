@@ -1,39 +1,42 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // Goal is documented here http://hl7.org/fhir/StructureDefinition/Goal
 type Goal struct {
-	Id                   *string           `bson:"id,omitempty" json:"id,omitempty"`
-	Meta                 *Meta             `bson:"meta,omitempty" json:"meta,omitempty"`
-	ImplicitRules        *string           `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
-	Language             *string           `bson:"language,omitempty" json:"language,omitempty"`
-	Text                 *Narrative        `bson:"text,omitempty" json:"text,omitempty"`
-	RawContained         []json.RawMessage `bson:"contained,omitempty" json:"contained,omitempty"`
-	Contained            []IResource       `bson:"-,omitempty" json:"-,omitempty"`
-	Extension            []Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension    []Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier           []Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Status               GoalStatus        `bson:"status,omitempty" json:"status,omitempty"`
-	Category             []CodeableConcept `bson:"category,omitempty" json:"category,omitempty"`
-	Priority             *CodeableConcept  `bson:"priority,omitempty" json:"priority,omitempty"`
-	Description          CodeableConcept   `bson:"description,omitempty" json:"description,omitempty"`
-	Subject              *Reference        `bson:"subject,omitempty" json:"subject,omitempty"`
-	StartDate            *string           `bson:"startDate,omitempty" json:"startDate,omitempty"`
-	StartCodeableConcept *CodeableConcept  `bson:"startCodeableConcept,omitempty" json:"startCodeableConcept,omitempty"`
-	Target               *GoalTarget       `bson:"target,omitempty" json:"target,omitempty"`
-	StatusDate           *string           `bson:"statusDate,omitempty" json:"statusDate,omitempty"`
-	StatusReason         *string           `bson:"statusReason,omitempty" json:"statusReason,omitempty"`
-	ExpressedBy          *Reference        `bson:"expressedBy,omitempty" json:"expressedBy,omitempty"`
-	Addresses            []Reference       `bson:"addresses,omitempty" json:"addresses,omitempty"`
-	Note                 []Annotation      `bson:"note,omitempty" json:"note,omitempty"`
-	OutcomeCode          []CodeableConcept `bson:"outcomeCode,omitempty" json:"outcomeCode,omitempty"`
-	OutcomeReference     []Reference       `bson:"outcomeReference,omitempty" json:"outcomeReference,omitempty"`
+	Id                   *string            `bson:"id,omitempty" json:"id,omitempty"`
+	Meta                 *Meta              `bson:"meta,omitempty" json:"meta,omitempty"`
+	ImplicitRules        *string            `bson:"implicitRules,omitempty" json:"implicitRules,omitempty"`
+	Language             *string            `bson:"language,omitempty" json:"language,omitempty"`
+	Text                 *Narrative         `bson:"text,omitempty" json:"text,omitempty"`
+	RawContained         []json.RawMessage  `bson:"contained,omitempty" json:"contained,omitempty"`
+	Contained            []IResource        `bson:"-,omitempty" json:"-,omitempty"`
+	Extension            []*Extension       `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension    []*Extension       `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier           []*Identifier      `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Status               GoalStatus         `bson:"status,omitempty" json:"status,omitempty"`
+	Category             []*CodeableConcept `bson:"category,omitempty" json:"category,omitempty"`
+	Priority             *CodeableConcept   `bson:"priority,omitempty" json:"priority,omitempty"`
+	Description          CodeableConcept    `bson:"description,omitempty" json:"description,omitempty"`
+	Subject              *Reference         `bson:"subject,omitempty" json:"subject,omitempty"`
+	StartDate            *string            `bson:"startDate,omitempty" json:"startDate,omitempty"`
+	StartCodeableConcept *CodeableConcept   `bson:"startCodeableConcept,omitempty" json:"startCodeableConcept,omitempty"`
+	Target               *GoalTarget        `bson:"target,omitempty" json:"target,omitempty"`
+	StatusDate           *string            `bson:"statusDate,omitempty" json:"statusDate,omitempty"`
+	StatusReason         *string            `bson:"statusReason,omitempty" json:"statusReason,omitempty"`
+	ExpressedBy          *Reference         `bson:"expressedBy,omitempty" json:"expressedBy,omitempty"`
+	Addresses            []*Reference       `bson:"addresses,omitempty" json:"addresses,omitempty"`
+	Note                 []*Annotation      `bson:"note,omitempty" json:"note,omitempty"`
+	OutcomeCode          []*CodeableConcept `bson:"outcomeCode,omitempty" json:"outcomeCode,omitempty"`
+	OutcomeReference     []*Reference       `bson:"outcomeReference,omitempty" json:"outcomeReference,omitempty"`
 }
 type GoalTarget struct {
 	Id                    *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension             []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension     []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension             []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Measure               *CodeableConcept `bson:"measure,omitempty" json:"measure,omitempty"`
 	DetailQuantity        *Quantity        `bson:"detailQuantity,omitempty" json:"detailQuantity,omitempty"`
 	DetailRange           *Range           `bson:"detailRange,omitempty" json:"detailRange,omitempty"`
@@ -58,13 +61,17 @@ func (r Goal) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherGoal
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherGoal
 	}{
 		OtherGoal:    OtherGoal(r),
 		ResourceType: "Goal",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into Goal

@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // GuidanceResponse is documented here http://hl7.org/fhir/StructureDefinition/GuidanceResponse
 type GuidanceResponse struct {
@@ -11,8 +14,8 @@ type GuidanceResponse struct {
 	Text                  *Narrative             `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained          []json.RawMessage      `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained             []IResource            `bson:"-,omitempty" json:"-,omitempty"`
-	Extension             []Extension            `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension     []Extension            `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension             []*Extension           `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []*Extension           `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	RequestId             *string                `bson:"requestId,omitempty" json:"requestId,omitempty"`
 	Identifier            *Identifier            `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Module                Reference              `bson:"module,omitempty" json:"module,omitempty"`
@@ -23,11 +26,11 @@ type GuidanceResponse struct {
 	Performer             *Reference             `bson:"performer,omitempty" json:"performer,omitempty"`
 	ReasonCodeableConcept *CodeableConcept       `bson:"reasonCodeableConcept,omitempty" json:"reasonCodeableConcept,omitempty"`
 	ReasonReference       *Reference             `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	Note                  []Annotation           `bson:"note,omitempty" json:"note,omitempty"`
-	EvaluationMessage     []Reference            `bson:"evaluationMessage,omitempty" json:"evaluationMessage,omitempty"`
+	Note                  []*Annotation          `bson:"note,omitempty" json:"note,omitempty"`
+	EvaluationMessage     []*Reference           `bson:"evaluationMessage,omitempty" json:"evaluationMessage,omitempty"`
 	OutputParameters      *Reference             `bson:"outputParameters,omitempty" json:"outputParameters,omitempty"`
 	Result                *Reference             `bson:"result,omitempty" json:"result,omitempty"`
-	DataRequirement       []DataRequirement      `bson:"dataRequirement,omitempty" json:"dataRequirement,omitempty"`
+	DataRequirement       []*DataRequirement     `bson:"dataRequirement,omitempty" json:"dataRequirement,omitempty"`
 }
 
 // OtherGuidanceResponse is a helper type to use the default implementations of Marshall and Unmarshal
@@ -46,13 +49,17 @@ func (r GuidanceResponse) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherGuidanceResponse
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherGuidanceResponse
 	}{
 		OtherGuidanceResponse: OtherGuidanceResponse(r),
 		ResourceType:          "GuidanceResponse",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into GuidanceResponse

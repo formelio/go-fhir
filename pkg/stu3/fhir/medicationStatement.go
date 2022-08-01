@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // MedicationStatement is documented here http://hl7.org/fhir/StructureDefinition/MedicationStatement
 type MedicationStatement struct {
@@ -11,11 +14,11 @@ type MedicationStatement struct {
 	Text                      *Narrative                `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained              []json.RawMessage         `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained                 []IResource               `bson:"-,omitempty" json:"-,omitempty"`
-	Extension                 []Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension         []Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier                []Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	BasedOn                   []Reference               `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	PartOf                    []Reference               `bson:"partOf,omitempty" json:"partOf,omitempty"`
+	Extension                 []*Extension              `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension         []*Extension              `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier                []*Identifier             `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	BasedOn                   []*Reference              `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	PartOf                    []*Reference              `bson:"partOf,omitempty" json:"partOf,omitempty"`
 	Context                   *Reference                `bson:"context,omitempty" json:"context,omitempty"`
 	Status                    MedicationStatementStatus `bson:"status,omitempty" json:"status,omitempty"`
 	Category                  *CodeableConcept          `bson:"category,omitempty" json:"category,omitempty"`
@@ -26,13 +29,13 @@ type MedicationStatement struct {
 	DateAsserted              *string                   `bson:"dateAsserted,omitempty" json:"dateAsserted,omitempty"`
 	InformationSource         *Reference                `bson:"informationSource,omitempty" json:"informationSource,omitempty"`
 	Subject                   Reference                 `bson:"subject,omitempty" json:"subject,omitempty"`
-	DerivedFrom               []Reference               `bson:"derivedFrom,omitempty" json:"derivedFrom,omitempty"`
+	DerivedFrom               []*Reference              `bson:"derivedFrom,omitempty" json:"derivedFrom,omitempty"`
 	Taken                     MedicationStatementTaken  `bson:"taken,omitempty" json:"taken,omitempty"`
-	ReasonNotTaken            []CodeableConcept         `bson:"reasonNotTaken,omitempty" json:"reasonNotTaken,omitempty"`
-	ReasonCode                []CodeableConcept         `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	ReasonReference           []Reference               `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	Note                      []Annotation              `bson:"note,omitempty" json:"note,omitempty"`
-	Dosage                    []Dosage                  `bson:"dosage,omitempty" json:"dosage,omitempty"`
+	ReasonNotTaken            []*CodeableConcept        `bson:"reasonNotTaken,omitempty" json:"reasonNotTaken,omitempty"`
+	ReasonCode                []*CodeableConcept        `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
+	ReasonReference           []*Reference              `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
+	Note                      []*Annotation             `bson:"note,omitempty" json:"note,omitempty"`
+	Dosage                    []*Dosage                 `bson:"dosage,omitempty" json:"dosage,omitempty"`
 }
 
 // OtherMedicationStatement is a helper type to use the default implementations of Marshall and Unmarshal
@@ -51,13 +54,17 @@ func (r MedicationStatement) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherMedicationStatement
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherMedicationStatement
 	}{
 		OtherMedicationStatement: OtherMedicationStatement(r),
 		ResourceType:             "MedicationStatement",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into MedicationStatement

@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // ProcedureRequest is documented here http://hl7.org/fhir/StructureDefinition/ProcedureRequest
 type ProcedureRequest struct {
@@ -11,18 +14,18 @@ type ProcedureRequest struct {
 	Text                    *Narrative                 `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained            []json.RawMessage          `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained               []IResource                `bson:"-,omitempty" json:"-,omitempty"`
-	Extension               []Extension                `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension       []Extension                `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier              []Identifier               `bson:"identifier,omitempty" json:"identifier,omitempty"`
-	Definition              []Reference                `bson:"definition,omitempty" json:"definition,omitempty"`
-	BasedOn                 []Reference                `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
-	Replaces                []Reference                `bson:"replaces,omitempty" json:"replaces,omitempty"`
+	Extension               []*Extension               `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension       []*Extension               `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier              []*Identifier              `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Definition              []*Reference               `bson:"definition,omitempty" json:"definition,omitempty"`
+	BasedOn                 []*Reference               `bson:"basedOn,omitempty" json:"basedOn,omitempty"`
+	Replaces                []*Reference               `bson:"replaces,omitempty" json:"replaces,omitempty"`
 	Requisition             *Identifier                `bson:"requisition,omitempty" json:"requisition,omitempty"`
 	Status                  RequestStatus              `bson:"status,omitempty" json:"status,omitempty"`
 	Intent                  RequestIntent              `bson:"intent,omitempty" json:"intent,omitempty"`
 	Priority                *RequestPriority           `bson:"priority,omitempty" json:"priority,omitempty"`
 	DoNotPerform            *bool                      `bson:"doNotPerform,omitempty" json:"doNotPerform,omitempty"`
-	Category                []CodeableConcept          `bson:"category,omitempty" json:"category,omitempty"`
+	Category                []*CodeableConcept         `bson:"category,omitempty" json:"category,omitempty"`
 	Code                    CodeableConcept            `bson:"code,omitempty" json:"code,omitempty"`
 	Subject                 Reference                  `bson:"subject,omitempty" json:"subject,omitempty"`
 	Context                 *Reference                 `bson:"context,omitempty" json:"context,omitempty"`
@@ -35,20 +38,20 @@ type ProcedureRequest struct {
 	Requester               *ProcedureRequestRequester `bson:"requester,omitempty" json:"requester,omitempty"`
 	PerformerType           *CodeableConcept           `bson:"performerType,omitempty" json:"performerType,omitempty"`
 	Performer               *Reference                 `bson:"performer,omitempty" json:"performer,omitempty"`
-	ReasonCode              []CodeableConcept          `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
-	ReasonReference         []Reference                `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
-	SupportingInfo          []Reference                `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
-	Specimen                []Reference                `bson:"specimen,omitempty" json:"specimen,omitempty"`
-	BodySite                []CodeableConcept          `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
-	Note                    []Annotation               `bson:"note,omitempty" json:"note,omitempty"`
-	RelevantHistory         []Reference                `bson:"relevantHistory,omitempty" json:"relevantHistory,omitempty"`
+	ReasonCode              []*CodeableConcept         `bson:"reasonCode,omitempty" json:"reasonCode,omitempty"`
+	ReasonReference         []*Reference               `bson:"reasonReference,omitempty" json:"reasonReference,omitempty"`
+	SupportingInfo          []*Reference               `bson:"supportingInfo,omitempty" json:"supportingInfo,omitempty"`
+	Specimen                []*Reference               `bson:"specimen,omitempty" json:"specimen,omitempty"`
+	BodySite                []*CodeableConcept         `bson:"bodySite,omitempty" json:"bodySite,omitempty"`
+	Note                    []*Annotation              `bson:"note,omitempty" json:"note,omitempty"`
+	RelevantHistory         []*Reference               `bson:"relevantHistory,omitempty" json:"relevantHistory,omitempty"`
 }
 type ProcedureRequestRequester struct {
-	Id                *string     `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Agent             Reference   `bson:"agent,omitempty" json:"agent,omitempty"`
-	OnBehalfOf        *Reference  `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
+	Id                *string      `bson:"id,omitempty" json:"id,omitempty"`
+	Extension         []*Extension `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Agent             Reference    `bson:"agent,omitempty" json:"agent,omitempty"`
+	OnBehalfOf        *Reference   `bson:"onBehalfOf,omitempty" json:"onBehalfOf,omitempty"`
 }
 
 // OtherProcedureRequest is a helper type to use the default implementations of Marshall and Unmarshal
@@ -67,13 +70,17 @@ func (r ProcedureRequest) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherProcedureRequest
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherProcedureRequest
 	}{
 		OtherProcedureRequest: OtherProcedureRequest(r),
 		ResourceType:          "ProcedureRequest",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into ProcedureRequest

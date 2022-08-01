@@ -1,6 +1,9 @@
 package fhir
 
-import "encoding/json"
+import (
+	"bytes"
+	"encoding/json"
+)
 
 // ResearchStudy is documented here http://hl7.org/fhir/StructureDefinition/ResearchStudy
 type ResearchStudy struct {
@@ -11,33 +14,33 @@ type ResearchStudy struct {
 	Text                  *Narrative          `bson:"text,omitempty" json:"text,omitempty"`
 	RawContained          []json.RawMessage   `bson:"contained,omitempty" json:"contained,omitempty"`
 	Contained             []IResource         `bson:"-,omitempty" json:"-,omitempty"`
-	Extension             []Extension         `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension     []Extension         `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
-	Identifier            []Identifier        `bson:"identifier,omitempty" json:"identifier,omitempty"`
+	Extension             []*Extension        `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension     []*Extension        `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Identifier            []*Identifier       `bson:"identifier,omitempty" json:"identifier,omitempty"`
 	Title                 *string             `bson:"title,omitempty" json:"title,omitempty"`
-	Protocol              []Reference         `bson:"protocol,omitempty" json:"protocol,omitempty"`
-	PartOf                []Reference         `bson:"partOf,omitempty" json:"partOf,omitempty"`
+	Protocol              []*Reference        `bson:"protocol,omitempty" json:"protocol,omitempty"`
+	PartOf                []*Reference        `bson:"partOf,omitempty" json:"partOf,omitempty"`
 	Status                ResearchStudyStatus `bson:"status,omitempty" json:"status,omitempty"`
-	Category              []CodeableConcept   `bson:"category,omitempty" json:"category,omitempty"`
-	Focus                 []CodeableConcept   `bson:"focus,omitempty" json:"focus,omitempty"`
-	Contact               []ContactDetail     `bson:"contact,omitempty" json:"contact,omitempty"`
-	RelatedArtifact       []RelatedArtifact   `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
-	Keyword               []CodeableConcept   `bson:"keyword,omitempty" json:"keyword,omitempty"`
-	Jurisdiction          []CodeableConcept   `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
+	Category              []*CodeableConcept  `bson:"category,omitempty" json:"category,omitempty"`
+	Focus                 []*CodeableConcept  `bson:"focus,omitempty" json:"focus,omitempty"`
+	Contact               []*ContactDetail    `bson:"contact,omitempty" json:"contact,omitempty"`
+	RelatedArtifact       []*RelatedArtifact  `bson:"relatedArtifact,omitempty" json:"relatedArtifact,omitempty"`
+	Keyword               []*CodeableConcept  `bson:"keyword,omitempty" json:"keyword,omitempty"`
+	Jurisdiction          []*CodeableConcept  `bson:"jurisdiction,omitempty" json:"jurisdiction,omitempty"`
 	Description           *string             `bson:"description,omitempty" json:"description,omitempty"`
-	Enrollment            []Reference         `bson:"enrollment,omitempty" json:"enrollment,omitempty"`
+	Enrollment            []*Reference        `bson:"enrollment,omitempty" json:"enrollment,omitempty"`
 	Period                *Period             `bson:"period,omitempty" json:"period,omitempty"`
 	Sponsor               *Reference          `bson:"sponsor,omitempty" json:"sponsor,omitempty"`
 	PrincipalInvestigator *Reference          `bson:"principalInvestigator,omitempty" json:"principalInvestigator,omitempty"`
-	Site                  []Reference         `bson:"site,omitempty" json:"site,omitempty"`
+	Site                  []*Reference        `bson:"site,omitempty" json:"site,omitempty"`
 	ReasonStopped         *CodeableConcept    `bson:"reasonStopped,omitempty" json:"reasonStopped,omitempty"`
-	Note                  []Annotation        `bson:"note,omitempty" json:"note,omitempty"`
-	Arm                   []ResearchStudyArm  `bson:"arm,omitempty" json:"arm,omitempty"`
+	Note                  []*Annotation       `bson:"note,omitempty" json:"note,omitempty"`
+	Arm                   []*ResearchStudyArm `bson:"arm,omitempty" json:"arm,omitempty"`
 }
 type ResearchStudyArm struct {
 	Id                *string          `bson:"id,omitempty" json:"id,omitempty"`
-	Extension         []Extension      `bson:"extension,omitempty" json:"extension,omitempty"`
-	ModifierExtension []Extension      `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
+	Extension         []*Extension     `bson:"extension,omitempty" json:"extension,omitempty"`
+	ModifierExtension []*Extension     `bson:"modifierExtension,omitempty" json:"modifierExtension,omitempty"`
 	Name              string           `bson:"name,omitempty" json:"name,omitempty"`
 	Code              *CodeableConcept `bson:"code,omitempty" json:"code,omitempty"`
 	Description       *string          `bson:"description,omitempty" json:"description,omitempty"`
@@ -59,13 +62,17 @@ func (r ResearchStudy) MarshalJSON() ([]byte, error) {
 			}
 		}
 	}
-	return json.Marshal(struct {
-		OtherResearchStudy
+	buffer := bytes.NewBuffer([]byte{})
+	jsonEncoder := json.NewEncoder(buffer)
+	jsonEncoder.SetEscapeHTML(false)
+	err := jsonEncoder.Encode(struct {
 		ResourceType string `json:"resourceType"`
+		OtherResearchStudy
 	}{
 		OtherResearchStudy: OtherResearchStudy(r),
 		ResourceType:       "ResearchStudy",
 	})
+	return buffer.Bytes(), err
 }
 
 // UnmarshalJSON unmarshals the given byte slice into ResearchStudy
