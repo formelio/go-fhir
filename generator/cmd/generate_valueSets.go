@@ -7,7 +7,7 @@ import (
 	"strings"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/ivido/go-fhir-stu3/generator/fhir"
+	"github.com/ivido/go-fhir-library/generator/fhir"
 )
 
 func generateValueSets() {

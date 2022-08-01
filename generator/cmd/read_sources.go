@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ivido/go-fhir-stu3/generator/fhir"
+	"github.com/ivido/go-fhir-library/generator/fhir"
 )
 
 func readSourcesToContext(dir string) {
