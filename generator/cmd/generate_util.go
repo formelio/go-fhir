@@ -4,14 +4,15 @@ import (
 	"fmt"
 
 	"github.com/dave/jennifer/jen"
-	"github.com/ivido/go-fhir/generator/fhir"
+	"github.com/formelio/go-fhir/generator/fhir"
 )
 
 /*
 // <definition.Name> is documented here <definition.Url>"
-type <definition.Name> struct {
-	..fields
-}
+
+	type <definition.Name> struct {
+		..fields
+	}
 */
 func generateStruct(file *jen.File, definition fhir.StructureDefinition, elementDefinitions []fhir.ElementDefinition, requiredElements map[string]bool) ([]string, error) {
 	var err error
@@ -25,34 +26,35 @@ func generateStruct(file *jen.File, definition fhir.StructureDefinition, element
 
 /*
 // MarshalJSON marshals the given <resourceType> as JSON into a byte slice
-func (r <resourceType>) MarshalJSON() ([]byte, error) {
-	IF(HAS_CONTAINED):
-	------------------
-		// If the field has contained resources, we need to marshal them individually and store them in RawContained
-		if len(r.Contained) > 0 {
-			r.RawContained = make([]json.RawMessage, len(r.Contained))
-			var err error
-			for i, contained := range r.Contained {
-				r.RawContained[i], err = json.Marshal(contained)
-				if err != nil {
-					return nil, err
+
+	func (r <resourceType>) MarshalJSON() ([]byte, error) {
+		IF(HAS_CONTAINED):
+		------------------
+			// If the field has contained resources, we need to marshal them individually and store them in RawContained
+			if len(r.Contained) > 0 {
+				r.RawContained = make([]json.RawMessage, len(r.Contained))
+				var err error
+				for i, contained := range r.Contained {
+					r.RawContained[i], err = json.Marshal(contained)
+					if err != nil {
+						return nil, err
+					}
 				}
 			}
-		}
-	------------------
+		------------------
 
-	buffer := bytes.NewBuffer([]byte{})
-	jsonEncoder := json.NewEncoder(buffer)
-	jsonEncoder.SetEscapeHTML(false)
-	err := jsonEncoder.Encode(struct {
-		ResourceType string `json:"resourceType"`
-		Other<resourceType>
-	}{
-		Other<resourceType>: Other<resourceType>(r),
-		ResourceType: "<resourceType>",
-	})
-	return buffer.Bytes(), err
-}
+		buffer := bytes.NewBuffer([]byte{})
+		jsonEncoder := json.NewEncoder(buffer)
+		jsonEncoder.SetEscapeHTML(false)
+		err := jsonEncoder.Encode(struct {
+			ResourceType string `json:"resourceType"`
+			Other<resourceType>
+		}{
+			Other<resourceType>: Other<resourceType>(r),
+			ResourceType: "<resourceType>",
+		})
+		return buffer.Bytes(), err
+	}
 */
 func generateResourceMarshal(file *jen.File, resourceType string, hasContained bool) {
 	file.Commentf("MarshalJSON marshals the given %s as JSON into a byte slice", resourceType)
@@ -84,23 +86,23 @@ func generateResourceMarshal(file *jen.File, resourceType string, hasContained b
 }
 
 /*
-func (r *<resourceType>) UnmarshalJSON(data []byte) error {
-	if err := json.Unmarshal(data, (*Other<resourceType>)(r)); err != nil {
-		return err
-	}
-	if len(r.RawContained) > 0 {
-		var err error
-		r.Contained = make([]IResource, len(r.RawContained))
-		for i, rawContained := range r.RawContained {
-			r.Contained[i], err = UnmarshalResource(rawContained)
-			if err != nil {
-				return err
+	func (r *<resourceType>) UnmarshalJSON(data []byte) error {
+		if err := json.Unmarshal(data, (*Other<resourceType>)(r)); err != nil {
+			return err
+		}
+		if len(r.RawContained) > 0 {
+			var err error
+			r.Contained = make([]IResource, len(r.RawContained))
+			for i, rawContained := range r.RawContained {
+				r.Contained[i], err = UnmarshalResource(rawContained)
+				if err != nil {
+					return err
+				}
 			}
 		}
+		r.RawContained = nil
+		return nil
 	}
-	r.RawContained = nil
-	return nil
-}
 */
 func generateResourceUnmarshal(file *jen.File, resourceType string, hasContained bool) {
 	file.Commentf("UnmarshalJSON unmarshals the given byte slice into %s", resourceType)
@@ -124,7 +126,9 @@ func generateResourceUnmarshal(file *jen.File, resourceType string, hasContained
 	})
 }
 
-/* generates the json tags for the field
+/*
+	generates the json tags for the field
+
 `bson:"<jsonTag>,omitempty" json:"<jsonTag>,omitempty"`
 */
 func generateTags(statement *jen.Statement, jsonTag string) {
@@ -143,9 +147,10 @@ func generateOperators(statement *jen.Statement, list, required bool) {
 
 /*
 // Returns the resourceType of the resource, makes this resource an instance of IResource
-func (r <resourceType>) GetResourceType() ResourceType {
-	return ResourceType<resourceType
-}
+
+	func (r <resourceType>) GetResourceType() ResourceType {
+		return ResourceType<resourceType
+	}
 */
 func generateGetResourceType(file *jen.File, resourceType string) {
 	file.Commentf("Returns the resourceType of the resource, makes this resource an instance of IResource")
@@ -164,20 +169,20 @@ func generateOtherType(file *jen.File, resourceType string) {
 }
 
 /*
-func (b *BundleEntry) UnmarshalJSON(data []byte) error {
-	// Unmarshal into all defined fields
-	err := json.Unmarshal(bytes, (*otherBundleEntry)(bundleEntry))
-	if err != nil {
-		return err
+	func (b *BundleEntry) UnmarshalJSON(data []byte) error {
+		// Unmarshal into all defined fields
+		err := json.Unmarshal(bytes, (*otherBundleEntry)(bundleEntry))
+		if err != nil {
+			return err
+		}
+		var err error
+		r.Resource, err = UnmarshalResource(data)
+		if err != nil {
+			return err
+		}
+		r.RawResource = nil
+		return nil
 	}
-	var err error
-	r.Resource, err = UnmarshalResource(data)
-	if err != nil {
-		return err
-	}
-	r.RawResource = nil
-	return nil
-}
 */
 func generateElementUnmarshal(file *jen.File, resourceFields []string, typeIdentifier string) {
 	file.Func().Params(jen.Id("r").Id("*" + typeIdentifier)).Id("UnmarshalJSON").Params(jen.Id("data").Op("[]").Byte()).Error().BlockFunc(func(unmarshal *jen.Group) {
@@ -198,16 +203,16 @@ func generateElementUnmarshal(file *jen.File, resourceFields []string, typeIdent
 }
 
 /*
-func (r *<typeIdentifier>) MarshalJSON() ([]byte, error) {
-	if <typeIdentifier>.<resourceField> != nil {
-		r, err := json.Marshal(<typeIdentifier>.<resourceField>)
-		if err != nil {
-			return nil, err
+	func (r *<typeIdentifier>) MarshalJSON() ([]byte, error) {
+		if <typeIdentifier>.<resourceField> != nil {
+			r, err := json.Marshal(<typeIdentifier>.<resourceField>)
+			if err != nil {
+				return nil, err
+			}
+			<typeIdentifier>.Raw<resourceField> = r
 		}
-		<typeIdentifier>.Raw<resourceField> = r
+		return json.Marshal((*Other<typeIdentifier>)(<typeIdentifier>))
 	}
-	return json.Marshal((*Other<typeIdentifier>)(<typeIdentifier>))
-}
 */
 func generateElementMarshal(file *jen.File, resourceFields []string, typeIdentifier string) {
 	file.Func().Params(jen.Id("r").Op("*").Id(typeIdentifier)).Id("MarshalJSON").Params().Params(jen.Op("[]").Byte(), jen.Error()).BlockFunc(func(marshal *jen.Group) {
